@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-`<insert database schema design here>`
+![My Schema](schema-images/KanairBnb.png)
 
 ## API Documentation
 
