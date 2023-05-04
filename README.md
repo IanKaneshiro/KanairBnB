@@ -53,7 +53,7 @@ Returns the information about the current user that is logged in.
 - Request
 
   - Method: GET
-  - URL: /users/:userId
+  - URL: /users/me
   - Body: none
 
 - Successful Response when there is a logged in user
@@ -167,7 +167,7 @@ user's information.
 - Request
 
   - Method: POST
-  - URL: /users
+  - URL: /users/sign-up
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -304,7 +304,7 @@ Returns all the spots owned (created) by the current user.
 - Request
 
   - Method: GET
-  - URL: /spots/users/:userId
+  - URL: /users/me/spots
   - Body: none
 
 - Successful Response
@@ -669,7 +669,7 @@ Returns all the reviews written by the current user.
 - Request
 
   - Method: GET
-  - URL: /reviews/users/:userId
+  - URL: /users/me/reviews
   - Body: none
 
 - Successful Response
@@ -727,7 +727,7 @@ Returns all the reviews that belong to a spot specified by id.
 - Request
 
   - Method: GET
-  - URL: reviews/spots/:spotId
+  - URL: /spots/:spotId/reviews
   - Body: none
 
 - Successful Response
@@ -785,7 +785,7 @@ Create and return a new review for a spot specified by id.
 - Request
 
   - Method: POST
-  - URL: /reviews/spots/:spotId
+  - URL: /spots/:spotId/reviews
   - Headers:
     - Content-Type: application/json
   - Body:
@@ -1038,7 +1038,7 @@ Return all the bookings that the current user has made.
 - Request
 
   - Method: GET
-  - URL: bookings/users/:userId
+  - URL: /users/me/bookings
   - Body: none
 
 - Successful Response
@@ -1085,7 +1085,7 @@ Return all the bookings for a spot specified by id.
 - Request
 
   - Method: GET
-  - URL: /bookings/spots/:spotId
+  - URL: /spots/:spotId/bookings
   - Body: none
 
 - Successful Response: If you ARE NOT the owner of the spot.
@@ -1157,7 +1157,7 @@ Create and return a new booking from a spot specified by id.
 - Request
 
   - Method: POST
-  - URL: bookings/spots/:spotId
+  - URL: spots/:spotId/bookings
   - Body:
 
     ```json
@@ -1394,7 +1394,7 @@ Delete an existing image for a Spot.
 - Request
 
   - Method: DELETE
-  - URL: images/spots/:imageId
+  - URL: /spots/:spotId/images/:imageId
   - Body: none
 
 - Successful Response
@@ -1432,7 +1432,7 @@ Delete an existing image for a Review.
 - Request
 
   - Method: DELETE
-  - URL: images/reviews/:imageId
+  - URL: /reviews/:reviewId/images/:imageId
   - Body: none
 
 - Successful Response
@@ -1469,7 +1469,7 @@ Return spots filtered by query parameters.
 - Request
 
   - Method: GET
-  - URL: /spots?
+  - URL: /spots?:query
   - Query Parameters
     - page: integer, minimum: 1, maximum: 10, default: 1
     - size: integer, minimum: 1, maximum: 20, default: 20
