@@ -75,4 +75,5 @@ router.get("/", (req, res) => {
     });
   } else return res.json({ user: null });
 });
+
 module.exports = router;
