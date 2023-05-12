@@ -25,6 +25,7 @@ const validateSpot = [
     .withMessage("Longitude is not valid."),
   check("name")
     .exists({ checkFalsy: true })
+    .withMessage("Name required.")
     .isLength({ max: 50 })
     .withMessage("Name must be less than 50 characters."),
   check("description")
@@ -36,6 +37,7 @@ const validateSpot = [
   handleValidationErrors,
 ];
 
+// Create a new spot
 router.post("/", requireAuth, validateSpot, async (req, res, next) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
@@ -65,6 +67,8 @@ router.post("/", requireAuth, validateSpot, async (req, res, next) => {
     name: spot.name,
     description: spot.description,
     price: spot.price,
+    createdAt: spot.createdAt,
+    updatedAt: spot.updatedAt,
   };
 
   res.status(201);
