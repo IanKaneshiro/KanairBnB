@@ -53,7 +53,7 @@ Returns the information about the current user that is logged in.
 - Request
 
   - Method: GET
-  - URL: /users/me
+  - URL: /session/me
   - Body: none
 
 - Successful Response when there is a logged in user
@@ -97,7 +97,7 @@ information.
 - Request
 
   - Method: POST
-  - URL: /users/login
+  - URL: /session/login
   - Headers:
     - Content-Type: application/json
   - Body:

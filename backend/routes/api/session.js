@@ -20,7 +20,8 @@ const validateLogin = [
   handleValidationErrors,
 ];
 
-router.post("/", validateLogin, async (req, res, next) => {
+// Login
+router.post("/login", validateLogin, async (req, res, next) => {
   const { credential, password } = req.body;
 
   const user = await User.unscoped().findOne({
@@ -55,12 +56,14 @@ router.post("/", validateLogin, async (req, res, next) => {
   });
 });
 
-router.delete("/", (_req, res) => {
+// Logout
+router.delete("/logout", (_req, res) => {
   res.clearCookie("token");
   return res.json({ message: "success" });
 });
 
-router.get("/", (req, res) => {
+// Get session user
+router.get("/me", (req, res) => {
   const { user } = req;
   if (user) {
     const safeUser = {
