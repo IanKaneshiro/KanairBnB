@@ -1,10 +1,11 @@
 const express = require("express");
-const { check } = require("express-validator");
+const { check, validationResult } = require("express-validator");
 
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
-const { Spot, Booking } = require("../../db/models");
+const { Spot, Booking, Review } = require("../../db/models");
+const { ValidationErrorItemOrigin } = require("sequelize");
 
 const router = express.Router();
 
@@ -163,6 +164,76 @@ router.post(
 
     res.status(200);
     return res.json(safeBooking);
+  }
+);
+
+const validateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .withMessage("Review text is required"),
+  check("stars").custom((value) => {
+    if (value < 1 || value > 5) {
+      throw new Error("Stars must be an integer from 1 to 5");
+    } else {
+      return true;
+    }
+  }),
+  handleValidationErrors,
+];
+
+// CREATE A REVIEW FOR A SPOT BASED ON SPOT ID
+router.post(
+  "/:spotId/reviews",
+  requireAuth,
+  validateReview,
+  async (req, res, next) => {
+    const { review, stars } = req.body;
+    const spotId = parseInt(req.params.spotId);
+    const userId = req.user.id;
+
+    const spot = await Spot.findByPk(spotId);
+
+    // CHECK IF THE SPOT DOESNT EXIST
+    if (!spot) {
+      const err = new Error("Spot couldn't be found");
+
+      err.status = 404;
+      return next(err);
+    }
+
+    //  CHECK IF USER HAS ALREADY REVIEWD SPOT
+    const existingReview = await Review.findOne({
+      where: {
+        spotId,
+        userId,
+      },
+    });
+
+    if (existingReview) {
+      const err = new Error("User already has a review for this spot");
+      err.status = 403;
+      return next(err);
+    }
+
+    const rev = await Review.create({
+      spotId,
+      userId,
+      review,
+      stars,
+    });
+
+    const safeReview = {
+      id: rev.id,
+      userId: rev.userId,
+      spotId: rev.spotId,
+      review: rev.review,
+      stars: rev.stars,
+      createdAt: rev.createdAt,
+      updatedAt: rev.updatedAt,
+    };
+
+    res.status(201);
+    res.json(safeReview);
   }
 );
 
