@@ -8,6 +8,14 @@ const { Spot, Booking, Review, Image } = require("../../db/models");
 
 const router = express.Router();
 
+// GET ALL SPOTS
+router.get("/", async (req, res, next) => {
+  const spots = await Spot.findAll();
+
+  res.status(200);
+  res.json({ Spots: spots });
+});
+
 const validateSpot = [
   check("address")
     .exists({ checkFalsy: true })
