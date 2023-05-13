@@ -5,7 +5,6 @@ const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
 const { Spot, Booking } = require("../../db/models");
-const { DATE } = require("sequelize");
 
 const router = express.Router();
 
@@ -139,8 +138,8 @@ router.post("/:spotId/bookings", requireAuth, async (req, res, next) => {
 
   const safeBooking = {
     id: booking.id,
-    spotId: booking.spotId,
     userId: booking.userId,
+    spotId: booking.spotId,
     startDate: booking.startDate,
     endDate: booking.endDate,
     createdAt: booking.createdAt,
