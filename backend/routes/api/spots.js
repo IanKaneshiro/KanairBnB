@@ -26,7 +26,7 @@ const validateSpot = [
   check("name")
     .exists({ checkFalsy: true })
     .withMessage("Name required.")
-    .isLength({ max: 50 })
+    .isLength({ max: 49 })
     .withMessage("Name must be less than 50 characters."),
   check("description")
     .exists({ checkFalsy: true })
@@ -72,9 +72,7 @@ router.post("/", requireAuth, validateSpot, async (req, res, next) => {
   };
 
   res.status(201);
-  return res.json({
-    spot: safeSpot,
-  });
+  return res.json(safeSpot);
 });
 
 module.exports = router;
