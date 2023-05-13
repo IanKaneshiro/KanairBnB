@@ -1,7 +1,12 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Review extends Model {
+  class Image extends Model {
+    getImageable(options) {
+      if (!this.imageableType) return Promise.resolve(null);
+      const mixinMethodName = `get${this.commentableType}`;
+      return this[mixinMethodName](options);
+    }
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,48 +14,39 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Review.belongsTo(models.Spot, {
-        foreignKey: "spotId",
-      });
-      Review.belongsTo(models.User, {
-        foreignKey: "userId",
-      });
-      Review.hasMany(models.Image, {
+      Image.belongsTo(models.Spot, {
         foreignKey: "imageableId",
         constraints: false,
-        scope: {
-          imageableType: "Review",
-        },
+      });
+      Image.belongsTo(models.Review, {
+        foreignKey: "imageableId",
+        constraints: false,
       });
     }
   }
-  Review.init(
+  Image.init(
     {
-      spotId: {
+      imageableId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      review: {
+      imageableType: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      stars: {
-        type: DataTypes.INTEGER,
+      url: {
+        type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          min: 1,
-          max: 5,
-        },
+      },
+      preview: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
       },
     },
     {
       sequelize,
-      modelName: "Review",
+      modelName: "Image",
     }
   );
-  return Review;
+  return Image;
 };

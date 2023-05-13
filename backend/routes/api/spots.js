@@ -4,8 +4,7 @@ const { check, validationResult } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
-const { Spot, Booking, Review } = require("../../db/models");
-const { ValidationErrorItemOrigin } = require("sequelize");
+const { Spot, Booking, Review, Image } = require("../../db/models");
 
 const router = express.Router();
 
@@ -75,6 +74,57 @@ router.post("/", requireAuth, validateSpot, async (req, res, next) => {
   res.status(201);
   return res.json(safeSpot);
 });
+
+const validateImage = [
+  check("url").isURL().withMessage("Please enter a valid url"),
+  check("preview").isBoolean().withMessage("Must be true or false"),
+  handleValidationErrors,
+];
+
+// Add a image to a spot based on spot id
+router.post(
+  "/:spotId/images",
+  requireAuth,
+  validateImage,
+  async (req, res, next) => {
+    const { url, preview } = req.body;
+    const spotId = parseInt(req.params.spotId);
+    const userId = req.user.id;
+
+    const spot = await Spot.findByPk(spotId);
+
+    // Error if the spot doesn't exist
+    if (!spot) {
+      const err = new Error("Spot couldn't be found");
+
+      err.status = 404;
+      return next(err);
+    }
+
+    // Authorization
+    if (spot.ownerId !== userId) {
+      const err = new Error("Forbidden");
+      err.status = 403;
+      return next(err);
+    }
+
+    const image = await Image.create({
+      imageableId: spotId,
+      imageableType: "Spot",
+      url,
+      preview,
+    });
+
+    const safeImage = {
+      id: image.id,
+      url: image.url,
+      preview: image.preview,
+    };
+
+    res.status(200);
+    return res.json(safeImage);
+  }
+);
 
 // Book a spot based on spot id
 const validateDate = [
