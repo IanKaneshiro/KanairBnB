@@ -5,7 +5,7 @@ const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
 
-const { User } = require("../../db/models");
+const { User, Spot, Review, Image, sequelize } = require("../../db/models");
 
 const router = express.Router();
 
@@ -33,6 +33,40 @@ const validateSignup = [
     .withMessage("Password must be 6 characters or more."),
   handleValidationErrors,
 ];
+
+// GET ALL SPOTS BY CURRENT USER
+router.get("/me/spots", requireAuth, async (req, res, next) => {
+  const spots = await Spot.findAll({
+    include: [
+      { model: Review, attributes: [] },
+      { model: Image, scope: { imageableId: "Spot" }, attributes: [] },
+    ],
+    attributes: [
+      "id",
+      "ownerId",
+      "address",
+      "city",
+      "state",
+      "country",
+      "lat",
+      "lng",
+      "name",
+      "description",
+      "price",
+      "createdAt",
+      "updatedAt",
+      [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
+      [sequelize.col("Images.url"), "previewImage"],
+    ],
+    where: {
+      ownerId: req.user.id,
+    },
+    group: ["Spot.id"],
+  });
+
+  res.status(200);
+  res.json({ Spots: spots });
+});
 
 router.post("/sign-up", validateSignup, async (req, res) => {
   const { firstName, lastName, email, password, username } = req.body;

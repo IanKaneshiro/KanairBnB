@@ -61,7 +61,7 @@ module.exports = {
           price: 800,
         },
         {
-          ownerId: 1,
+          ownerId: 4,
           address: "Flying above the Atlantic Ocean",
           city: "Unknown",
           state: "Unknown",
