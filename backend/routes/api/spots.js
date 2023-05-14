@@ -13,7 +13,11 @@ router.get("/", async (req, res, next) => {
   const spots = await Spot.findAll({
     include: [
       { model: Review, attributes: [] },
-      { model: Image, scope: { imageableId: "Spot" }, attributes: [] },
+      {
+        model: Image,
+        attributes: [],
+        where: { imageableType: "Spot", preview: true },
+      },
     ],
     attributes: [
       "id",
@@ -32,7 +36,7 @@ router.get("/", async (req, res, next) => {
       [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
       [sequelize.col("Images.url"), "previewImage"],
     ],
-    group: ["Spot.id"],
+    group: ["Spot.id", "Images.id"],
   });
 
   res.status(200);
