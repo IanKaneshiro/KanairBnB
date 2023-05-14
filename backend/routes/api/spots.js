@@ -4,13 +4,36 @@ const { check, validationResult } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
-const { Spot, Booking, Review, Image } = require("../../db/models");
+const { Spot, Booking, Review, Image, sequelize } = require("../../db/models");
 
 const router = express.Router();
 
 // GET ALL SPOTS
 router.get("/", async (req, res, next) => {
-  const spots = await Spot.findAll();
+  const spots = await Spot.findAll({
+    include: [
+      { model: Review, attributes: [] },
+      { model: Image, scope: { imageableId: "Spot" }, attributes: [] },
+    ],
+    attributes: [
+      "id",
+      "ownerId",
+      "address",
+      "city",
+      "state",
+      "country",
+      "lat",
+      "lng",
+      "name",
+      "description",
+      "price",
+      "createdAt",
+      "updatedAt",
+      [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
+      [sequelize.col("Images.url"), "previewImage"],
+    ],
+    group: ["Spot.id"],
+  });
 
   res.status(200);
   res.json({ Spots: spots });
