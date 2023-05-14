@@ -42,7 +42,7 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
       {
         model: Image,
         attributes: [],
-        where: { imageableType: "Spot", preview: true },
+        scope: { imageableType: "Spot" },
       },
     ],
     attributes: [
@@ -65,6 +65,7 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
     where: {
       ownerId: req.user.id,
     },
+    order: [["id"]],
     group: ["Spot.id", "Images.id"],
   });
 
