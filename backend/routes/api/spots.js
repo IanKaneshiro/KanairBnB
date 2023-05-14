@@ -16,7 +16,9 @@ router.get("/", async (req, res, next) => {
       {
         model: Image,
         attributes: [],
-        where: { imageableType: "Spot", preview: true },
+        scope: {
+          imageableId: "Spot",
+        },
       },
     ],
     attributes: [
