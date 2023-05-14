@@ -39,7 +39,11 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
   const spots = await Spot.findAll({
     include: [
       { model: Review, attributes: [] },
-      { model: Image, scope: { imageableId: "Spot" }, attributes: [] },
+      {
+        model: Image,
+        attributes: [],
+        where: { imageableType: "Spot", preview: true },
+      },
     ],
     attributes: [
       "id",
@@ -61,7 +65,7 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
     where: {
       ownerId: req.user.id,
     },
-    group: ["Spot.id"],
+    group: ["Spot.id", "Images.id"],
   });
 
   res.status(200);
