@@ -119,7 +119,28 @@ const validateImage = [
   handleValidationErrors,
 ];
 
-// Add a image to a spot based on spot id
+// DELETE A SPOT
+router.delete("/:spotId", requireAuth, async (req, res, next) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+  if (!spot) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+  if (spot.ownerId !== req.user.id) {
+    const err = new Error("Forbidden");
+    err.status = 403;
+    return next(err);
+  }
+
+  await spot.destroy();
+  res.status(200);
+  res.json({
+    message: "Successfully deleted",
+  });
+});
+
+// ADD A IMAGE TO A SPOT BASED ON SPOTID
 router.post(
   "/:spotId/images",
   requireAuth,
@@ -160,7 +181,7 @@ router.post(
     };
 
     res.status(200);
-    return res.json(safeImage);
+    res.json(safeImage);
   }
 );
 
@@ -251,7 +272,7 @@ router.post(
     };
 
     res.status(200);
-    return res.json(safeBooking);
+    res.json(safeBooking);
   }
 );
 
