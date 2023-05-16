@@ -46,31 +46,37 @@ module.exports = {
           imageableId: 1,
           imageableType: "Review",
           url: "https://www.pexels.com/photo/calico-cat-on-focus-photo-1404819/",
+          preview: true,
         },
         {
           imageableId: 2,
           imageableType: "Review",
           url: "https://www.pexels.com/photo/cat-sitting-inside-a-plastic-ring-977935/",
+          preview: true,
         },
         {
           imageableId: 3,
           imageableType: "Review",
           url: "https://www.pexels.com/photo/orange-cat-on-focus-photography-2173872/",
+          preview: true,
         },
         {
           imageableId: 4,
           imageableType: "Review",
           url: "https://www.pexels.com/photo/cat-with-red-scarf-on-neck-sitting-on-white-stool-1741206/",
+          preview: true,
         },
         {
           imageableId: 5,
           imageableType: "Review",
           url: "https://www.pexels.com/photo/photo-of-a-gray-and-white-cat-2928158/",
+          preview: true,
         },
         {
           imageableId: 6,
           imageableType: "Review",
           url: "https://www.pexels.com/photo/close-up-photo-of-black-and-white-kitten-looking-up-1835008/",
+          preview: true,
         },
       ],
 

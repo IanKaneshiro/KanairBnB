@@ -41,8 +41,8 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
       { model: Review, attributes: [] },
       {
         model: Image,
+        as: "SpotImages",
         attributes: [],
-        scope: { imageableType: "Spot" },
       },
     ],
     attributes: [
@@ -60,13 +60,13 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
       "createdAt",
       "updatedAt",
       [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
-      [sequelize.col("Images.url"), "previewImage"],
+      [sequelize.col("SpotImages.url"), "previewImage"],
     ],
     where: {
       ownerId: req.user.id,
     },
     order: [["id"]],
-    group: ["Spot.id", "Images.id"],
+    group: ["Spot.id", "SpotImages.id"],
   });
 
   res.status(200);
