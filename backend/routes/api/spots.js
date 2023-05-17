@@ -441,4 +441,30 @@ router.get("/:spotId/reviews", async (req, res, next) => {
   res.status(200);
   res.json({ Reviews: reviews });
 });
+
+// GET ALL BOOKINGS BY A SPOT ID
+router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+  if (!spot) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+
+  let bookings;
+  if (req.user.id === parseInt(spot.ownerId)) {
+    bookings = await spot.getBookings({
+      include: [{ model: User, attributes: ["id", "firstName", "lastName"] }],
+    });
+  } else {
+    bookings = await spot.getBookings({
+      attributes: ["spotId", "startDate", "endDate"],
+    });
+  }
+
+  res.status(200);
+  res.json({
+    Bookings: bookings,
+  });
+});
 module.exports = router;
