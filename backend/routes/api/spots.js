@@ -467,4 +467,37 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
     Bookings: bookings,
   });
 });
+
+// DELETE A SPOT IMAGE
+router.delete(
+  "/:spotId/images/:imageId",
+  requireAuth,
+  async (req, res, next) => {
+    const id = parseInt(req.params.imageId);
+    const spot = await Spot.findByPk(req.params.spotId);
+    if (spot.ownerId !== req.user.id) {
+      const err = new Error("Forbidden");
+      err.status = 403;
+      return next(err);
+    }
+    const image = await Image.findOne({
+      where: {
+        id,
+        imageableId: spot.id,
+        imageableType: "Spot",
+      },
+    });
+
+    if (!image) {
+      const err = new Error("Spot Image couldn't be found");
+      err.status = 404;
+      return next(err);
+    } else {
+      await image.destroy();
+    }
+
+    res.status(200);
+    res.json({ message: "Successfully deleted" });
+  }
+);
 module.exports = router;
