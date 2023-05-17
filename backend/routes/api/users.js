@@ -9,31 +9,6 @@ const { User, Spot, Review, Image, sequelize } = require("../../db/models");
 
 const router = express.Router();
 
-const validateSignup = [
-  check("firstName")
-    .exists({ checkFalsy: true })
-    .isLength({ min: 2 })
-    .withMessage("Please provide a first name with at least 2 characters"),
-  check("lastName")
-    .exists({ checkFalsy: true })
-    .isLength({ min: 2 })
-    .withMessage("Please provide a last name with at least 2 chracters"),
-  check("email")
-    .exists({ checkFalsy: true })
-    .isEmail()
-    .withMessage("Please provide a valid email."),
-  check("username")
-    .exists({ checkFalsy: true })
-    .isLength({ min: 4 })
-    .withMessage("Please provide a username with at least 4 characters."),
-  check("username").not().isEmail().withMessage("Username cannot be an email."),
-  check("password")
-    .exists({ checkFalsy: true })
-    .isLength({ min: 6 })
-    .withMessage("Password must be 6 characters or more."),
-  handleValidationErrors,
-];
-
 // GET ALL SPOTS BY CURRENT USER
 router.get("/me/spots", requireAuth, async (req, res, next) => {
   const spots = await Spot.findAll({
@@ -69,9 +44,39 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
     group: ["Spot.id", "SpotImages.id"],
   });
 
+  if (!spots.length) {
+    return res.json({
+      message: "User has no spots",
+    });
+  }
+
   res.status(200);
   res.json({ Spots: spots });
 });
+const validateSignup = [
+  check("firstName")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 2 })
+    .withMessage("Please provide a first name with at least 2 characters"),
+  check("lastName")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 2 })
+    .withMessage("Please provide a last name with at least 2 chracters"),
+  check("email")
+    .exists({ checkFalsy: true })
+    .isEmail()
+    .withMessage("Please provide a valid email."),
+  check("username")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 4 })
+    .withMessage("Please provide a username with at least 4 characters."),
+  check("username").not().isEmail().withMessage("Username cannot be an email."),
+  check("password")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 6 })
+    .withMessage("Password must be 6 characters or more."),
+  handleValidationErrors,
+];
 
 router.post("/sign-up", validateSignup, async (req, res) => {
   const { firstName, lastName, email, password, username } = req.body;

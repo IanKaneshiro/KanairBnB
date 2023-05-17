@@ -107,12 +107,6 @@ router.post("/", requireAuth, validateSpot, async (req, res, next) => {
   return res.json(safeSpot);
 });
 
-const validateImage = [
-  check("url").isURL().withMessage("Please enter a valid url"),
-  check("preview").isBoolean().withMessage("Must be true or false"),
-  handleValidationErrors,
-];
-
 // GET DETAILS OF SPOT BASED ON ID
 router.get("/:spotId", async (req, res, next) => {
   const spot = await Spot.findByPk(req.params.spotId, {
@@ -217,6 +211,12 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
   });
 });
 
+const validateImage = [
+  check("url").isURL().withMessage("Please enter a valid url"),
+  check("preview").isBoolean().withMessage("Must be true or false"),
+  handleValidationErrors,
+];
+
 // ADD A IMAGE TO A SPOT BASED ON SPOT ID
 router.post(
   "/:spotId/images",
@@ -309,8 +309,8 @@ router.post(
       where: {
         userId,
         spotId,
-        endDate: new Date(`${endDate}T00:00:00.000Z`).toISOString(),
-        startDate: new Date(`${startDate}T00:00:00.000Z`).toISOString(),
+        endDate,
+        startDate,
       },
     });
 
@@ -439,6 +439,12 @@ router.get("/:spotId/reviews", async (req, res, next) => {
   });
 
   res.status(200);
+  if (!reviews.length) {
+    return res.json({
+      message: "Spot has no reviews",
+    });
+  }
+
   res.json({ Reviews: reviews });
 });
 
