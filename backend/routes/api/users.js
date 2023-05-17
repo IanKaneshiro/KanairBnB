@@ -9,6 +9,50 @@ const { User, Spot, Review, Image, sequelize } = require("../../db/models");
 
 const router = express.Router();
 
+// GET ALL SPOTS BY CURRENT USER
+router.get("/me/spots", requireAuth, async (req, res, next) => {
+  const spots = await Spot.findAll({
+    include: [
+      { model: Review, attributes: [] },
+      {
+        model: Image,
+        as: "SpotImages",
+        attributes: [],
+      },
+    ],
+    attributes: [
+      "id",
+      "ownerId",
+      "address",
+      "city",
+      "state",
+      "country",
+      "lat",
+      "lng",
+      "name",
+      "description",
+      "price",
+      "createdAt",
+      "updatedAt",
+      [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
+      [sequelize.col("SpotImages.url"), "previewImage"],
+    ],
+    where: {
+      ownerId: req.user.id,
+    },
+    order: [["id"]],
+    group: ["Spot.id", "SpotImages.id"],
+  });
+
+  if (!spots.length) {
+    return res.json({
+      message: "User has no spots",
+    });
+  }
+
+  res.status(200);
+  res.json({ Spots: spots });
+});
 const validateSignup = [
   check("firstName")
     .exists({ checkFalsy: true })
@@ -33,45 +77,6 @@ const validateSignup = [
     .withMessage("Password must be 6 characters or more."),
   handleValidationErrors,
 ];
-
-// GET ALL SPOTS BY CURRENT USER
-router.get("/me/spots", requireAuth, async (req, res, next) => {
-  const spots = await Spot.findAll({
-    include: [
-      { model: Review, attributes: [] },
-      {
-        model: Image,
-        attributes: [],
-        scope: { imageableType: "Spot" },
-      },
-    ],
-    attributes: [
-      "id",
-      "ownerId",
-      "address",
-      "city",
-      "state",
-      "country",
-      "lat",
-      "lng",
-      "name",
-      "description",
-      "price",
-      "createdAt",
-      "updatedAt",
-      [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
-      [sequelize.col("Images.url"), "previewImage"],
-    ],
-    where: {
-      ownerId: req.user.id,
-    },
-    order: [["id"]],
-    group: ["Spot.id", "Images.id"],
-  });
-
-  res.status(200);
-  res.json({ Spots: spots });
-});
 
 router.post("/sign-up", validateSignup, async (req, res) => {
   const { firstName, lastName, email, password, username } = req.body;

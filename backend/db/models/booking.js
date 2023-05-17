@@ -21,15 +21,19 @@ module.exports = (sequelize, DataTypes) => {
     {
       spotId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       userId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       startDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       endDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
+        allowNull: false,
       },
     },
     {

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Spot.belongsTo(models.User, {
         foreignKey: "ownerId",
+        as: "Owner",
       });
       Spot.hasMany(models.Booking, {
         foreignKey: "spotId",
@@ -24,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Spot.hasMany(models.Image, {
         foreignKey: "imageableId",
+        as: "SpotImages",
         constraints: false,
         scope: {
           imageableType: "Spot",
