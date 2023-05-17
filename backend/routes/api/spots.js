@@ -348,6 +348,7 @@ router.post(
   }
 );
 
+// CREATE A REVIEW FOR A SPOT BASED ON SPOT ID
 const validateReview = [
   check("review")
     .exists({ checkFalsy: true })
@@ -362,7 +363,6 @@ const validateReview = [
   handleValidationErrors,
 ];
 
-// CREATE A REVIEW FOR A SPOT BASED ON SPOT ID
 router.post(
   "/:spotId/reviews",
   requireAuth,
@@ -489,8 +489,6 @@ router.delete(
     const image = await Image.findOne({
       where: {
         id,
-        imageableId: spot.id,
-        imageableType: "Spot",
       },
     });
 
@@ -498,10 +496,8 @@ router.delete(
       const err = new Error("Spot Image couldn't be found");
       err.status = 404;
       return next(err);
-    } else {
-      await image.destroy();
     }
-
+    await image.destroy();
     res.status(200);
     res.json({ message: "Successfully deleted" });
   }
