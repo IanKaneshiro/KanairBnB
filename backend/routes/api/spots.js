@@ -129,7 +129,7 @@ router.get("/:spotId", async (req, res, next) => {
         [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgStarRating"],
       ],
     },
-    group: ["Spot.id", "SpotImages.id", "owner.id"],
+    group: ["Spot.id", "SpotImages.id", "Owner.id"],
   });
   if (!spot) {
     const err = new Error("Spot couldn't be found");
