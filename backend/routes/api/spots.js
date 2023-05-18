@@ -211,13 +211,13 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
   });
 });
 
+// ADD A IMAGE TO A SPOT BASED ON SPOT ID
 const validateImage = [
   check("url").isURL().withMessage("Please enter a valid url"),
   check("preview").isBoolean().withMessage("Must be true or false"),
   handleValidationErrors,
 ];
 
-// ADD A IMAGE TO A SPOT BASED ON SPOT ID
 router.post(
   "/:spotId/images",
   requireAuth,
