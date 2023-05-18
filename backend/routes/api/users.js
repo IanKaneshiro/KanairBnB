@@ -17,31 +17,36 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
       {
         model: Image,
         as: "SpotImages",
-        attributes: [],
+        attributes: ["url", "preview"],
       },
     ],
-    attributes: [
-      "id",
-      "ownerId",
-      "address",
-      "city",
-      "state",
-      "country",
-      "lat",
-      "lng",
-      "name",
-      "description",
-      "price",
-      "createdAt",
-      "updatedAt",
-      [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
-      [sequelize.col("SpotImages.url"), "previewImage"],
-    ],
+    attributes: {
+      include: [
+        [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
+      ],
+    },
     where: {
       ownerId: req.user.id,
     },
     order: [["id"]],
     group: ["Spot.id", "SpotImages.id"],
+  });
+
+  let spotList = [];
+  spots.forEach((spot) => {
+    spotList.push(spot.toJSON());
+  });
+
+  spotList.forEach((spot) => {
+    spot.SpotImages.forEach((image) => {
+      if (image.preview === true) {
+        spot.previewImage = image.url;
+      }
+    });
+    if (!spot.previewImage) {
+      spot.previewImage = "No preview image found";
+    }
+    delete spot.SpotImages;
   });
 
   if (!spots.length) {
@@ -51,8 +56,61 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
   }
 
   res.status(200);
-  res.json({ Spots: spots });
+  res.json({ Spots: spotList });
 });
+
+// GET ALL REVIEWS OF CURRENT USER
+router.get("/me/reviews", requireAuth, async (req, res, next) => {
+  const reviews = await Review.findAll({
+    where: {
+      userId: req.user.id,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: Spot,
+        include: {
+          model: Image,
+          as: "SpotImages",
+          attributes: ["url", "preview"],
+        },
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+        },
+      },
+      {
+        model: Image,
+        as: "ReviewImages",
+        attributes: ["id", "url"],
+      },
+    ],
+  });
+
+  let reviewsList = [];
+  reviews.forEach((review) => {
+    reviewsList.push(review.toJSON());
+  });
+
+  reviewsList.forEach((review) => {
+    review.Spot.SpotImages.forEach((image) => {
+      if (image.preview === true) {
+        review.Spot.previewImage = image.url;
+      }
+    });
+    if (!review.Spot.previewImage) {
+      review.Spot.previewImage = "No preview image found";
+    }
+    delete review.Spot.SpotImages;
+  });
+
+  res.status(200);
+  res.json({ Reviews: reviewsList });
+});
+
+// SIGN UP NEW USER
 const validateSignup = [
   check("firstName")
     .exists({ checkFalsy: true })

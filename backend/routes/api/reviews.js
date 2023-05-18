@@ -72,4 +72,82 @@ router.post(
   }
 );
 
+// EDIT A REVIEW
+const validateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .withMessage("Review text is required"),
+  check("stars")
+    .exists({ checkFalsy: true })
+    .withMessage("Stars value is required")
+    .custom((value) => {
+      if (value < 1 || value > 5) {
+        throw new Error("Stars must be an integer from 1 to 5");
+      } else {
+        return true;
+      }
+    }),
+  handleValidationErrors,
+];
+
+router.put(
+  "/:reviewId",
+  requireAuth,
+  validateReview,
+  async (req, res, next) => {
+    const { review, stars } = req.body;
+    const rev = await Review.findByPk(req.params.reviewId);
+
+    if (!rev) {
+      const err = new Error("Review couldn't be found");
+      err.status = 404;
+      return next(err);
+    }
+
+    if (rev.userId !== req.user.id) {
+      const err = new Error("Forbidden");
+      err.status = 403;
+      return next(err);
+    }
+
+    const updatedReview = await rev.update({
+      review,
+      stars,
+    });
+
+    const safeReview = {
+      id: updatedReview.id,
+      userId: updatedReview.userId,
+      spotId: updatedReview.spotId,
+      review: updatedReview.review,
+      stars: updatedReview.stars,
+      createdAt: updatedReview.createdAt,
+      updatedAt: updatedReview.updatedAt,
+    };
+
+    res.status(200);
+    return res.json(safeReview);
+  }
+);
+
+// DELETE A REVIEW
+router.delete("/:reviewId", requireAuth, async (req, res, next) => {
+  const review = await Review.findByPk(req.params.reviewId);
+  if (!review) {
+    const err = new Error("Review couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+  if (review.userId !== req.user.id) {
+    const err = new Error("Forbidden");
+    err.status = 403;
+    return next(err);
+  }
+
+  await review.destroy();
+  res.status(200);
+  res.json({
+    message: "Successfully deleted",
+  });
+});
 module.exports = router;

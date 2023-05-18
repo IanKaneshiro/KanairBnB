@@ -23,21 +23,36 @@ router.get("/", async (req, res, next) => {
       {
         model: Image,
         as: "SpotImages",
-        attributes: [],
+        attributes: ["url", "preview"],
       },
     ],
     attributes: {
       include: [
         [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
-        [sequelize.col("SpotImages.url"), "previewImage"],
       ],
     },
-    order: [["id"]],
     group: ["Spot.id", "SpotImages.id"],
   });
 
+  let spotList = [];
+  spots.forEach((spot) => {
+    spotList.push(spot.toJSON());
+  });
+
+  spotList.forEach((spot) => {
+    spot.SpotImages.forEach((image) => {
+      if (image.preview === true) {
+        spot.previewImage = image.url;
+      }
+    });
+    if (!spot.previewImage) {
+      spot.previewImage = "No preview image found";
+    }
+    delete spot.SpotImages;
+  });
+
   res.status(200);
-  res.json({ Spots: spots });
+  res.json({ Spots: spotList });
 });
 
 const validateSpot = [
@@ -211,13 +226,13 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
   });
 });
 
+// ADD A IMAGE TO A SPOT BASED ON SPOT ID
 const validateImage = [
   check("url").isURL().withMessage("Please enter a valid url"),
   check("preview").isBoolean().withMessage("Must be true or false"),
   handleValidationErrors,
 ];
 
-// ADD A IMAGE TO A SPOT BASED ON SPOT ID
 router.post(
   "/:spotId/images",
   requireAuth,
@@ -348,6 +363,7 @@ router.post(
   }
 );
 
+// CREATE A REVIEW FOR A SPOT BASED ON SPOT ID
 const validateReview = [
   check("review")
     .exists({ checkFalsy: true })
@@ -362,7 +378,6 @@ const validateReview = [
   handleValidationErrors,
 ];
 
-// CREATE A REVIEW FOR A SPOT BASED ON SPOT ID
 router.post(
   "/:spotId/reviews",
   requireAuth,
@@ -389,7 +404,7 @@ router.post(
 
     if (existingReview) {
       const err = new Error("User already has a review for this spot");
-      err.status = 403;
+      err.status = 500;
       return next(err);
     }
 
@@ -489,8 +504,6 @@ router.delete(
     const image = await Image.findOne({
       where: {
         id,
-        imageableId: spot.id,
-        imageableType: "Spot",
       },
     });
 
@@ -498,10 +511,8 @@ router.delete(
       const err = new Error("Spot Image couldn't be found");
       err.status = 404;
       return next(err);
-    } else {
-      await image.destroy();
     }
-
+    await image.destroy();
     res.status(200);
     res.json({ message: "Successfully deleted" });
   }
