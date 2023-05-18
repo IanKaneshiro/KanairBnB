@@ -23,21 +23,36 @@ router.get("/", async (req, res, next) => {
       {
         model: Image,
         as: "SpotImages",
-        attributes: [],
+        attributes: ["url", "preview"],
       },
     ],
     attributes: {
       include: [
         [sequelize.fn("AVG", sequelize.col("Reviews.stars")), "avgRating"],
-        [sequelize.col("SpotImages.url"), "previewImage"],
       ],
     },
-    order: [["id"]],
     group: ["Spot.id", "SpotImages.id"],
   });
 
+  let spotList = [];
+  spots.forEach((spot) => {
+    spotList.push(spot.toJSON());
+  });
+
+  spotList.forEach((spot) => {
+    spot.SpotImages.forEach((image) => {
+      if (image.preview === true) {
+        spot.previewImage = image.url;
+      }
+    });
+    if (!spot.previewImage) {
+      spot.previewImage = "No preview image found";
+    }
+    delete spot.SpotImages;
+  });
+
   res.status(200);
-  res.json({ Spots: spots });
+  res.json({ Spots: spotList });
 });
 
 const validateSpot = [
