@@ -130,6 +130,49 @@ router.put(
   }
 );
 
+// DELETE A REVIEW IMAGE
+router.delete(
+  "/:reviewId/images/:imageId",
+  requireAuth,
+  async (req, res, next) => {
+    try {
+      const review = await Review.findByPk(req.params.reviewId);
+
+      if (!review) {
+        res.status(404);
+        return res.json({
+          message: "Review couldn't be found",
+        });
+      }
+
+      if (review.userId !== req.user.id) {
+        res.status(403);
+        return res.json({
+          message: "Forbidden",
+        });
+      }
+
+      const image = await review.getReviewImages({
+        where: { id: req.params.imageId },
+      });
+
+      if (!image.length) {
+        res.status(404);
+        return res.json({
+          message: "Review Image couldn't be found",
+        });
+      }
+
+      await image[0].destroy();
+
+      res.status(200);
+      res.json({ message: "Successfully deleted" });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
 // DELETE A REVIEW
 router.delete("/:reviewId", requireAuth, async (req, res, next) => {
   const review = await Review.findByPk(req.params.reviewId);

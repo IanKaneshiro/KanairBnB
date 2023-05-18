@@ -473,7 +473,7 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
   }
 
   let bookings;
-  if (req.user.id === parseInt(spot.ownerId)) {
+  if (req.user.id === spot.ownerId) {
     bookings = await spot.getBookings({
       include: [{ model: User, attributes: ["id", "firstName", "lastName"] }],
     });
@@ -494,27 +494,41 @@ router.delete(
   "/:spotId/images/:imageId",
   requireAuth,
   async (req, res, next) => {
-    const id = parseInt(req.params.imageId);
-    const spot = await Spot.findByPk(req.params.spotId);
-    if (spot.ownerId !== req.user.id) {
-      const err = new Error("Forbidden");
-      err.status = 403;
-      return next(err);
-    }
-    const image = await Image.findOne({
-      where: {
-        id,
-      },
-    });
+    try {
+      const spot = await Spot.findByPk(req.params.spotId);
 
-    if (!image) {
-      const err = new Error("Spot Image couldn't be found");
-      err.status = 404;
-      return next(err);
+      if (!spot) {
+        res.status(404);
+        return res.json({
+          message: "Spot couldn't be found",
+        });
+      }
+
+      if (spot.ownerId !== req.user.id) {
+        res.status(403);
+        return res.json({
+          message: "Forbidden",
+        });
+      }
+
+      const image = await spot.getSpotImages({
+        where: { id: req.params.imageId },
+      });
+
+      if (!image.length) {
+        res.status(404);
+        return res.json({
+          message: "Spot Image couldn't be found",
+        });
+      }
+
+      await image[0].destroy();
+
+      res.status(200);
+      res.json({ message: "Successfully deleted" });
+    } catch (err) {
+      next(err);
     }
-    await image.destroy();
-    res.status(200);
-    res.json({ message: "Successfully deleted" });
   }
 );
 module.exports = router;
