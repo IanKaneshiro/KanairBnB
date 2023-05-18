@@ -53,6 +53,43 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
   res.status(200);
   res.json({ Spots: spots });
 });
+
+// GET ALL REVIEWS OF CURRENT USER
+router.get("/me/reviews", requireAuth, async (req, res, next) => {
+  const reviews = await Review.findAll({
+    where: {
+      userId: req.user.id,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: Spot,
+        include: {
+          model: Image,
+          as: "SpotImages",
+          attributes: [],
+        },
+        attributes: {
+          exclude: ["createdAt", "updatedAt"],
+          include: [[sequelize.col("SpotImages.url"), "previewImage"]],
+        },
+      },
+      {
+        model: Image,
+        as: "ReviewImages",
+        attributes: ["id", "url"],
+      },
+    ],
+  });
+
+  res.status(200);
+  res.json({ Reviews: reviews });
+});
+
+// SIGN UP NEW USER
 const validateSignup = [
   check("firstName")
     .exists({ checkFalsy: true })
