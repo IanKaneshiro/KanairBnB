@@ -5,7 +5,14 @@ const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
 
-const { User, Spot, Review, Image, sequelize } = require("../../db/models");
+const {
+  User,
+  Spot,
+  Review,
+  Image,
+  Booking,
+  sequelize,
+} = require("../../db/models");
 
 const router = express.Router();
 
@@ -108,6 +115,46 @@ router.get("/me/reviews", requireAuth, async (req, res, next) => {
 
   res.status(200);
   res.json({ Reviews: reviewsList });
+});
+
+//GET ALL BOOKINGS FOR CURRENT USER
+router.get("/me/bookings", requireAuth, async (req, res, next) => {
+  const bookings = await Booking.findAll({
+    where: {
+      userId: req.user.id,
+    },
+    include: {
+      model: Spot,
+      attributes: {
+        exclude: ["createdAt", "updatedAt", "description"],
+      },
+      include: {
+        model: Image,
+        as: "SpotImages",
+        attributes: ["url", "preview"],
+      },
+    },
+  });
+
+  let bookingsList = [];
+  bookings.forEach((booking) => {
+    bookingsList.push(booking.toJSON());
+  });
+
+  bookingsList.forEach((booking) => {
+    booking.Spot.SpotImages.forEach((image) => {
+      if (image.preview === true) {
+        booking.Spot.previewImage = image.url;
+      }
+    });
+    if (!booking.Spot.previewImage) {
+      booking.Spot.previewImage = "No preview image found";
+    }
+    delete booking.Spot.SpotImages;
+  });
+
+  res.status(200);
+  res.json({ Bookings: bookingsList });
 });
 
 // SIGN UP NEW USER
