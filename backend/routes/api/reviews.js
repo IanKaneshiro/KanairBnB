@@ -4,7 +4,7 @@ const { check, validationResult } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
-const { Spot, Booking, Review, Image } = require("../../db/models");
+const { Review, Image } = require("../../db/models");
 
 const router = express.Router();
 

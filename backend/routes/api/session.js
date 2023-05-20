@@ -4,11 +4,29 @@ const bcrypt = require("bcryptjs");
 const { check } = require("express-validator");
 
 const { handleValidationErrors } = require("../../utils/validation");
-const { setTokenCookie, restoreUser } = require("../../utils/auth");
+const { setTokenCookie } = require("../../utils/auth");
 const { User } = require("../..//db/models");
 
 const router = express.Router();
 
+// Get session user
+router.get("/me", (req, res) => {
+  const { user } = req;
+  if (user) {
+    const safeUser = {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      username: user.username,
+    };
+    return res.json({
+      user: safeUser,
+    });
+  } else return res.json({ user: null });
+});
+
+// Login
 const validateLogin = [
   check("credential")
     .exists({ checkFalsy: true })
@@ -20,7 +38,6 @@ const validateLogin = [
   handleValidationErrors,
 ];
 
-// Login
 router.post("/login", validateLogin, async (req, res, next) => {
   const { credential, password } = req.body;
 
@@ -60,23 +77,6 @@ router.post("/login", validateLogin, async (req, res, next) => {
 router.delete("/logout", (_req, res) => {
   res.clearCookie("token");
   return res.json({ message: "success" });
-});
-
-// Get session user
-router.get("/me", (req, res) => {
-  const { user } = req;
-  if (user) {
-    const safeUser = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      username: user.username,
-    };
-    return res.json({
-      user: safeUser,
-    });
-  } else return res.json({ user: null });
 });
 
 module.exports = router;

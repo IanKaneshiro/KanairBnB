@@ -1,9 +1,9 @@
 const express = require("express");
-const { check, validationResult, isLatLong } = require("express-validator");
+const { check } = require("express-validator");
 
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
-const { Op, where } = require("sequelize");
+const { Op } = require("sequelize");
 
 const {
   Spot,
@@ -16,6 +16,7 @@ const {
 
 const router = express.Router();
 
+// GET ALL SPOTS
 const validateQuery = [
   check("page")
     .optional()
@@ -72,7 +73,6 @@ const validateQuery = [
   handleValidationErrors,
 ];
 
-// GET ALL SPOTS
 router.get("/", validateQuery, async (req, res, next) => {
   // pagination
   let page = parseInt(req.query.page);
@@ -182,6 +182,7 @@ router.get("/", validateQuery, async (req, res, next) => {
   res.json({ Spots: spotList, page, size });
 });
 
+// CREATE A NEW SPOT
 const validateSpot = [
   check("address")
     .exists({ checkFalsy: true })
@@ -211,7 +212,6 @@ const validateSpot = [
   handleValidationErrors,
 ];
 
-// CREATE A NEW SPOT
 router.post("/", requireAuth, validateSpot, async (req, res, next) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
