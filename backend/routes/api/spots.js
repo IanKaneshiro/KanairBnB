@@ -30,7 +30,7 @@ const validateQuery = [
     .optional()
     .custom((value) => {
       value = parseInt(value);
-      if (value > 90 || value < -90) {
+      if (value > 90 || value < -90 || !value) {
         throw new Error("Maximum latitude is invalid");
       }
       return true;
@@ -39,7 +39,7 @@ const validateQuery = [
     .optional()
     .custom((value) => {
       value = parseInt(value);
-      if (value > 90 || value < -90) {
+      if (value > 90 || value < -90 || !value) {
         throw new Error("Minimum latitude is invalid");
       }
       return true;
@@ -48,8 +48,8 @@ const validateQuery = [
     .optional()
     .custom((value) => {
       value = parseInt(value);
-      if (value > 180 || value < -180) {
-        throw new Error("Maximum longitude is invalid");
+      if (value > 180 || value < -180 || !value) {
+        throw new Error("Minimum longitude is invalid");
       }
       return true;
     }),
@@ -57,8 +57,8 @@ const validateQuery = [
     .optional()
     .custom((value) => {
       value = parseInt(value);
-      if (value > 180 || value < -180) {
-        throw new Error("Minimum longitude is invalid");
+      if (value > 180 || value < -180 || !value) {
+        throw new Error("Maximum longitude is invalid");
       }
       return true;
     }),
@@ -614,6 +614,11 @@ router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
     bookings = await spot.getBookings({
       attributes: ["spotId", "startDate", "endDate"],
     });
+  }
+  if (!bookings.length) {
+    const err = new Error("No bookings for this spot");
+    err.status = 404;
+    return next(err);
   }
 
   res.status(200);
