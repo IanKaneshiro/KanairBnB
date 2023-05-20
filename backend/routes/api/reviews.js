@@ -28,7 +28,6 @@ router.post(
     // Error if the review doesn't exist
     if (!review) {
       const err = new Error("Review couldn't be found");
-
       err.status = 404;
       return next(err);
     }
@@ -139,17 +138,15 @@ router.delete(
       const review = await Review.findByPk(req.params.reviewId);
 
       if (!review) {
-        res.status(404);
-        return res.json({
-          message: "Review couldn't be found",
-        });
+        const err = new Error("Review couldn't be found");
+        err.status = 404;
+        return next(err);
       }
 
       if (review.userId !== req.user.id) {
-        res.status(403);
-        return res.json({
-          message: "Forbidden",
-        });
+        const err = new Error("Forbidden");
+        err.status = 403;
+        return next(err);
       }
 
       const image = await review.getReviewImages({
@@ -157,10 +154,9 @@ router.delete(
       });
 
       if (!image.length) {
-        res.status(404);
-        return res.json({
-          message: "Review Image couldn't be found",
-        });
+        const err = new Error("Review Image couldn't be found");
+        err.status = 404;
+        return next(err);
       }
 
       await image[0].destroy();

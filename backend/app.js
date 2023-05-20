@@ -77,12 +77,17 @@ app.use((err, _req, _res, next) => {
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);
   console.error(err);
-  res.json({
+  const errObj = {
     title: err.title || "Server Error",
     message: err.message,
     errors: err.errors,
-    stack: isProduction ? null : err.stack,
-  });
+    stack: err.stack,
+  };
+  if (isProduction) {
+    delete errObj.title;
+    delete errObj.stack;
+  }
+  res.json(errObj);
 });
 
 module.exports = app;

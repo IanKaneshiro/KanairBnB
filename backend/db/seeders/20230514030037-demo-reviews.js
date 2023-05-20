@@ -87,7 +87,7 @@ module.exports = {
         },
         {
           spotId: 7,
-          userId: 5,
+          userId: 1,
           review:
             "Overrated and overcrowded. The Hall of Justice didn't impress.",
           stars: 2,
@@ -113,7 +113,7 @@ module.exports = {
         },
         {
           spotId: 1,
-          userId: 4,
+          userId: 5,
           review:
             "A must-visit place for nature enthusiasts. The Batcave offers a unique experience.",
           stars: 4,
@@ -133,7 +133,7 @@ module.exports = {
         },
         {
           spotId: 7,
-          userId: 5,
+          userId: 4,
           review:
             "Decent place, but nothing extraordinary. The Hall of Justice didn't leave a lasting impression.",
           stars: 3,
