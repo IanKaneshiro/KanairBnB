@@ -15,31 +15,38 @@ module.exports = {
       options,
       [
         {
-          firstName: "test",
-          lastName: "user",
-          email: "test@test.com",
-          username: "test",
+          firstName: "demo",
+          lastName: "demo",
+          email: "demo@email.com",
+          username: "demo",
           hashedPassword: bcrypt.hashSync("password"),
         },
         {
           firstName: "Bruce",
           lastName: "Wayne",
-          email: "vengeance@user.io",
+          email: "vengeance@email.com",
           username: "LetsGetNuts",
           hashedPassword: bcrypt.hashSync("password"),
         },
         {
           firstName: "Clark",
           lastName: "Kent",
-          email: "farmboy@user.io",
+          email: "farmboy@email.com",
           username: "Smallville",
           hashedPassword: bcrypt.hashSync("password"),
         },
         {
-          firstName: "Diana",
-          lastName: "Prince",
-          email: "ww@user.io",
-          username: "ArtifactsLover",
+          firstName: "Natasha",
+          lastName: "Romanoff",
+          email: "blackwidow@email.com",
+          username: "BlackWidow",
+          hashedPassword: bcrypt.hashSync("password"),
+        },
+        {
+          firstName: "Logan",
+          lastName: "Howlett",
+          email: "claws@email.com",
+          username: "Wolverine",
           hashedPassword: bcrypt.hashSync("password"),
         },
       ],
@@ -54,7 +61,13 @@ module.exports = {
       options,
       {
         username: {
-          [Op.in]: ["test", "LetsGetNuts", "Smallville", "ArtifactsLover"],
+          [Op.in]: [
+            "demo",
+            "LetsGetNuts",
+            "Smallville",
+            "BlackWidow",
+            "Wolverine",
+          ],
         },
       },
       {}

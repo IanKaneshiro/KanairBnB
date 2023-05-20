@@ -4,7 +4,7 @@ const { check, validationResult } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
-const { Spot, Booking, Review, Image } = require("../../db/models");
+const { Review, Image } = require("../../db/models");
 
 const router = express.Router();
 
@@ -127,6 +127,49 @@ router.put(
 
     res.status(200);
     return res.json(safeReview);
+  }
+);
+
+// DELETE A REVIEW IMAGE
+router.delete(
+  "/:reviewId/images/:imageId",
+  requireAuth,
+  async (req, res, next) => {
+    try {
+      const review = await Review.findByPk(req.params.reviewId);
+
+      if (!review) {
+        res.status(404);
+        return res.json({
+          message: "Review couldn't be found",
+        });
+      }
+
+      if (review.userId !== req.user.id) {
+        res.status(403);
+        return res.json({
+          message: "Forbidden",
+        });
+      }
+
+      const image = await review.getReviewImages({
+        where: { id: req.params.imageId },
+      });
+
+      if (!image.length) {
+        res.status(404);
+        return res.json({
+          message: "Review Image couldn't be found",
+        });
+      }
+
+      await image[0].destroy();
+
+      res.status(200);
+      res.json({ message: "Successfully deleted" });
+    } catch (err) {
+      next(err);
+    }
   }
 );
 
