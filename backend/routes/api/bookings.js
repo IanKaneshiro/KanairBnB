@@ -29,7 +29,7 @@ const validateDate = [
     .withMessage("startDate must be a valid date."),
   handleValidationErrors,
 ];
-validateDate;
+
 router.put("/:bookingId", requireAuth, validateDate, async (req, res, next) => {
   const { startDate, endDate } = req.body;
   const booking = await Booking.findByPk(req.params.bookingId);
