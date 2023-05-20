@@ -447,25 +447,31 @@ router.post(
       return next(err);
     }
 
-    const existingBooking = await Booking.findOne({
+    const existingBooking = await Booking.findAll({
       where: {
-        userId,
-        spotId,
-        endDate,
-        startDate,
+        spotId: req.params.spotId,
       },
     });
 
-    if (existingBooking) {
+    if (existingBooking.length) {
       const err = new Error(
         "Sorry, this spot is already booked for the specified dates"
       );
+      err.title = "Booking conflict";
       err.status = 403;
-      err.errors = {
-        startDate: "Start date conflicts with an existing booking",
-        endDate: "End date conflicts with an existing booking",
-      };
-      return next(err);
+      err.errors = {};
+      existingBooking.forEach((booking) => {
+        console.log(startDate, booking.startDate);
+        console.log(endDate, booking.endDate);
+        if (startDate >= booking.startDate && startDate <= booking.endDate) {
+          err.errors.startDate =
+            "Start date conflicts with an existing booking";
+        }
+        if (endDate >= booking.startDate && endDate <= booking.endDate) {
+          err.errors.endDate = "End date conflicts with an existing booking";
+        }
+      });
+      if (Object.keys(err.errors).length > 0) return next(err);
     }
 
     const booking = await Booking.create({
