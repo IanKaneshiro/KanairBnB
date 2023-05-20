@@ -1,8 +1,13 @@
 const express = require("express");
-const { check } = require("express-validator");
 
-const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
+const {
+  validateQuery,
+  validateSpot,
+  validateSpotImage,
+  validateSpotDate,
+  validateSpotReview,
+} = require("../../utils/inputValdation");
 const { Op } = require("sequelize");
 
 const {
@@ -17,62 +22,6 @@ const {
 const router = express.Router();
 
 // GET ALL SPOTS
-const validateQuery = [
-  check("page")
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage("Page must be greater than or equal to 1"),
-  check("size")
-    .optional()
-    .isInt({ min: 1 })
-    .withMessage("Size must be greater than or equal to 1"),
-  check("maxLat")
-    .optional()
-    .custom((value) => {
-      value = parseInt(value);
-      if (value > 90 || value < -90 || !value) {
-        throw new Error("Maximum latitude is invalid");
-      }
-      return true;
-    }),
-  check("minLat")
-    .optional()
-    .custom((value) => {
-      value = parseInt(value);
-      if (value > 90 || value < -90 || !value) {
-        throw new Error("Minimum latitude is invalid");
-      }
-      return true;
-    }),
-  check("minLng")
-    .optional()
-    .custom((value) => {
-      value = parseInt(value);
-      if (value > 180 || value < -180 || !value) {
-        throw new Error("Minimum longitude is invalid");
-      }
-      return true;
-    }),
-  check("maxLng")
-    .optional()
-    .custom((value) => {
-      value = parseInt(value);
-      if (value > 180 || value < -180 || !value) {
-        throw new Error("Maximum longitude is invalid");
-      }
-      return true;
-    }),
-  check("minPrice")
-    .optional()
-    .isFloat({ min: 0 })
-    .withMessage("Minimum price must be greater than or equal to 0"),
-  check("maxPrice")
-    .optional()
-    .isFloat({ min: 0 })
-    .withMessage("Maximum price must be greater than or equal to 0"),
-  handleValidationErrors,
-];
-
 router.get("/", validateQuery, async (req, res, next) => {
   // pagination
   let page = parseInt(req.query.page);
@@ -183,36 +132,6 @@ router.get("/", validateQuery, async (req, res, next) => {
   res.status(200);
   res.json({ Spots: spotList, page, size });
 });
-
-// CREATE A NEW SPOT
-const validateSpot = [
-  check("address")
-    .exists({ checkFalsy: true })
-    .withMessage("Street address is required."),
-  check("city").exists({ checkFalsy: true }).withMessage("City is required."),
-  check("state").exists({ checkFalsy: true }).withMessage("State is required."),
-  check("country")
-    .exists({ checkFalsy: true })
-    .withMessage("Country is required."),
-  check("lat")
-    .exists({ checkFalsy: true })
-    .withMessage("Latitude is not valid."),
-  check("lng")
-    .exists({ checkFalsy: true })
-    .withMessage("Longitude is not valid."),
-  check("name")
-    .exists({ checkFalsy: true })
-    .withMessage("Name required.")
-    .isLength({ max: 49 })
-    .withMessage("Name must be less than 50 characters."),
-  check("description")
-    .exists({ checkFalsy: true })
-    .withMessage("Description is required."),
-  check("price")
-    .exists({ checkFalsy: true })
-    .withMessage("Price per day is required."),
-  handleValidationErrors,
-];
 
 router.post("/", requireAuth, validateSpot, async (req, res, next) => {
   const { address, city, state, country, lat, lng, name, description, price } =
@@ -356,16 +275,10 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
 });
 
 // ADD A IMAGE TO A SPOT BASED ON SPOT ID
-const validateImage = [
-  check("url").isURL().withMessage("Please enter a valid url"),
-  check("preview").isBoolean().withMessage("Must be true or false"),
-  handleValidationErrors,
-];
-
 router.post(
   "/:spotId/images",
   requireAuth,
-  validateImage,
+  validateSpotImage,
   async (req, res, next) => {
     const { url, preview } = req.body;
     const spotId = parseInt(req.params.spotId);
@@ -404,30 +317,10 @@ router.post(
 );
 
 // BOOK A SPOT BASED ON SPOT ID
-const validateDate = [
-  check("endDate")
-    .exists({ checkFalsy: true })
-    .withMessage("endDate is required")
-    .isDate()
-    .withMessage("endDate must be a valid date.")
-    .custom((value, { req }) => {
-      if (value <= req.body.startDate) {
-        throw new Error("endDate cannot be on or before startDate");
-      }
-      return true;
-    }),
-  check("startDate")
-    .exists({ checkFalsy: true })
-    .withMessage("startDate is required")
-    .isDate()
-    .withMessage("startDate must be a valid date."),
-  handleValidationErrors,
-];
-
 router.post(
   "/:spotId/bookings",
   requireAuth,
-  validateDate,
+  validateSpotDate,
   async (req, res, next) => {
     const { startDate, endDate } = req.body;
     const spotId = parseInt(req.params.spotId);
@@ -497,24 +390,10 @@ router.post(
 );
 
 // CREATE A REVIEW FOR A SPOT BASED ON SPOT ID
-const validateReview = [
-  check("review")
-    .exists({ checkFalsy: true })
-    .withMessage("Review text is required"),
-  check("stars").custom((value) => {
-    if (value < 1 || value > 5) {
-      throw new Error("Stars must be an integer from 1 to 5");
-    } else {
-      return true;
-    }
-  }),
-  handleValidationErrors,
-];
-
 router.post(
   "/:spotId/reviews",
   requireAuth,
-  validateReview,
+  validateSpotReview,
   async (req, res, next) => {
     const { review, stars } = req.body;
     const spotId = parseInt(req.params.spotId);

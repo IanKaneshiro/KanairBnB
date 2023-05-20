@@ -1,23 +1,20 @@
 const express = require("express");
-const { check, validationResult } = require("express-validator");
 
-const { handleValidationErrors } = require("../../utils/validation");
 const { requireAuth } = require("../../utils/auth");
 
 const { Review, Image } = require("../../db/models");
+const {
+  validateReviewImage,
+  validateReview,
+} = require("../../utils/inputValdation");
 
 const router = express.Router();
 
 // CREATE IMAGE BASED ON REVIEW ID
-const validateImage = [
-  check("url").isURL().withMessage("Please enter a valid url"),
-  handleValidationErrors,
-];
-
 router.post(
   "/:reviewId/images",
   requireAuth,
-  validateImage,
+  validateReviewImage,
   async (req, res, next) => {
     const { url } = req.body;
     const reviewId = parseInt(req.params.reviewId);
@@ -72,23 +69,6 @@ router.post(
 );
 
 // EDIT A REVIEW
-const validateReview = [
-  check("review")
-    .exists({ checkFalsy: true })
-    .withMessage("Review text is required"),
-  check("stars")
-    .exists({ checkFalsy: true })
-    .withMessage("Stars value is required")
-    .custom((value) => {
-      if (value < 1 || value > 5) {
-        throw new Error("Stars must be an integer from 1 to 5");
-      } else {
-        return true;
-      }
-    }),
-  handleValidationErrors,
-];
-
 router.put(
   "/:reviewId",
   requireAuth,
@@ -189,4 +169,5 @@ router.delete("/:reviewId", requireAuth, async (req, res, next) => {
     message: "Successfully deleted",
   });
 });
+
 module.exports = router;
