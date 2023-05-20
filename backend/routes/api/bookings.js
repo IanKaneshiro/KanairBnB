@@ -92,7 +92,7 @@ router.put("/:bookingId", requireAuth, validateDate, async (req, res, next) => {
   };
 
   res.status(200);
-  return res.json(safeBooking);
+  res.json(safeBooking);
 });
 
 // DELETE A BOOKING

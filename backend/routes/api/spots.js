@@ -138,6 +138,7 @@ router.get("/", validateQuery, async (req, res, next) => {
         attributes: ["url", "preview"],
       },
     ],
+    order: ["id"],
     limit,
     offset,
     where,
@@ -174,8 +175,9 @@ router.get("/", validateQuery, async (req, res, next) => {
   });
 
   if (!spotList.length) {
-    res.status(404);
-    return res.json({ message: "No spots with seach criteria" });
+    const err = new Error("No spots with seach criteria");
+    err.status = 404;
+    return next(err);
   }
 
   res.status(200);
@@ -373,7 +375,6 @@ router.post(
 
     if (!spot) {
       const err = new Error("Spot couldn't be found");
-
       err.status = 404;
       return next(err);
     }
@@ -436,7 +437,6 @@ router.post(
 
     if (!spot) {
       const err = new Error("Spot couldn't be found");
-
       err.status = 404;
       return next(err);
     }
@@ -580,13 +580,13 @@ router.get("/:spotId/reviews", async (req, res, next) => {
     ],
   });
 
-  res.status(200);
   if (!reviews.length) {
-    return res.json({
-      message: "Spot has no reviews",
-    });
+    const err = new Error("Spot has no reviews");
+    err.status = 404;
+    return next(err);
   }
 
+  res.status(200);
   res.json({ Reviews: reviews });
 });
 
@@ -625,17 +625,15 @@ router.delete(
       const spot = await Spot.findByPk(req.params.spotId);
 
       if (!spot) {
-        res.status(404);
-        return res.json({
-          message: "Spot couldn't be found",
-        });
+        const err = new Error("Spot couldn't be found");
+        err.status = 404;
+        return next(err);
       }
 
       if (spot.ownerId !== req.user.id) {
-        res.status(403);
-        return res.json({
-          message: "Forbidden",
-        });
+        const err = new Error("Forbidden");
+        err.status = 403;
+        return next(err);
       }
 
       const image = await spot.getSpotImages({
@@ -643,10 +641,9 @@ router.delete(
       });
 
       if (!image.length) {
-        res.status(404);
-        return res.json({
-          message: "Spot Image couldn't be found",
-        });
+        const err = new Error("Spot Image couldn't be found");
+        err.status = 404;
+        return next(err);
       }
 
       await image[0].destroy();

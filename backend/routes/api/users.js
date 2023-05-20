@@ -57,9 +57,9 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
   });
 
   if (!spots.length) {
-    return res.json({
-      message: "User has no spots",
-    });
+    const err = new Error("User has no spots");
+    err.status = 404;
+    return next(err);
   }
 
   res.status(200);
