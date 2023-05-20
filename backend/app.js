@@ -11,7 +11,8 @@ const { ValidationError } = require("sequelize");
 // Checking enviroment
 const { environment } = require("./config");
 const isProduction = true;
-// environment === "production";
+environment === "production";
+
 // import routes
 const routes = require("./routes");
 
@@ -87,12 +88,6 @@ app.use((err, _req, res, _next) => {
     delete errObj.title;
     delete errObj.stack;
   }
-  // {
-  //   title: err.title || "Server Error",
-  //   message: err.message,
-  //   errors: err.errors,
-  //   stack: isProduction ? null : err.stack,
-  // }
   res.json(errObj);
 });
 
