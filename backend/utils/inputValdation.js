@@ -123,29 +123,29 @@ const validateQuery = [
 const validateSpot = [
   check("address")
     .exists({ checkFalsy: true })
-    .withMessage("Street address is required."),
-  check("city").exists({ checkFalsy: true }).withMessage("City is required."),
-  check("state").exists({ checkFalsy: true }).withMessage("State is required."),
+    .withMessage("Street address is required"),
+  check("city").exists({ checkFalsy: true }).withMessage("City is required"),
+  check("state").exists({ checkFalsy: true }).withMessage("State is required"),
   check("country")
     .exists({ checkFalsy: true })
-    .withMessage("Country is required."),
+    .withMessage("Country is required"),
   check("lat")
     .exists({ checkFalsy: true })
-    .withMessage("Latitude is not valid."),
+    .withMessage("Latitude is not valid"),
   check("lng")
     .exists({ checkFalsy: true })
-    .withMessage("Longitude is not valid."),
+    .withMessage("Longitude is not valid"),
   check("name")
     .exists({ checkFalsy: true })
-    .withMessage("Name required.")
+    .withMessage("Name required")
     .isLength({ max: 49 })
-    .withMessage("Name must be less than 50 characters."),
+    .withMessage("Name must be less than 50 characters"),
   check("description")
     .exists({ checkFalsy: true })
-    .withMessage("Description is required."),
+    .withMessage("Description is required"),
   check("price")
     .exists({ checkFalsy: true })
-    .withMessage("Price per day is required."),
+    .withMessage("Price per day is required"),
   handleValidationErrors,
 ];
 // Add a image to a spot based on spot id
@@ -161,7 +161,7 @@ const validateSpotDate = [
     .exists({ checkFalsy: true })
     .withMessage("endDate is required")
     .isDate()
-    .withMessage("endDate must be a valid date.")
+    .withMessage("endDate must be a valid date")
     .custom((value, { req }) => {
       if (value <= req.body.startDate) {
         throw new Error("endDate cannot be on or before startDate");
@@ -172,7 +172,7 @@ const validateSpotDate = [
     .exists({ checkFalsy: true })
     .withMessage("startDate is required")
     .isDate()
-    .withMessage("startDate must be a valid date."),
+    .withMessage("startDate must be a valid date"),
   handleValidationErrors,
 ];
 

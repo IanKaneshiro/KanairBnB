@@ -147,6 +147,7 @@ router.get("/", validateQuery, async (req, res, next) => {
   }
 });
 
+// CREATE A NEW SPOT
 router.post("/", requireAuth, validateSpot, async (req, res, next) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
