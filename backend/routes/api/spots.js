@@ -11,7 +11,8 @@ const {
   validateSpotReview,
 } = require("../../utils/inputValdation");
 
-const { Op } = require("sequelize");
+// Importing helper function
+const { applySeachFilters } = require("../../utils/helperFunctions");
 
 const {
   Spot,
@@ -35,54 +36,12 @@ router.get("/", validateQuery, async (req, res, next) => {
 
   const limit = size;
   const offset = size * (page - 1);
+
   // Search filter setup
-  const where = {};
-
-  // --------------------------------HELPER FUNCTION TO REMOVE REPETITIVE CODE -------------------
-  // Min and max price
-  if (maxPrice && minPrice) {
-    where.price = {
-      [Op.between]: [minPrice, maxPrice],
-    };
-  } else if (maxPrice) {
-    where.price = {
-      [Op.lte]: maxPrice,
-    };
-  } else if (minPrice) {
-    where.price = {
-      [Op.gte]: minPrice,
-    };
-  }
-
-  // Min and max Latitude
-  if (maxLat && minLat) {
-    where.lat = {
-      [Op.between]: [minLat, maxLat],
-    };
-  } else if (maxLat) {
-    where.lat = {
-      [Op.lte]: maxLat,
-    };
-  } else if (minLat) {
-    where.lat = {
-      [Op.gte]: minLat,
-    };
-  }
-
-  // Min and max longitude
-  if (maxLng && minLng) {
-    where.lng = {
-      [Op.between]: [minLng, maxLng],
-    };
-  } else if (maxLng) {
-    where.lng = {
-      [Op.lte]: maxLng,
-    };
-  } else if (minLng) {
-    where.lng = {
-      [Op.gte]: minLng,
-    };
-  }
+  let where = {};
+  where = applySeachFilters(where, "price", minPrice, maxPrice);
+  where = applySeachFilters(where, "lat", minLat, maxLat);
+  where = applySeachFilters(where, "lng", minLng, maxLat);
 
   try {
     const spots = await Spot.findAll({
