@@ -194,6 +194,31 @@ const validateSpotReview = [
   handleValidationErrors,
 ];
 
+const validateSignup = [
+  check("firstName")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 2 })
+    .withMessage("First Name is required"),
+  check("lastName")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 2 })
+    .withMessage("Last Name is required"),
+  check("email")
+    .exists({ checkFalsy: true })
+    .isEmail()
+    .withMessage("Invalid email"),
+  check("username")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 4 })
+    .withMessage("Username is required"),
+  check("username").not().isEmail().withMessage("Username cannot be an email"),
+  check("password")
+    .exists({ checkFalsy: true })
+    .isLength({ min: 6 })
+    .withMessage("Password must be 6 characters or more"),
+  handleValidationErrors,
+];
+
 module.exports = {
   validateBookingDate,
   validateReviewImage,
@@ -204,4 +229,5 @@ module.exports = {
   validateSpotImage,
   validateSpotDate,
   validateSpotReview,
+  validateSignup,
 };
