@@ -41,7 +41,7 @@ router.get("/", validateQuery, async (req, res, next) => {
   let where = {};
   where = applySeachFilters(where, "price", minPrice, maxPrice);
   where = applySeachFilters(where, "lat", minLat, maxLat);
-  where = applySeachFilters(where, "lng", minLng, maxLat);
+  where = applySeachFilters(where, "lng", minLng, maxLng);
 
   try {
     const spots = await Spot.findAll({
@@ -387,8 +387,8 @@ router.post(
 
       const safeBooking = {
         id: booking.id,
-        userId: booking.userId,
         spotId: booking.spotId,
+        userId: booking.userId,
         startDate: booking.startDate,
         endDate: booking.endDate,
         createdAt: booking.createdAt,

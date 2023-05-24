@@ -192,7 +192,7 @@ router.get("/me/bookings", requireAuth, async (req, res, next) => {
 });
 
 // SIGN UP NEW USER
-router.post("/sign-up", validateSignup, async (req, res) => {
+router.post("/sign-up", validateSignup, async (req, res, next) => {
   const { firstName, lastName, email, password, username } = req.body;
 
   try {
