@@ -12,7 +12,10 @@ const {
 } = require("../../utils/inputValdation");
 
 // Importing helper function
-const { applySeachFilters } = require("../../utils/helperFunctions");
+const {
+  applySeachFilters,
+  reviewUniqueErrHandler,
+} = require("../../utils/helperFunctions");
 
 const {
   Spot,
@@ -442,17 +445,7 @@ router.post(
       res.status(201);
       res.json(safeReview);
     } catch (err) {
-      if (
-        err.name === "SequelizeUniqueConstraintError" &&
-        err.fields.indexOf("spotId") !== -1 &&
-        err.fields.indexOf("userId") !== -1
-      ) {
-        const errObj = {
-          message: "User already has a review for this spot",
-          stack: err.stack,
-        };
-        return next(errObj);
-      }
+      reviewUniqueErrHandler(err, next);
       next(err);
     }
   }
