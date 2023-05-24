@@ -387,8 +387,8 @@ router.post(
 
       const safeBooking = {
         id: booking.id,
-        userId: booking.userId,
         spotId: booking.spotId,
+        userId: booking.userId,
         startDate: booking.startDate,
         endDate: booking.endDate,
         createdAt: booking.createdAt,
