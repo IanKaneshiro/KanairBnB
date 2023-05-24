@@ -14,6 +14,8 @@ const {
   Booking,
   sequelize,
 } = require("../../db/models");
+const { ValidationError } = require("sequelize");
+const e = require("express");
 
 const router = express.Router();
 
@@ -219,6 +221,19 @@ router.post("/sign-up", validateSignup, async (req, res, next) => {
       user: safeUser,
     });
   } catch (err) {
+    if (
+      err.name === "SequelizeUniqueConstraintError" &&
+      (err.fields.includes("username") || err.fields.includes("email"))
+    ) {
+      const errObj = {
+        message: "User already exists",
+        errors: {
+          [err.fields[0]]: err.message,
+        },
+        stack: err.stack,
+      };
+      return next(errObj);
+    }
     next(err);
   }
 });
