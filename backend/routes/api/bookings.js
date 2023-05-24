@@ -38,7 +38,6 @@ router.put(
       // checking if booking is in the past;
       const currentDate = new Date();
       const formattedDate = currentDate.toISOString().slice(0, 10);
-      console.log(booking.endDate, formattedDate);
       if (booking.endDate < formattedDate) {
         const err = new Error("Past bookings can't be modified");
         err.status = 403;
@@ -129,7 +128,6 @@ router.delete("/:bookingId", requireAuth, async (req, res, next) => {
     // Checking if the booking has already started
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().slice(0, 10);
-    console.log(booking.startDate, formattedDate);
     if (booking.startDate <= formattedDate) {
       const err = new Error("Bookings that have been started can't be deleted");
       err.status = 403;

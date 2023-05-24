@@ -422,20 +422,6 @@ router.post(
         return next(err);
       }
 
-      const existingReview = await Review.findOne({
-        where: {
-          spotId,
-          userId: req.user.id,
-        },
-      });
-
-      // Checking if user has already reviewed spot
-      if (existingReview) {
-        const err = new Error("User already has a review for this spot");
-        err.status = 500;
-        return next(err);
-      }
-
       const rev = await Review.create({
         spotId,
         userId: req.user.id,
@@ -456,6 +442,17 @@ router.post(
       res.status(201);
       res.json(safeReview);
     } catch (err) {
+      if (
+        err.name === "SequelizeUniqueConstraintError" &&
+        err.fields.indexOf("spotId") !== -1 &&
+        err.fields.indexOf("userId") !== -1
+      ) {
+        const errObj = {
+          message: "User already has a review for this spot",
+          stack: err.stack,
+        };
+        return next(errObj);
+      }
       next(err);
     }
   }

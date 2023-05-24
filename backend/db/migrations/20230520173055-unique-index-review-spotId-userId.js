@@ -11,7 +11,6 @@ module.exports = {
       fields: ["spotId", "userId"],
       unique: true,
       name: "index-reviews-userId-spotId",
-      message: "User already has a review for this spot",
     });
   },
 
