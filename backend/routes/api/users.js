@@ -6,6 +6,9 @@ const { setTokenCookie, requireAuth } = require("../../utils/auth");
 // Importing validation middleware
 const { validateSignup } = require("../../utils/inputValdation");
 
+// Importing helper functions
+const { userUniqueErrHandler } = require("../../utils/helperFunctions");
+
 const {
   User,
   Spot,
@@ -219,20 +222,7 @@ router.post("/sign-up", validateSignup, async (req, res, next) => {
       user: safeUser,
     });
   } catch (err) {
-    if (
-      err.name === "SequelizeUniqueConstraintError" &&
-      (err.fields.indexOf("username") !== -1 ||
-        err.fields.indexOf("email") !== -1)
-    ) {
-      const errObj = {
-        message: "User already exists",
-        errors: {
-          [err.fields[0]]: err.message,
-        },
-        stack: err.stack,
-      };
-      return next(errObj);
-    }
+    userUniqueErrHandler(err, next);
     next(err);
   }
 });
