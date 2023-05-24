@@ -14,8 +14,6 @@ const {
   Booking,
   sequelize,
 } = require("../../db/models");
-const { ValidationError } = require("sequelize");
-const e = require("express");
 
 const router = express.Router();
 
