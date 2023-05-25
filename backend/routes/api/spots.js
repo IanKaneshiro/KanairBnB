@@ -366,8 +366,7 @@ router.post(
         if (err) return next(err);
       }
 
-      const booking = await Booking.create({
-        spotId: spot.id,
+      const booking = await spot.createBooking({
         userId: req.user.id,
         startDate,
         endDate,
