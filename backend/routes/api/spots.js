@@ -15,6 +15,7 @@ const {
 const {
   applySeachFilters,
   reviewUniqueErrHandler,
+  conflictingDates,
 } = require("../../utils/helperFunctions");
 
 const {
@@ -360,28 +361,9 @@ router.post(
 
       //  Checking if the input start/end date conflicts with already booked dates
       if (existingBooking.length) {
-        // Creating an error object to return if dates conflict
-        const err = new Error(
-          "Sorry, this spot is already booked for the specified dates"
-        );
-        err.title = "Booking conflict";
-        err.status = 403;
-        err.errors = {};
-        existingBooking.forEach((booking) => {
-          if (startDate >= booking.startDate && startDate <= booking.endDate) {
-            // If startDate conflict, an error is added to errors object
-            err.errors.startDate =
-              "Start date conflicts with an existing booking";
-          }
-          // If endDate conflict, an error is added to errors object
-          if (
-            (endDate >= booking.startDate && endDate <= booking.endDate) ||
-            (startDate <= booking.endDate && endDate >= booking.endDate)
-          ) {
-            err.errors.endDate = "End date conflicts with an existing booking";
-          }
-        });
-        if (Object.keys(err.errors).length > 0) return next(err);
+        // Checking for conflicting dates
+        const err = conflictingDates(startDate, endDate, existingBooking);
+        if (err) return next(err);
       }
 
       const booking = await Booking.create({

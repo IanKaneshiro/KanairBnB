@@ -83,8 +83,37 @@ function reviewUniqueErrHandler(err, next) {
   }
 }
 
+// create booking by spotId and edit booking
+function conflictingDates(startDate, endDate, bookings) {
+  // Creating an error object to return if dates conflict
+  const err = new Error(
+    "Sorry, this spot is already booked for the specified dates"
+  );
+  err.title = "Booking conflict";
+  err.status = 403;
+  err.errors = {};
+
+  bookings.forEach((booking) => {
+    // If startDate conflict, an error is added to errors object
+    if (startDate >= booking.startDate && startDate <= booking.endDate) {
+      err.errors.startDate = "Start date conflicts with an existing booking";
+    }
+    // If endDate conflict, an error is added to errors object
+    if (
+      (endDate >= booking.startDate && endDate <= booking.endDate) ||
+      (startDate <= booking.endDate && endDate >= booking.endDate)
+    ) {
+      err.errors.endDate = "End date conflicts with an existing booking";
+    }
+  });
+  if (Object.keys(err.errors).length > 0) {
+    return err;
+  }
+}
+
 module.exports = {
   applySeachFilters,
   userUniqueErrHandler,
   reviewUniqueErrHandler,
+  conflictingDates,
 };
