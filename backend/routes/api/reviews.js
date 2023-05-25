@@ -53,9 +53,7 @@ router.post(
         return next(err);
       }
 
-      const image = await Image.create({
-        imageableId: req.params.reviewId,
-        imageableType: "Review",
+      const image = await review.createReviewImage({
         url,
       });
 
@@ -142,7 +140,7 @@ router.delete(
         return next(err);
       }
 
-      // Querying for all images associated with current review that match image id
+      // Querying for all images associated with current review that match imageId
       const image = await review.getReviewImages({
         where: { id: req.params.imageId },
       });

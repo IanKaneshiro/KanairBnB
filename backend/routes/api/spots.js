@@ -307,9 +307,7 @@ router.post(
         return next(err);
       }
 
-      const image = await Image.create({
-        imageableId: req.params.spotId,
-        imageableType: "Spot",
+      const image = await spot.createSpotImage({
         url,
         preview,
       });
@@ -366,8 +364,7 @@ router.post(
         if (err) return next(err);
       }
 
-      const booking = await Booking.create({
-        spotId: spot.id,
+      const booking = await spot.createBooking({
         userId: req.user.id,
         startDate,
         endDate,
@@ -398,10 +395,9 @@ router.post(
   validateSpotReview,
   async (req, res, next) => {
     const { review, stars } = req.body;
-    const spotId = parseInt(req.params.spotId);
 
     try {
-      const spot = await Spot.findByPk(spotId);
+      const spot = await Spot.findByPk(req.params.spotId);
 
       // Checking if spot exists in database
       if (!spot) {
@@ -410,8 +406,7 @@ router.post(
         return next(err);
       }
 
-      const rev = await Review.create({
-        spotId,
+      const rev = await spot.createReview({
         userId: req.user.id,
         review,
         stars,

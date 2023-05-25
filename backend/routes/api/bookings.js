@@ -120,7 +120,7 @@ router.delete("/:bookingId", requireAuth, async (req, res, next) => {
       return next(err);
     }
 
-    // Removing bookings from DB
+    // Removing bookings from database
     await booking.destroy();
 
     res.status(200);
