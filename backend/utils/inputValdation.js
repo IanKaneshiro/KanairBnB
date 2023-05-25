@@ -14,12 +14,28 @@ const validateBookingDate = [
         throw new Error("endDate cannot be on or before startDate");
       }
       return true;
+    })
+    .custom((value) => {
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString().slice(0, 10);
+      if (value < formattedDate) {
+        throw new Error("startDate cannot be in the past");
+      }
+      return true;
     }),
   check("startDate")
     .exists({ checkFalsy: true })
     .withMessage("startDate is required")
     .isDate()
-    .withMessage("startDate must be a valid date."),
+    .withMessage("startDate must be a valid date.")
+    .custom((value) => {
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString().slice(0, 10);
+      if (value < formattedDate) {
+        throw new Error("endDate cannot be in the past");
+      }
+      return true;
+    }),
   handleValidationErrors,
 ];
 
@@ -167,12 +183,28 @@ const validateSpotDate = [
         throw new Error("endDate cannot be on or before startDate");
       }
       return true;
+    })
+    .custom((value) => {
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString().slice(0, 10);
+      if (value < formattedDate) {
+        throw new Error("endDate cannot be in the past");
+      }
+      return true;
     }),
   check("startDate")
     .exists({ checkFalsy: true })
     .withMessage("startDate is required")
     .isDate()
-    .withMessage("startDate must be a valid date"),
+    .withMessage("startDate must be a valid date")
+    .custom((value) => {
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString().slice(0, 10);
+      if (value < formattedDate) {
+        throw new Error("startDate cannot be in the past");
+      }
+      return true;
+    }),
   handleValidationErrors,
 ];
 
