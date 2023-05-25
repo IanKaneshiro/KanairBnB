@@ -83,7 +83,7 @@ function reviewUniqueErrHandler(err, next) {
   }
 }
 
-// create booking by spotId and edit booking
+// Create booking by spotId and edit booking
 function conflictingDates(startDate, endDate, bookings) {
   // Creating an error object to return if dates conflict
   const err = new Error(
