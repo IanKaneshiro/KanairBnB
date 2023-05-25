@@ -78,12 +78,12 @@ router.get("/", validateQuery, async (req, res, next) => {
 
     // Add avgRating to each spot
     spotList.forEach((spot) => {
-      let count = null;
+      let count = 0;
       spot.Reviews.forEach((review) => {
         count = count + review.stars;
       });
-      if (!count) {
-        spot.avgRating = "No reviews for this spot yet";
+      if (count === 0) {
+        spot.avgRating = null;
       } else {
         spot.avgRating = count / spot.Reviews.length;
       }
@@ -98,7 +98,7 @@ router.get("/", validateQuery, async (req, res, next) => {
         }
       });
       if (!spot.previewImage) {
-        spot.previewImage = "No preview image found";
+        spot.previewImage = null;
       }
       delete spot.SpotImages;
     });

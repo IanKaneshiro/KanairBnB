@@ -65,7 +65,7 @@ router.get("/me/spots", requireAuth, async (req, res, next) => {
         }
       });
       if (!spot.previewImage) {
-        spot.previewImage = "No preview image found";
+        spot.previewImage = null;
       }
       delete spot.SpotImages;
     });
@@ -129,7 +129,7 @@ router.get("/me/reviews", requireAuth, async (req, res, next) => {
         }
       });
       if (!review.Spot.previewImage) {
-        review.Spot.previewImage = "No preview image found";
+        review.Spot.previewImage = null;
       }
       delete review.Spot.SpotImages;
     });
@@ -182,7 +182,7 @@ router.get("/me/bookings", requireAuth, async (req, res, next) => {
         }
       });
       if (!booking.Spot.previewImage) {
-        booking.Spot.previewImage = "No preview image found";
+        booking.Spot.previewImage = null;
       }
       delete booking.Spot.SpotImages;
     });
