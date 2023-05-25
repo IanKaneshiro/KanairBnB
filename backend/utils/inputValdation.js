@@ -8,7 +8,7 @@ const validateBookingDate = [
     .exists({ checkFalsy: true })
     .withMessage("endDate is required")
     .isDate()
-    .withMessage("endDate must be a valid date.")
+    .withMessage("endDate must be a valid date")
     .custom((value, { req }) => {
       if (value <= req.body.startDate) {
         throw new Error("endDate cannot be on or before startDate");
@@ -27,7 +27,7 @@ const validateBookingDate = [
     .exists({ checkFalsy: true })
     .withMessage("startDate is required")
     .isDate()
-    .withMessage("startDate must be a valid date.")
+    .withMessage("startDate must be a valid date")
     .custom((value) => {
       const currentDate = new Date();
       const formattedDate = currentDate.toISOString().slice(0, 10);
