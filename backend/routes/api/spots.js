@@ -78,10 +78,7 @@ router.get("/", validateQuery, async (req, res, next) => {
 
     // Add avgRating to each spot
     spotList.forEach((spot) => {
-      let count = 0;
-      spot.Reviews.forEach((review) => {
-        count = count + review.stars;
-      });
+      const count = spot.Reviews.reduce((acc, review) => acc + review.stars, 0);
       if (count === 0) {
         spot.avgRating = null;
       } else {
