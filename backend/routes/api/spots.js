@@ -82,7 +82,7 @@ router.get("/", validateQuery, async (req, res, next) => {
       if (count === 0) {
         spot.avgRating = null;
       } else {
-        spot.avgRating = count / spot.Reviews.length;
+        spot.avgRating = Math.round(count / spot.Reviews.length);
       }
       delete spot.Reviews;
     });
@@ -170,8 +170,12 @@ router.get("/:spotId", async (req, res, next) => {
         include: [
           [sequelize.fn("COUNT", sequelize.col("Reviews.id")), "numReviews"],
           [
-            sequelize.fn("AVG", sequelize.col("Reviews.stars")),
-            "avgStarRating",
+            sequelize.fn(
+              "ROUND",
+              sequelize.fn("AVG", sequelize.col("Reviews.stars")),
+              1
+            ),
+            "avgRating",
           ],
         ],
       },
