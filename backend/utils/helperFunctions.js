@@ -101,7 +101,7 @@ function conflictingDates(startDate, endDate, bookings) {
     // If endDate conflict, an error is added to errors object
     if (
       (endDate >= booking.startDate && endDate <= booking.endDate) ||
-      (startDate <= booking.endDate && endDate >= booking.endDate)
+      (startDate <= booking.startDate && endDate >= booking.endDate)
     ) {
       err.errors.endDate = "End date conflicts with an existing booking";
     }
