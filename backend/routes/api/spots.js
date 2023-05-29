@@ -82,7 +82,8 @@ router.get("/", validateQuery, async (req, res, next) => {
       if (count === 0) {
         spot.avgRating = null;
       } else {
-        spot.avgRating = Math.round(count / spot.Reviews.length);
+        const avg = count / spot.Reviews.length;
+        spot.avgRating = Number(avg.toFixed(1));
       }
       delete spot.Reviews;
     });
