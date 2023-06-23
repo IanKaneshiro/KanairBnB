@@ -12,14 +12,14 @@ const setUser = (user) => {
   };
 };
 
-// TODO add remove user action
-// const removeUser = () => {
-//   return {
-//     type: REMOVE_USER,
-//   };
-// };
+const removeUser = () => {
+  return {
+    type: REMOVE_USER,
+  };
+};
 
 // Thunk Action Creators
+// --- Login user
 export const login = (user) => async (dispatch) => {
   const { credential, password } = user;
   const res = await csrfFetch("/api/session/login", {
@@ -34,17 +34,53 @@ export const login = (user) => async (dispatch) => {
   return res;
 };
 
+// --- Restore session user
+export const restoreUser = () => async (dispatch) => {
+  const res = await csrfFetch("/api/session/me");
+  const data = await res.json();
+  dispatch(setUser(data.user));
+  return res;
+};
+
+// --- Sign up user
+export const signup = (user) => async (dispatch) => {
+  const { username, firstName, lastName, email, password } = user;
+  const res = await csrfFetch("/api/users/sign-up", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username,
+      firstName,
+      lastName,
+      email,
+      password,
+    }),
+  });
+  const data = await res.json();
+  dispatch(setUser(data.user));
+  return res;
+};
+
+// ---Logout user
+export const logout = () => async (dispatch) => {
+  const res = await csrfFetch("/api/session/logout", { method: "DELETE" });
+  dispatch(removeUser());
+  return res;
+};
+
 const initialState = { user: null };
 
 export default function sessionReducer(state = initialState, action) {
-  let newState;
   switch (action.type) {
     case SET_USER:
-      newState = { ...state };
-      newState.user = action.user;
-      return newState;
+      return { ...state, user: action.user };
     case REMOVE_USER:
-      return { user: null };
+      return {
+        ...state,
+        user: null,
+      };
     default:
       return state;
   }

@@ -2,10 +2,11 @@ import "./LoginForm.css";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../store/session";
-import { Redirect } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 
 export default function LoginFormPage() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +24,7 @@ export default function LoginFormPage() {
     };
     try {
       const res = await dispatch(login(payload));
+      history.push("/");
       return res;
     } catch (err) {
       const error = await err.json();
@@ -37,11 +39,10 @@ export default function LoginFormPage() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        {errors && errors.message && <p>{errors.message}</p>}
-        <label htmlFor="credential">
-          Credential:
+    <div className="form">
+      <h1>Login</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
           <input
             id="credential"
             name="credential"
@@ -49,13 +50,13 @@ export default function LoginFormPage() {
             placeholder="Username or Email"
             value={credential}
             onChange={(e) => setCredential(e.target.value)}
+            required
           />
-        </label>
-        {errors && errors.credential && <p>{errors.credential}</p>}
-      </div>
-      <div>
-        <label htmlFor="password">
-          Password:
+        </div>
+        {errors && errors.credential && (
+          <p className="errors">{errors.credential}</p>
+        )}
+        <div>
           <input
             id="password"
             name="password"
@@ -63,68 +64,15 @@ export default function LoginFormPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
-        </label>
-        {errors && errors.password && <p>{errors.password}</p>}
-      </div>
-      <button>Login</button>
-      <button>Sign Up</button>
-    </form>
+        </div>
+        {errors && errors.password && (
+          <p className="errors">{errors.password}</p>
+        )}
+        {errors && errors.message && <p className="errors">{errors.message}</p>}
+        <button>Login</button>
+      </form>
+    </div>
   );
 }
-
-// import React, { useState } from "react";
-// import * as sessionActions from "../../store/session";
-// import { useDispatch, useSelector } from "react-redux";
-// import { Redirect } from "react-router-dom";
-
-// function LoginFormPage() {
-//   const dispatch = useDispatch();
-//   const sessionUser = useSelector((state) => state.session.user);
-//   const [credential, setCredential] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [errors, setErrors] = useState({});
-
-//   if (sessionUser) return <Redirect to="/" />;
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     setErrors({});
-//     return dispatch(sessionActions.login({ credential, password })).catch(
-//       async (res) => {
-//         const data = await res.json();
-//         console.log(data);
-//         if (data && data.errors) setErrors(data.errors);
-//       }
-//     );
-//   };
-
-//   return (
-//     <>
-//       <h1>Log In</h1>
-//       <form onSubmit={handleSubmit}>
-//         <label>
-//           Username or Email
-//           <input
-//             type="text"
-//             value={credential}
-//             onChange={(e) => setCredential(e.target.value)}
-//           />
-//         </label>
-//         {errors.credential && <p>{errors.credential}</p>}
-//         <label>
-//           Password
-//           <input
-//             type="password"
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//           />
-//           {errors.password && <p>{errors.password}</p>}
-//         </label>
-//         <button type="submit">Log In</button>
-//       </form>
-//     </>
-//   );
-// }
-
-// export default LoginFormPage;
