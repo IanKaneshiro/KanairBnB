@@ -34,8 +34,6 @@ export default function LoginFormPage() {
         setErrors(error.errors);
       }
     }
-    setPassword("");
-    setCredential("");
   };
 
   return (

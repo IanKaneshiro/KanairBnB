@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import LoginFormPage from "./components/LoginFormPage";
 import SignupFormPage from "./components/SignupFormPage";
-import { restoreUser, logout } from "./store/session";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import Navigation from "./components/Navigation";
+import { restoreUser } from "./store/session";
 
 function App() {
   const dispatch = useDispatch();
@@ -14,22 +14,19 @@ function App() {
   }, [dispatch]);
 
   return (
-    isLoaded && (
-      <Switch>
-        <Route exact path="/">
-          <h1>Home</h1>
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-          <button onClick={() => dispatch(logout())}>Logout</button>
-        </Route>
-        <Route path="/login">
-          <LoginFormPage />
-        </Route>
-        <Route path="/signup">
-          <SignupFormPage />
-        </Route>
-      </Switch>
-    )
+    <>
+      <Navigation isLoaded={isLoaded} />
+      {isLoaded && (
+        <Switch>
+          <Route path="/login">
+            <LoginFormPage />
+          </Route>
+          <Route path="/signup">
+            <SignupFormPage />
+          </Route>
+        </Switch>
+      )}
+    </>
   );
 }
 

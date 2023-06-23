@@ -17,29 +17,32 @@ function SignupFormPage() {
 
   if (sessionUser) return <Redirect to="/" />;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (password === confirmPassword) {
-      setErrors({});
-      return dispatch(
-        signup({
-          email,
-          username,
-          firstName,
-          lastName,
-          password,
-        })
-      ).catch(async (res) => {
-        const data = await res.json();
+      try {
+        setErrors({});
+        const res = await dispatch(
+          signup({
+            email,
+            username,
+            firstName,
+            lastName,
+            password,
+          })
+        );
+        return res;
+      } catch (err) {
+        const data = await err.json();
         if (data && data.errors) {
           setErrors(data.errors);
         }
+      }
+    } else {
+      setErrors({
+        confirmPassword: "Passwords must match",
       });
     }
-    return setErrors({
-      confirmPassword:
-        "Confirm Password field must be the same as the Password field",
-    });
   };
 
   return (
@@ -55,7 +58,7 @@ function SignupFormPage() {
             required
           />
         </div>
-        {errors.email && <p>{errors.email}</p>}
+        {errors.email && <p className="errors">{errors.email}</p>}
         <div>
           <input
             type="text"
@@ -65,7 +68,7 @@ function SignupFormPage() {
             required
           />
         </div>
-        {errors.username && <p>{errors.username}</p>}
+        {errors.username && <p className="errors">{errors.username}</p>}
         <div>
           <input
             type="text"
@@ -75,7 +78,7 @@ function SignupFormPage() {
             required
           />
         </div>
-        {errors.firstName && <p>{errors.firstName}</p>}
+        {errors.firstName && <p className="errors">{errors.firstName}</p>}
         <div>
           <input
             type="text"
@@ -85,7 +88,7 @@ function SignupFormPage() {
             required
           />
         </div>
-        {errors.lastName && <p>{errors.lastName}</p>}
+        {errors.lastName && <p className="errors">{errors.lastName}</p>}
         <div>
           <input
             type="password"
@@ -95,7 +98,7 @@ function SignupFormPage() {
             required
           />
         </div>
-        {errors.password && <p>{errors.password}</p>}
+        {errors.password && <p className="errors">{errors.password}</p>}
         <div>
           <input
             type="password"
@@ -105,7 +108,9 @@ function SignupFormPage() {
             required
           />
         </div>
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
+        {errors.confirmPassword && (
+          <p className="errors">{errors.confirmPassword}</p>
+        )}
         <button type="submit">Sign Up</button>
       </form>
     </div>
