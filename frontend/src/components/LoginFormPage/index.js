@@ -2,11 +2,10 @@ import "./LoginForm.css";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../store/session";
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 export default function LoginFormPage() {
   const dispatch = useDispatch();
-  const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
@@ -17,23 +16,10 @@ export default function LoginFormPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-
-    const payload = {
-      credential,
-      password,
-    };
-    try {
-      const res = await dispatch(login(payload));
-      history.push("/");
-      return res;
-    } catch (err) {
-      const error = await err.json();
-      if (!error.errors) {
-        setErrors({ message: error.message });
-      } else {
-        setErrors(error.errors);
-      }
-    }
+    return dispatch(login({ credential, password })).catch(async (res) => {
+      const data = await res.json();
+      if (data && data.errors) setErrors(data.errors);
+    });
   };
 
   return (
@@ -61,14 +47,14 @@ export default function LoginFormPage() {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
             required
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         {errors && errors.password && (
           <p className="errors">{errors.password}</p>
         )}
-        {errors && errors.message && <p className="errors">{errors.message}</p>}
+        {errors && errors.login && <p className="errors">{errors.login}</p>}
         <button>Login</button>
       </form>
     </div>

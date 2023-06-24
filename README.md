@@ -127,7 +127,9 @@ information.
         "firstName": "John",
         "lastName": "Smith",
         "email": "john.smith@gmail.com",
-        "username": "JohnSmith"
+        "username": "JohnSmith",
+        "createdAt": "2023-05-29T21:12:35.000Z",
+        "updatedAt": "2023-05-29T21:12:35.000Z"
       }
     }
     ```
@@ -141,7 +143,10 @@ information.
 
     ```json
     {
-      "message": "Invalid credentials"
+      "message": "Invalid credentials",
+      "errors": {
+        "login": "Invalid login"
+      }
     }
     ```
 
@@ -200,7 +205,9 @@ user's information.
         "firstName": "John",
         "lastName": "Smith",
         "email": "john.smith@gmail.com",
-        "username": "JohnSmith"
+        "username": "JohnSmith",
+        "createdAt": "2023-05-29T21:12:35.000Z",
+        "updatedAt": "2023-05-29T21:12:35.000Z"
       }
     }
     ```
