@@ -20,6 +20,11 @@ ul {
   gap: 1em;
 }
 
+.profile-dropdown > li:hover {
+  cursor: pointer;
+  color: black;
+}
+
 .navbar--profile > button {
   padding: 10px;
   border: none;
