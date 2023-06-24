@@ -1,17 +1,32 @@
 import "./LoginForm.css";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../store/session";
-import { Redirect } from "react-router-dom";
+import { useModal } from "../../context/Modal";
 
-export default function LoginFormPage() {
+function LoginFormModal() {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const formRef = useRef();
+  const { setOpenModal, openModal } = useModal();
 
-  if (sessionUser) return <Redirect to="/" />;
+  useEffect(() => {
+    if (!openModal) return;
+
+    const closeModal = (e) => {
+      if (!formRef.current?.contains(e.target)) {
+        setOpenModal(false);
+      }
+    };
+    document.addEventListener("click", closeModal);
+
+    return () => document.removeEventListener("click", closeModal);
+  }, [openModal, setOpenModal]);
+
+  if (sessionUser) return setOpenModal(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,9 +38,10 @@ export default function LoginFormPage() {
   };
 
   return (
-    <div className="form">
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="login-container">
+      <form onSubmit={handleSubmit} className="login-form" ref={formRef}>
+        <i class="fa-solid fa-xmark" onClick={() => setOpenModal(false)}></i>
+        <h1>Login</h1>
         <div>
           <input
             id="credential"
@@ -60,3 +76,5 @@ export default function LoginFormPage() {
     </div>
   );
 }
+
+export default LoginFormModal;
