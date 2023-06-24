@@ -20,7 +20,7 @@ ul {
   gap: 1em;
 }
 
-.profile-dropdown > li:hover {
+.navbar-li:hover {
   cursor: pointer;
   color: black;
 }
