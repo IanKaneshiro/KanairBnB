@@ -1,6 +1,7 @@
 .login-form input {
   padding: 10px;
   margin: 10px 0;
+  width: 20vw;
   border: 0;
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
   border-radius: 10px;
@@ -13,6 +14,7 @@
   color: white;
   font-weight: bold;
   border-radius: 10px;
+  width: 20vw;
 }
 
 .login-form button:hover {
@@ -22,12 +24,12 @@
 
 .login-form {
   display: flex;
+  align-items: center;
   flex-direction: column;
-  padding: 50px 80px;
+  padding: 40px;
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
   border-radius: 10px;
   background-color: #fff;
-  align-items: center;
 }
 
 .login-container {
