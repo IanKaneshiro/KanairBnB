@@ -1,12 +1,13 @@
 import "./SignupForm.css";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
 import { signup } from "../../store/session";
+import { useModal } from "../../context/Modal";
 
-function SignupFormPage() {
+function SignupFormModal() {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
+  const formRef = useRef();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -14,8 +15,22 @@ function SignupFormPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const { setOpenModal, openModal } = useModal();
 
-  if (sessionUser) return <Redirect to="/" />;
+  useEffect(() => {
+    if (!openModal) return;
+
+    const closeModal = (e) => {
+      if (!formRef.current?.contains(e.target)) {
+        setOpenModal(false);
+      }
+    };
+    document.addEventListener("click", closeModal);
+
+    return () => document.removeEventListener("click", closeModal);
+  }, [openModal, setOpenModal]);
+
+  if (sessionUser) return setOpenModal(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,9 +61,10 @@ function SignupFormPage() {
   };
 
   return (
-    <div className="form">
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
+    <div className="signup-container">
+      <form onSubmit={handleSubmit} className="signup-form" ref={formRef}>
+        <i class="fa-solid fa-xmark" onClick={() => setOpenModal(false)}></i>
+        <h1>Sign Up</h1>
         <div>
           <input
             type="text"
@@ -117,4 +133,4 @@ function SignupFormPage() {
   );
 }
 
-export default SignupFormPage;
+export default SignupFormModal;
