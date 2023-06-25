@@ -20,6 +20,9 @@ function App() {
           <Route exact path="/">
             <LandingPage />
           </Route>
+          <Route path="/spots/:spotId">
+            <h1>To do: Spot details page</h1>
+          </Route>
         </Switch>
       )}
     </>
