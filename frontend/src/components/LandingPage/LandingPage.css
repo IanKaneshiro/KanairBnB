@@ -1,0 +1,8 @@
+.spots-main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-gap: 15px;
+  padding: 20px 40px;
+  max-width: 1000px; /* Adjust as needed */
+  margin: 0 auto;
+}
