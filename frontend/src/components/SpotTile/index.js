@@ -1,15 +1,27 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./SpotTile.css";
 
 const SpotTile = ({ spot }) => {
   return (
     <div className="spot-tile">
-      <img src={spot.previewImage} alt={spot.name} />
-      <p>
-        {spot.city}, {spot.state}
-      </p>
-      <p>{spot.avgRating}</p>
-      <p>${spot.price} night</p>
+      <Link to={`/spots/${spot.id}`}>
+        <img
+          className="spot-title-img"
+          src={spot.previewImage}
+          alt={spot.name}
+        />
+        <div className="spot-tile-info">
+          <p className="spot-tile-address">
+            {spot.city}, {spot.state}
+          </p>
+          <p className="spot-tile-rating">
+            <i className="fa-solid fa-star"></i>
+            {spot.avgRating}
+          </p>
+          <p className="spot-tile-price">${spot.price} night</p>
+        </div>
+      </Link>
     </div>
   );
 };
