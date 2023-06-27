@@ -9,7 +9,7 @@
   padding-top: 10px;
 }
 
-.signup-form button {
+.signup-form > button {
   padding: 10px;
   border: none;
   background-color: #3f51b5;
@@ -18,7 +18,7 @@
   border-radius: 10px;
 }
 
-.signup-form button:hover {
+.signup-form > button:hover {
   cursor: pointer;
   color: black;
 }
