@@ -58,13 +58,6 @@ module.exports = {
           stars: 5,
         },
         {
-          spotId: 5,
-          userId: 3,
-          review:
-            "A beautiful spot with breathtaking views. Perfect for a farmboy with a secret identity.",
-          stars: 4,
-        },
-        {
           spotId: 4,
           userId: 5,
           review:

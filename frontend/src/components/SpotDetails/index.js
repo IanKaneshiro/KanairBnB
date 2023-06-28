@@ -3,11 +3,17 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getSpotById, clearCurrentSpot } from "../../store/spots";
+import { thunkLoadReviews, clearReviews } from "../../store/reviews";
+import ReviewsTile from "../ReviewsTile";
 
 const SpotDetails = () => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
   const currentSpot = useSelector((state) => state.spots.currentSpot);
+  const reviews = useSelector((state) =>
+    Object.values(state.reviews).sort((a, b) => b.createdAt - a.createdAt)
+  );
+  const session = useSelector((state) => state.session.user);
 
   useEffect(() => {
     dispatch(getSpotById(parseInt(spotId)));
@@ -15,6 +21,21 @@ const SpotDetails = () => {
     return () => dispatch(clearCurrentSpot());
   }, [dispatch, spotId]);
 
+  useEffect(() => {
+    // TODO: handle errors better when there are no reviews
+    dispatch(thunkLoadReviews(parseInt(spotId))).catch((e) => console.log(e));
+
+    return () => dispatch(clearReviews());
+  }, [dispatch, spotId]);
+
+  const handleReviewCount = () => {
+    if (currentSpot.numReviews === 1) return "\u00B7 1 Review";
+    if (!currentSpot.numReviews) return "";
+    if (currentSpot.numReviews > 1)
+      return ` \u00B7  ${currentSpot.numReviews} Reviews`;
+  };
+
+  // TODO: Add a nicer loading page
   if (!currentSpot.id) return <h1>....loading</h1>;
 
   return (
@@ -46,13 +67,38 @@ const SpotDetails = () => {
               </p>
               <p>
                 <i className="fa-solid fa-star"></i>
-                {currentSpot.avgRating} - {currentSpot.numReviews} reviews
+                {currentSpot.avgRating
+                  ? currentSpot.avgRating.toFixed(1)
+                  : "New"}{" "}
+                {handleReviewCount()}
               </p>
             </div>
             <button onClick={() => window.alert("Feature coming soon")}>
               Reserve
             </button>
           </div>
+        </div>
+        <div className="details-reviews-header">
+          <h2>
+            <i className="fa-solid fa-star"></i>
+            {currentSpot.avgRating ? currentSpot.avgRating.toFixed(1) : "New"}
+            {handleReviewCount()}
+          </h2>
+          {/* {TODO: add post your review section} */}
+          {session ? (
+            <button onClick={() => window.alert("TODO: Add review form")}>
+              Post your review
+            </button>
+          ) : null}
+        </div>
+        <div className="details-reviews-container">
+          {!reviews.length && session && session.id !== currentSpot.Owner.id ? (
+            <p>Be the first to post a review!</p>
+          ) : reviews.length > 0 ? (
+            reviews.map((review) => {
+              return <ReviewsTile review={review} key={review.id} />;
+            })
+          ) : null}
         </div>
       </div>
     </div>
