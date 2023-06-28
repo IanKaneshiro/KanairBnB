@@ -83,7 +83,7 @@
 .details-reviews-header {
   padding-top: 20px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 10px;
   border-top: 2px solid #cccccc;
 }
@@ -95,6 +95,7 @@
   color: #fffbff;
   padding: 5px;
   font-weight: bold;
+  width: 200px;
 }
 
 .reviews-tile {

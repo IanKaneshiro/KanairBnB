@@ -58,10 +58,10 @@ ul {
 }
 
 i {
-  padding: 0 3px;
+  margin: 0 3px;
 }
 
-button:hover {
+.navbar button:hover {
   cursor: pointer;
   color: black;
 }

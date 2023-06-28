@@ -16,6 +16,13 @@ function Navigation({ isLoaded }) {
       </li>
       {isLoaded && (
         <li>
+          {sessionUser && (
+            <button
+              style={{ backgroundColor: "transparent", marginLeft: "10px" }}
+            >
+              <NavLink to="/spots/new">Create a New Spot</NavLink>
+            </button>
+          )}
           <ProfileButton user={sessionUser} />
         </li>
       )}
