@@ -1,22 +1,22 @@
 .spot-form-container {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   padding: 20px 40px;
 }
 
-.new-spot-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.spot-form-container > button {
+.spot-form-container button {
   padding: 10px;
   border: none;
   background-color: #3f51b5;
   color: white;
   font-weight: bold;
   border-radius: 10px;
+  width: 100%;
+}
+
+.spot-form-container div {
+  margin: 5px 0;
+  padding: 5px;
 }
 
 .spot-form-container > button:hover {
@@ -24,7 +24,8 @@
   color: black;
 }
 
-.spot-form-container input {
+.spot-form-container input,
+textarea {
   padding: 10px;
   border: 0;
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
@@ -32,26 +33,11 @@
   width: 100%;
 }
 
-.spot-form-input {
-  display: flex;
-  flex-direction: column;
-}
-
-.spot-form-input-2 {
-  display: flex;
-  justify-content: space-between;
-}
-.spot-form-input-2 div {
-  display: flex;
-  flex-direction: column;
-  width: 45%;
-}
-
 .spot-form-location {
   display: grid;
-  grid-template-columns: repeat(6, 100px);
-  grid-template-rows: repeat(4, 50px);
-  gap: 10px;
+  grid-template-columns: repeat(5, auto);
+  grid-template-rows: repeat(4, auto);
+  gap: 5px;
 }
 
 .spot-form-input-country {
@@ -76,4 +62,13 @@
 
 .spot-form-input-longitude {
   grid-column: 3/6;
+}
+
+.spot-form-error {
+  display: flex;
+  gap: 10px;
+}
+
+.spot-form-error > p {
+  color: red;
 }
