@@ -70,7 +70,7 @@ const SpotDetails = () => {
               <p>
                 <i className="fa-solid fa-star"></i>
                 {currentSpot.avgRating
-                  ? currentSpot.avgRating.toFixed(1)
+                  ? parseInt(currentSpot.avgRating).toFixed(1)
                   : "New"}{" "}
                 {handleReviewCount()}
               </p>
@@ -83,7 +83,9 @@ const SpotDetails = () => {
         <div className="details-reviews-header">
           <h2>
             <i className="fa-solid fa-star"></i>
-            {currentSpot.avgRating ? currentSpot.avgRating.toFixed(1) : "New"}
+            {currentSpot.avgRating
+              ? parseInt(currentSpot.avgRating).toFixed(1)
+              : "New"}
             {handleReviewCount()}
           </h2>
           {/* {TODO: add post your review section} */}
