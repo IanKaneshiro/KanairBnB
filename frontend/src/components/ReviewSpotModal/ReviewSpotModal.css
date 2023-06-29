@@ -1,0 +1,19 @@
+.rating-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 400px;
+  max-width: 800px;
+}
+
+.rating-modal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rating-modal-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
