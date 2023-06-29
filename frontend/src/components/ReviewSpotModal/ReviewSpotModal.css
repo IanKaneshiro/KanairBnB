@@ -1,0 +1,12 @@
+.filled {
+  color: black;
+}
+
+.empty {
+  color: burlywood;
+}
+
+.rating-input {
+  display: flex;
+  align-items: center;
+}

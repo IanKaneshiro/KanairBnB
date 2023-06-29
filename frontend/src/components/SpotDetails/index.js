@@ -4,7 +4,9 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getSpotById, clearCurrentSpot } from "../../store/spots";
 import { thunkLoadReviews, clearReviews } from "../../store/reviews";
+import OpenModalMenuButton from "../ModalButton";
 import ReviewsTile from "../ReviewsTile";
+import ReviewSpotModal from "../ReviewSpotModal";
 
 const SpotDetails = () => {
   const { spotId } = useParams();
@@ -33,6 +35,15 @@ const SpotDetails = () => {
     if (!currentSpot.numReviews) return "";
     if (currentSpot.numReviews > 1)
       return ` \u00B7  ${currentSpot.numReviews} Reviews`;
+  };
+
+  const showReview = () => {
+    const hasReview = reviews.filter((rev) => rev.userId === session.id);
+    if (!hasReview.length && session && session.id !== currentSpot.Owner.id) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   // TODO: Add a nicer loading page
@@ -71,7 +82,7 @@ const SpotDetails = () => {
                 <i className="fa-solid fa-star"></i>
                 {currentSpot.avgRating
                   ? currentSpot.avgRating.toFixed(1)
-                  : "New"}{" "}
+                  : "New"}
                 {handleReviewCount()}
               </p>
             </div>
@@ -87,10 +98,11 @@ const SpotDetails = () => {
             {handleReviewCount()}
           </h2>
           {/* {TODO: add post your review section} */}
-          {session ? (
-            <button onClick={() => window.alert("TODO: Add review form")}>
-              Post your review
-            </button>
+          {showReview() ? (
+            <OpenModalMenuButton
+              itemText="Post your Review"
+              modalComponent={<ReviewSpotModal />}
+            />
           ) : null}
         </div>
         <div className="details-reviews-container">
