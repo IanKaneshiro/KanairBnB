@@ -1,8 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "./SpotTile.css";
+import OpenModalMenuButton from "../ModalButton";
+import DeleteSpotModal from "../DeleteSpotModal";
 
-const SpotTile = ({ spot }) => {
+const SpotTile = ({ spot, ownerId }) => {
+  const history = useHistory();
   // TODO: add a tooltip
   return (
     <div className="spot-tile">
@@ -23,6 +26,17 @@ const SpotTile = ({ spot }) => {
           <p className="spot-tile-price">${spot.price} night</p>
         </div>
       </Link>
+      {ownerId === spot.ownerId && (
+        <div className="spot-owner">
+          <button>
+            <Link to={`/spots/${spot.id}/edit`}>Update</Link>
+          </button>
+          <OpenModalMenuButton
+            itemText="Delete"
+            modalComponent={<DeleteSpotModal id={spot.id} />}
+          />
+        </div>
+      )}
     </div>
   );
 };

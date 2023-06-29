@@ -19,6 +19,7 @@ function CreateSpotForm() {
   const [errors, setErrors] = useState({});
 
   const session = useSelector((state) => state.session.user);
+
   const history = useHistory();
 
   if (!session) return <Redirect to="/" />;
