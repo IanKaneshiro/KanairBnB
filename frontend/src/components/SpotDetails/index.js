@@ -83,8 +83,7 @@ const SpotDetails = () => {
                 <i className="fa-solid fa-star"></i>
                 {currentSpot.avgRating
                   ? parseInt(currentSpot.avgRating).toFixed(1)
-                  : "New"}{" "}
-                ? currentSpot.avgRating.toFixed(1) : "New"}
+                  : "New"}
                 {handleReviewCount()}
               </p>
             </div>
