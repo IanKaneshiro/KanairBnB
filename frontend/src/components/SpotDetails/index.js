@@ -13,7 +13,7 @@ const SpotDetails = () => {
   const dispatch = useDispatch();
   const currentSpot = useSelector((state) => state.spots.currentSpot);
   const reviews = useSelector((state) =>
-    Object.values(state.reviews).sort((a, b) => b.createdAt - a.createdAt)
+    Object.values(state.reviews).sort((a, b) => b.id - a.id)
   );
   const session = useSelector((state) => state.session.user);
 
@@ -34,11 +34,11 @@ const SpotDetails = () => {
     if (currentSpot.numReviews === 1) return "\u00B7 1 Review";
     if (!currentSpot.numReviews) return "";
     if (currentSpot.numReviews > 1)
-      return ` \u00B7  ${currentSpot.numReviews} Reviews`;
+      return `\u00B7 ${currentSpot.numReviews} Reviews`;
   };
 
   const showReview = () => {
-    const hasReview = reviews.filter((rev) => rev.userId === session.id);
+    const hasReview = reviews.filter((rev) => rev?.userId === session?.id);
     if (!hasReview.length && session && session.id !== currentSpot.Owner.id) {
       return true;
     } else {
@@ -79,6 +79,7 @@ const SpotDetails = () => {
                 night
               </p>
               <p>
+                {/* {TODO: Throws an error on render} */}
                 <i className="fa-solid fa-star"></i>
                 {currentSpot.avgRating
                   ? currentSpot.avgRating.toFixed(1)
@@ -94,7 +95,9 @@ const SpotDetails = () => {
         <div className="details-reviews-header">
           <h2>
             <i className="fa-solid fa-star"></i>
-            {currentSpot.avgRating ? currentSpot.avgRating.toFixed(1) : "New"}
+            {currentSpot.avgRating
+              ? currentSpot.avgRating.toFixed(1) + " "
+              : "New"}
             {handleReviewCount()}
           </h2>
           {/* {TODO: add post your review section} */}

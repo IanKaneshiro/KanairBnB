@@ -1,47 +1,104 @@
 import React, { useState } from "react";
 import "./ReviewSpotModal.css";
 import { useModal } from "../../context/Modal";
+import { useSelector, useDispatch } from "react-redux";
+import { thunkAddReview } from "../../store/reviews";
 
 const ReviewSpotModal = () => {
   const [review, setReview] = useState("");
   const [stars, setStars] = useState(1);
+  const [activeStars, setActiveStars] = useState(stars);
+  const [errors, setErrors] = useState({});
+  const { id } = useSelector((state) => state.spots.currentSpot);
   const { closeModal } = useModal();
+  const dispatch = useDispatch();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    closeModal();
+    setErrors({});
     const payload = {
       review,
       stars,
     };
+
+    return dispatch(thunkAddReview(payload, id))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
+      });
   };
 
   return (
-    <div>
+    <div className="rating-modal-container">
       <h1>How was your stay?</h1>
-      <form>
+      <form className="rating-modal-form">
         <textarea
           placeholder="Leave your review here..."
           onChange={(e) => setReview(e.target.value)}
         />
+        {errors.review && <p className="error">{errors.review}</p>}
         <div className="rating-input">
-          <div className="filled">
-            <i class="fa-regular fa-star"></i>
+          <div
+            onMouseEnter={() => setActiveStars(1)}
+            onMouseLeave={() => setActiveStars(stars)}
+            onClick={() => setStars(1)}
+          >
+            <i
+              className={`fa-star ${
+                activeStars >= 1 ? "fa-solid" : "fa-regular"
+              }`}
+            ></i>
           </div>
-          <div className="filled">
-            <i class="fa-solid fa-star"></i>
+          <div
+            onMouseEnter={() => setActiveStars(2)}
+            onMouseLeave={() => setActiveStars(stars)}
+            onClick={() => setStars(2)}
+          >
+            <i
+              className={`fa-star ${
+                activeStars >= 2 ? "fa-solid" : "fa-regular"
+              }`}
+            ></i>
           </div>
-          <div className="filled">
-            <i class="fa fa-star"></i>
+          <div
+            onMouseEnter={() => setActiveStars(3)}
+            onMouseLeave={() => setActiveStars(stars)}
+            onClick={() => setStars(3)}
+          >
+            <i
+              className={`fa-star ${
+                activeStars >= 3 ? "fa-solid" : "fa-regular"
+              }`}
+            ></i>
           </div>
-          <div className="empty">
-            <i class="fa fa-star"></i>
+          <div
+            onMouseEnter={() => setActiveStars(4)}
+            onMouseLeave={() => setActiveStars(stars)}
+            onClick={() => setStars(4)}
+          >
+            <i
+              className={`fa-star ${
+                activeStars >= 4 ? "fa-solid" : "fa-regular"
+              }`}
+            ></i>
           </div>
-          <div className="filled">
-            <i class="fa fa-star"></i>
+          <div
+            onMouseEnter={() => setActiveStars(5)}
+            onMouseLeave={() => setActiveStars(stars)}
+            onClick={() => setStars(5)}
+          >
+            <i
+              className={`fa-star ${
+                activeStars >= 5 ? "fa-solid" : "fa-regular"
+              }`}
+            ></i>
           </div>
           <p>Stars</p>
         </div>
+        {errors.stars && <p className="error">{errors.stars}</p>}
         <button onClick={handleSubmit}>Submit Your Review</button>
       </form>
     </div>
