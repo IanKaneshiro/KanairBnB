@@ -5,23 +5,23 @@
 }
 
 .spot-form-container button {
-  padding: 10px;
-  border: none;
-  background-color: #3f51b5;
-  color: white;
+  border: 1px solid black;
+  border-radius: 0;
+  background-color: #ff5a5f;
+  color: #fffbff;
+  padding: 5px;
   font-weight: bold;
-  border-radius: 10px;
-  width: 100%;
+  width: 200px;
+  align-self: center;
+  cursor: pointer;
+}
+
+.spot-form-container button:hover {
+  box-shadow: 1px 1px black;
 }
 
 .spot-form-container div {
-  margin: 5px 0;
   padding: 5px;
-}
-
-.spot-form-container > button:hover {
-  cursor: pointer;
-  color: black;
 }
 
 .spot-form-container input,
@@ -33,11 +33,30 @@ textarea {
   width: 100%;
 }
 
+.spot-form-photos input {
+  margin: 5px 0;
+}
+
+.spot-form h2,
+p,
+textarea {
+  margin: 10px 0;
+}
+
+.spot-form-price-input {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
 .spot-form-location {
   display: grid;
   grid-template-columns: repeat(5, auto);
   grid-template-rows: repeat(4, auto);
-  gap: 5px;
+}
+
+.spot-form h2 {
+  margin-bottom: 10px;
 }
 
 .spot-form-input-country {
@@ -67,8 +86,14 @@ textarea {
 .spot-form-error {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
-.spot-form-error > p {
+.spot-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.error {
   color: red;
 }

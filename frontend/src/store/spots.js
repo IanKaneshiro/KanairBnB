@@ -60,7 +60,11 @@ export const addNewSpot = (payload) => async (dispatch) => {
 
   const data = await res.json();
   dispatch(addSpot(data));
-  return res;
+  console.log("server res", res);
+  console.log(data);
+  if (res.ok) {
+    return data;
+  } else return res;
 };
 
 const initialState = {

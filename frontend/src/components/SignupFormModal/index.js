@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
 import * as sessionActions from "../../store/session";
+import { Redirect } from "react-router-dom";
 import "./SignupForm.css";
 
 function SignupFormModal() {
@@ -14,6 +15,10 @@ function SignupFormModal() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+
+  const session = useSelector((state) => state.session.user);
+
+  if (session) return <Redirect to="/" />;
 
   const handleSubmit = (e) => {
     e.preventDefault();
