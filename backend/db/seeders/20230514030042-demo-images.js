@@ -127,12 +127,6 @@ module.exports = {
           preview: false,
         },
         {
-          imageableId: 8,
-          imageableType: "Review",
-          url: "https://www.pexels.com/photo/cat-sitting-inside-a-plastic-ring-977935/",
-          preview: false,
-        },
-        {
           imageableId: 9,
           imageableType: "Review",
           url: "https://www.pexels.com/photo/orange-cat-on-focus-photography-2173872/",

@@ -1,8 +1,9 @@
 // frontend/src/components/LoginFormModal/index.js
 import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
+import { Redirect } from "react-router-dom";
 import "./LoginForm.css";
 
 function LoginFormModal() {
@@ -11,6 +12,10 @@ function LoginFormModal() {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+
+  const session = useSelector((state) => state.session.user);
+
+  if (session) return <Redirect to="/" />;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,9 +30,16 @@ function LoginFormModal() {
       });
   };
 
+  const logInDemo = () => {
+    return dispatch(
+      sessionActions.login({ credential: "demo", password: "password" })
+    ).then(closeModal);
+  };
+
   return (
     <>
       <h1>Log In</h1>
+      {errors.login && <p className="errors">{errors.login}</p>}
       <form onSubmit={handleSubmit} className="login-form">
         <input
           type="text"
@@ -36,7 +48,6 @@ function LoginFormModal() {
           placeholder="Username or Email"
           required
         />
-
         <input
           type="password"
           value={password}
@@ -44,10 +55,11 @@ function LoginFormModal() {
           placeholder="Password"
           required
         />
-
-        {errors.login && <p className="errors">{errors.login}</p>}
         <button type="submit">Log In</button>
       </form>
+      <button className="demo-user-button" onClick={logInDemo}>
+        Demo User
+      </button>
     </>
   );
 }
