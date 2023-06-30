@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 import * as sessionActions from "./store/session";
-import { thunkLoadSpots } from "./store/spots";
 import Navigation from "./components/Navigation";
 import LandingPage from "./components/LandingPage";
 import SpotDetails from "./components/SpotDetails";
 import CreateSpotForm from "./components/CreateSpotForm";
+import ManageSpots from "./components/ManageSpots";
 
 function App() {
   const dispatch = useDispatch();
@@ -17,11 +17,6 @@ function App() {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
-  // Load Spots
-  useEffect(() => {
-    dispatch(thunkLoadSpots());
-  }, [dispatch]);
-
   return (
     <>
       <Navigation isLoaded={isLoaded} />
@@ -30,7 +25,13 @@ function App() {
           <Route exact path="/">
             <LandingPage />
           </Route>
-          <Route path="/spots/new">
+          <Route path="/spots/:spotId/edit">
+            <CreateSpotForm />
+          </Route>
+          <Route exact path="/spots/current">
+            <ManageSpots />
+          </Route>
+          <Route exact path="/spots/new">
             <CreateSpotForm />
           </Route>
           <Route path="/spots/:spotId">
