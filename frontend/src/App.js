@@ -7,7 +7,6 @@ import LandingPage from "./components/LandingPage";
 import SpotDetails from "./components/SpotDetails";
 import CreateSpotForm from "./components/CreateSpotForm";
 import ManageSpots from "./components/ManageSpots";
-import { thunkLoadSpots } from "./store/spots";
 
 function App() {
   const dispatch = useDispatch();
@@ -16,11 +15,6 @@ function App() {
   // Load Session User
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
-  }, [dispatch]);
-
-  // Load Spots
-  useEffect(() => {
-    dispatch(thunkLoadSpots());
   }, [dispatch]);
 
   return (

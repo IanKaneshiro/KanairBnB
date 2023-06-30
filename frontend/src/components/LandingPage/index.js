@@ -13,6 +13,7 @@ const LandingPage = () => {
     dispatch(thunkLoadSpots());
   }, [dispatch]);
 
+  if (!spots) return <h1>...loading</h1>;
   return (
     <main className="spots-main">
       {spots.map((spot) => (

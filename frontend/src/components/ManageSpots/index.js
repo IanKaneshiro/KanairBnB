@@ -3,22 +3,19 @@ import "./ManageSpots.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { Redirect, Link } from "react-router-dom";
-import { thunkGetUsersSpots, clearAllSpots } from "../../store/spots";
+import { thunkGetUsersSpots } from "../../store/spots";
 import SpotTile from "../SpotTile";
 
 const ManageSpots = () => {
   const session = useSelector((state) => state.session.user);
-  const spots = useSelector((state) => Object.values(state.spots.allSpots));
+  const spots = useSelector((state) => Object.values(state.spots.userSpots));
   const dispatch = useDispatch();
   // TODO: Clear spot on unmount
   useEffect(() => {
-    dispatch(clearAllSpots());
     dispatch(thunkGetUsersSpots()).catch(async (err) => {
       // TODO: Handle 401 error gracefully
       console.log(err);
     });
-
-    return () => dispatch(clearAllSpots());
   }, [dispatch]);
 
   if (!session) return <Redirect to="/" />;

@@ -3,9 +3,9 @@ import { csrfFetch } from "./csrf";
 // Action Types
 const LOAD_SPOTS = "spots/load";
 const GET_BY_ID = "spots/getById";
-const CLEAR_CURRENT_SPOT = "spots/clearCurrentSpot";
 const ADD_SPOT = "spots/add";
-const CLEAR_All_SPOTS = "spots/clearAllSpots";
+const ADD_USER_SPOTS = "spots/addUserSpots";
+const CLEAR_CURRENT_SPOT = "spots/clearCurrentSpot";
 const DELETE_SPOT = "spots/delete";
 
 // Action Creators
@@ -30,6 +30,13 @@ const addSpot = (payload) => {
   };
 };
 
+const addUserSpots = (payload) => {
+  return {
+    type: ADD_USER_SPOTS,
+    payload,
+  };
+};
+
 const deleteSpot = (id) => {
   return {
     type: DELETE_SPOT,
@@ -41,10 +48,6 @@ export const clearCurrentSpot = () => {
   return {
     type: CLEAR_CURRENT_SPOT,
   };
-};
-
-export const clearAllSpots = () => {
-  return { type: CLEAR_All_SPOTS };
 };
 
 // Thunk Action Creators
@@ -82,7 +85,7 @@ export const thunkGetUsersSpots = () => async (dispatch) => {
   const res = await csrfFetch("/api/users/me/spots");
 
   const data = await res.json();
-  if (res.ok) dispatch(loadSpots(data));
+  if (res.ok) dispatch(addUserSpots(data));
   return res;
 };
 
@@ -100,6 +103,7 @@ export const spots = (state) => state.spots.allSpots;
 const initialState = {
   allSpots: {},
   currentSpot: {},
+  userSpots: {},
 };
 
 export default function spotsReducer(state = initialState, action) {
@@ -118,17 +122,25 @@ export default function spotsReducer(state = initialState, action) {
       };
     case CLEAR_CURRENT_SPOT:
       return { ...state, currentSpot: {} };
-    case CLEAR_All_SPOTS:
-      return { ...state, allSpots: {} };
+
     case ADD_SPOT:
       return {
         ...state,
         allSpots: { ...state.allSpots, [action.payload.id]: action.payload },
       };
+    case ADD_USER_SPOTS:
+      newState = {};
+      action.payload.Spots.forEach((spot) => (newState[spot.id] = spot));
+      return {
+        ...state,
+        userSpots: newState,
+      };
     case DELETE_SPOT:
-      newState = { ...state.allSpots };
+      newState = { ...state.userSpots };
+      const allSpots = { ...state.allSpots };
       delete newState[action.id];
-      return { ...state, allSpots: newState };
+      delete allSpots[action.id];
+      return { ...state, userSpots: newState, allSpots };
     default:
       return state;
   }

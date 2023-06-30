@@ -1,8 +1,8 @@
 import React from "react";
+import "./DeleteSpotModal.css";
 import { useModal } from "../../context/Modal";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import "./DeleteSpotModal.css";
 import { thunkDeleteSpot } from "../../store/spots";
 
 const DeleteSpotModal = ({ id }) => {
