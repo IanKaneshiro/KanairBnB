@@ -9,9 +9,7 @@ const SpotDetails = () => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
   const currentSpot = useSelector((state) => state.spots.currentSpot);
-  const reviews = useSelector((state) =>
-    Object.values(state.reviews).sort((a, b) => b.id - a.id)
-  );
+
   const session = useSelector((state) => state.session.user);
 
   useEffect(() => {
@@ -24,22 +22,10 @@ const SpotDetails = () => {
   if (!currentSpot.id) return <h1>....loading</h1>;
 
   const handleReviewCount = () => {
-    if (reviews.length === parseInt(1)) return " \u00B7 1 Review";
-    if (!reviews.length) return "";
-    if (reviews.length > 1) return ` \u00B7 ${reviews.length} Reviews`;
-  };
-
-  const handleReviewRating = () => {
-    const count = (
-      reviews.reduce((acc, review) => acc + review.stars, 0) / reviews.length
-    ).toFixed(1);
-    if (count) {
-      if (isNaN(count)) {
-        return "New";
-      } else {
-        return count;
-      }
-    }
+    if (currentSpot.numReviews === 1) return " \u00B7 1 Review";
+    if (!currentSpot.numReviews) return "";
+    if (currentSpot.numReviews > 1)
+      return ` \u00B7 ${currentSpot.numReviews} Reviews`;
   };
 
   return (
@@ -74,7 +60,9 @@ const SpotDetails = () => {
               <p>
                 {/* {TODO: Throws an error on render} */}
                 <i className="fa-solid fa-star"></i>
-                {handleReviewRating()}
+                {currentSpot.avgRating
+                  ? currentSpot.avgRating.toFixed(1)
+                  : "New"}
                 {handleReviewCount()}
               </p>
             </div>
@@ -84,11 +72,9 @@ const SpotDetails = () => {
           </div>
         </div>
         <SpotDetailsReviews
-          reviews={reviews}
           session={session}
           currentSpot={currentSpot}
           handleReviewCount={handleReviewCount}
-          handleReviewRating={handleReviewRating}
         />
       </div>
     </div>

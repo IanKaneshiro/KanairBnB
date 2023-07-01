@@ -1,21 +1,18 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./SpotDetailsReviews.css";
 import OpenModalMenuButton from "../ModalButton";
 import ReviewsTile from "../ReviewsTile";
 import ReviewSpotModal from "../ReviewSpotModal";
 import { thunkLoadReviews, clearReviews } from "../../store/reviews";
 
-const SpotDetailsReviews = ({
-  reviews,
-  session,
-  currentSpot,
-  handleReviewCount,
-  handleReviewRating,
-}) => {
+const SpotDetailsReviews = ({ session, currentSpot, handleReviewCount }) => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
+  const reviews = useSelector((state) =>
+    Object.values(state.reviews).sort((a, b) => b.id - a.id)
+  );
 
   useEffect(() => {
     // TODO: handle errors better when there are no reviews
@@ -38,7 +35,7 @@ const SpotDetailsReviews = ({
       <div className="details-reviews-header">
         <h2>
           <i className="fa-solid fa-star"></i>
-          {handleReviewRating()}
+          {currentSpot.avgRating ? currentSpot.avgRating.toFixed(1) : "New"}
           {handleReviewCount()}
         </h2>
         {showReview() ? (
