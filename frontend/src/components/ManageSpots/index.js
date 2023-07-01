@@ -24,9 +24,9 @@ const ManageSpots = () => {
     <div className="manage-container">
       <h1>Manage Spots</h1>
       {!spots.length && (
-        <button>
-          <Link to="/spots/new">Create a New Spot</Link>
-        </button>
+        <Link to="/spots/new">
+          <button>Create a New Spot</button>
+        </Link>
       )}
 
       <div className="manage-spots">
