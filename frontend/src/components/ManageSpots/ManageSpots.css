@@ -1,6 +1,7 @@
 .manage-container {
   max-width: 1000px;
   margin: 0 auto;
+  padding: 20px;
 }
 
 .manage-spots {
@@ -19,7 +20,7 @@
   color: #fffbff;
   padding: 5px;
   font-weight: bold;
-  width: 200px;
+  width: 100px;
   align-self: center;
   cursor: pointer;
 }
@@ -30,6 +31,7 @@
 
 .spot-owner {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   gap: 10px;
+  margin-bottom: 20px;
 }

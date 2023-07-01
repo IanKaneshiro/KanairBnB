@@ -54,7 +54,7 @@ const SpotDetailsReviews = ({ session, currentSpot, handleReviewCount }) => {
           reviews.map((review) => {
             return (
               <ReviewsTile
-                sessionId={session.id}
+                sessionId={session?.id}
                 review={review}
                 key={review.id}
               />
