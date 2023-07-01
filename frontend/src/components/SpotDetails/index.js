@@ -31,10 +31,10 @@ const SpotDetails = () => {
   }, [dispatch, spotId]);
 
   const handleReviewCount = () => {
-    if (currentSpot.numReviews === parseInt(1)) return "\u00B7 1 Review";
+    if (currentSpot.numReviews === parseInt(1)) return " \u00B7 1 Review";
     if (!currentSpot.numReviews) return "";
     if (currentSpot.numReviews > 1)
-      return `\u00B7 ${currentSpot.numReviews} Reviews`;
+      return ` \u00B7 ${currentSpot.numReviews} Reviews`;
   };
 
   const showReview = () => {
@@ -64,7 +64,7 @@ const SpotDetails = () => {
         <div className="details-description">
           <div>
             <h2>
-              {`Hosted by ${currentSpot.Owner.firstName} ${currentSpot.Owner.lastName}`}
+              {`Hosted by ${currentSpot.Owner.firstName}, ${currentSpot.Owner.lastName}`}
             </h2>
             <div className="details-description-block">
               <p>{currentSpot.description}</p>
@@ -100,7 +100,6 @@ const SpotDetails = () => {
               : "New"}
             {handleReviewCount()}
           </h2>
-          {/* {TODO: add post your review section} */}
           {showReview() ? (
             <OpenModalMenuButton
               itemText="Post your Review"

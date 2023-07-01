@@ -6,12 +6,17 @@ import { thunkAddReview } from "../../store/reviews";
 
 const ReviewSpotModal = () => {
   const [review, setReview] = useState("");
-  const [stars, setStars] = useState(1);
+  const [stars, setStars] = useState(0);
   const [activeStars, setActiveStars] = useState(stars);
   const [errors, setErrors] = useState({});
   const { id } = useSelector((state) => state.spots.currentSpot);
   const { closeModal } = useModal();
   const dispatch = useDispatch();
+
+  const disableButton = () => {
+    if (review.length < 10 || stars === 0) return true;
+    return;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -99,7 +104,9 @@ const ReviewSpotModal = () => {
           <p>Stars</p>
         </div>
         {errors.stars && <p className="error">{errors.stars}</p>}
-        <button onClick={handleSubmit}>Submit Your Review</button>
+        <button disabled={disableButton()} onClick={handleSubmit}>
+          Submit Your Review
+        </button>
       </form>
     </div>
   );

@@ -31,36 +31,46 @@ function UpdateSpotForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    if (previewImage.length) {
-      const payload = {
-        id: parseInt(spotId),
-        country,
-        address,
-        city,
-        state,
-        lat,
-        lng,
-        description,
-        name,
-        price,
-        previewImage,
-      };
 
-      try {
-        const res = await dispatch(updateSpot(payload));
-        if (res.id) {
-          return history.push(`/spots/${res.id}`);
-        }
-      } catch (error) {
-        const data = await error.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
-        }
+    const payload = {
+      id: parseInt(spotId),
+      country,
+      address,
+      city,
+      state,
+      lat,
+      lng,
+      description,
+      name,
+      price,
+      previewImage,
+    };
+
+    try {
+      const res = await dispatch(updateSpot(payload));
+      if (res.id) {
+        return history.push(`/spots/${res.id}`);
       }
-    } else {
-      return setErrors({
-        previewImage: "Must include at least a preview image",
-      });
+    } catch (error) {
+      const data = await error.json();
+      if (data && data.errors) {
+        if (!previewImage) {
+          data.errors.previewImage = "Preview image is required";
+        }
+        if (
+          previewImage &&
+          !previewImage.endsWith(".png") &&
+          !previewImage.endsWith(".jpg") &&
+          !previewImage.endsWith(".jpeg")
+        ) {
+          data.errors.previewImage =
+            "Image URL must end in .png, .jpg, or .jpeg";
+        }
+        if (!data.errors.description && description.length < 30)
+          data.errors.description =
+            "Description needs a minimum of 30 characters";
+        setErrors(data.errors);
+      }
     }
   };
 

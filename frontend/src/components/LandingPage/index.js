@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import "./LandingPage.css";
 import SpotTile from "../SpotTile";
 import { thunkLoadSpots } from "../../store/spots";
+import Tooltip from "../Tooltip";
 
 const LandingPage = () => {
   const spots = useSelector((state) => Object.values(state.spots.allSpots));
@@ -17,7 +18,9 @@ const LandingPage = () => {
   return (
     <main className="spots-main">
       {spots.map((spot) => (
-        <SpotTile key={spot.id} spot={spot} />
+        <Tooltip content={spot.name}>
+          <SpotTile key={spot.id} spot={spot} />
+        </Tooltip>
       ))}
     </main>
   );

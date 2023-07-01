@@ -49,6 +49,21 @@ function CreateSpotForm() {
     } catch (error) {
       const data = await error.json();
       if (data && data.errors) {
+        if (!previewImage) {
+          data.errors.previewImage = "Preview image is required";
+        }
+        if (
+          previewImage &&
+          !previewImage.endsWith(".png") &&
+          !previewImage.endsWith(".jpg") &&
+          !previewImage.endsWith(".jpeg")
+        ) {
+          data.errors.previewImage =
+            "Image URL must end in .png, .jpg, or .jpeg";
+        }
+        if (!data.errors.description && description.length < 30)
+          data.errors.description =
+            "Description needs a minimum of 30 characters";
         setErrors(data.errors);
       }
     }
@@ -191,7 +206,6 @@ function CreateSpotForm() {
             <p className="error">{errors.previewImage}</p>
           )}
           <input type="text" placeholder="Image URL" />
-          {/* <p>Image URL must end in .png, .jpg, or .jpeg</p> */}
           <input type="text" placeholder="Image URL" />
           <input type="text" placeholder="Image URL" />
           <input type="text" placeholder="Image URL" />
