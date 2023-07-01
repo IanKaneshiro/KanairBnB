@@ -1,0 +1,35 @@
+.details-desciption-reserve > button:hover,
+.details-reviews-header > button:hover {
+  box-shadow: 1px 1px black;
+}
+
+.details-reviews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin: 20px 0;
+}
+
+.details-reviews-header {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 2px solid #cccccc;
+}
+
+.details-reviews-header > button {
+  border: 1px solid black;
+  border-radius: 0;
+  background-color: #ff5a5f;
+  color: #fffbff;
+  padding: 5px;
+  font-weight: bold;
+  width: 200px;
+}
+
+.reviews-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

@@ -20,7 +20,7 @@ const SpotTile = ({ spot, ownerId }) => {
           </p>
           <p className="spot-tile-rating">
             <i className="fa-solid fa-star"></i>
-            {spot.avgRating ? parseInt(spot.avgRating).toFixed(1) : "New"}
+            {spot.avgRating ? spot.avgRating : "New"}
           </p>
           <p className="spot-tile-price">${spot.price} night</p>
         </div>

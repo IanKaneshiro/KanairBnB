@@ -3,10 +3,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getSpotById, clearCurrentSpot } from "../../store/spots";
-import { thunkLoadReviews, clearReviews } from "../../store/reviews";
-import OpenModalMenuButton from "../ModalButton";
-import ReviewsTile from "../ReviewsTile";
-import ReviewSpotModal from "../ReviewSpotModal";
+import SpotDetailsReviews from "../SpotDetailsReviews";
 
 const SpotDetails = () => {
   const { spotId } = useParams();
@@ -23,31 +20,27 @@ const SpotDetails = () => {
     return () => dispatch(clearCurrentSpot());
   }, [dispatch, spotId]);
 
-  useEffect(() => {
-    // TODO: handle errors better when there are no reviews
-    dispatch(thunkLoadReviews(parseInt(spotId))).catch((e) => console.log(e));
-
-    return () => dispatch(clearReviews());
-  }, [dispatch, spotId]);
-
-  const handleReviewCount = () => {
-    if (currentSpot.numReviews === parseInt(1)) return " \u00B7 1 Review";
-    if (!currentSpot.numReviews) return "";
-    if (currentSpot.numReviews > 1)
-      return ` \u00B7 ${currentSpot.numReviews} Reviews`;
-  };
-
-  const showReview = () => {
-    const hasReview = reviews.filter((rev) => rev?.userId === session?.id);
-    if (!hasReview.length && session && session.id !== currentSpot.Owner.id) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   // TODO: Add a nicer loading page
   if (!currentSpot.id) return <h1>....loading</h1>;
+
+  const handleReviewCount = () => {
+    if (reviews.length === parseInt(1)) return " \u00B7 1 Review";
+    if (!reviews.length) return "";
+    if (reviews.length > 1) return ` \u00B7 ${reviews.length} Reviews`;
+  };
+
+  const handleReviewRating = () => {
+    const count = (
+      reviews.reduce((acc, review) => acc + review.stars, 0) / reviews.length
+    ).toFixed(1);
+    if (count) {
+      if (isNaN(count)) {
+        return "New";
+      } else {
+        return count;
+      }
+    }
+  };
 
   return (
     <div className="details-container">
@@ -58,7 +51,7 @@ const SpotDetails = () => {
         </p>
         <div className="details-img-container">
           {currentSpot.SpotImages.map((img) => {
-            return <img src={img.url} alt={img.id} />;
+            return <img src={img.url} alt={img.id} key={img.id} />;
           })}
         </div>
         <div className="details-description">
@@ -81,9 +74,7 @@ const SpotDetails = () => {
               <p>
                 {/* {TODO: Throws an error on render} */}
                 <i className="fa-solid fa-star"></i>
-                {currentSpot.avgRating
-                  ? parseInt(currentSpot.avgRating).toFixed(1)
-                  : "New"}
+                {handleReviewRating()}
                 {handleReviewCount()}
               </p>
             </div>
@@ -92,36 +83,13 @@ const SpotDetails = () => {
             </button>
           </div>
         </div>
-        <div className="details-reviews-header">
-          <h2>
-            <i className="fa-solid fa-star"></i>
-            {currentSpot.avgRating
-              ? parseInt(currentSpot.avgRating).toFixed(1)
-              : "New"}
-            {handleReviewCount()}
-          </h2>
-          {showReview() ? (
-            <OpenModalMenuButton
-              itemText="Post your Review"
-              modalComponent={<ReviewSpotModal />}
-            />
-          ) : null}
-        </div>
-        <div className="details-reviews-container">
-          {!reviews.length && session && session.id !== currentSpot.Owner.id ? (
-            <p>Be the first to post a review!</p>
-          ) : reviews.length > 0 ? (
-            reviews.map((review) => {
-              return (
-                <ReviewsTile
-                  sessionId={session?.id}
-                  review={review}
-                  key={review.id}
-                />
-              );
-            })
-          ) : null}
-        </div>
+        <SpotDetailsReviews
+          reviews={reviews}
+          session={session}
+          currentSpot={currentSpot}
+          handleReviewCount={handleReviewCount}
+          handleReviewRating={handleReviewRating}
+        />
       </div>
     </div>
   );

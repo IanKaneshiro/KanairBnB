@@ -5,15 +5,14 @@ import DeleteSpotModal from "../DeleteSpotModal";
 
 const ReviewsTile = ({ review, sessionId }) => {
   const date = new Date(review.createdAt);
-  if (!review) return <h1>...loading</h1>;
   return (
     <div className="reviews-tile">
-      <h3 className="reviews-tile-name">{review?.User?.firstName}</h3>
+      <h3 className="reviews-tile-name">{review.User.firstName}</h3>
       <p className="reviews-tile-date">{`${date.toLocaleString("default", {
         month: "long",
       })} ${date.getFullYear()}`}</p>
-      <p className="reviews-tile-review">{review?.review}</p>
-      {review?.User.id === sessionId && (
+      <p className="reviews-tile-review">{review.review}</p>
+      {review.userId === sessionId && (
         <OpenModalMenuButton
           itemText="Delete"
           modalComponent={<DeleteSpotModal reviewId={review.id} />}
