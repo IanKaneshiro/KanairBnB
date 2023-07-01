@@ -15,7 +15,7 @@ const ReviewSpotModal = () => {
 
   const disableButton = () => {
     if (review.length < 10 || stars === 0) return true;
-    return;
+    return false;
   };
 
   const handleSubmit = (e) => {
