@@ -9,7 +9,6 @@ const SpotDetails = () => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
   const currentSpot = useSelector((state) => state.spots.currentSpot);
-
   const session = useSelector((state) => state.session.user);
 
   useEffect(() => {
@@ -61,7 +60,7 @@ const SpotDetails = () => {
                 {/* {TODO: Throws an error on render} */}
                 <i className="fa-solid fa-star"></i>
                 {currentSpot.avgRating
-                  ? parseInt(currentSpot.avgRating).toFixed(1)
+                  ? Number(currentSpot.avgRating).toFixed(1)
                   : "New"}
                 {handleReviewCount()}
               </p>

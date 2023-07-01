@@ -1,4 +1,5 @@
 import { csrfFetch } from "./csrf";
+import { getSpotById } from "./spots";
 
 // Action Types
 const LOAD_REVIEWS = "reviews/load";
@@ -36,10 +37,11 @@ export const thunkLoadReviews = (spotId) => async (dispatch) => {
   return res;
 };
 
-export const thunkDeleteReview = (id) => async (dispatch) => {
-  const res = await csrfFetch(`/api/reviews/${id}`, { method: "DELETE" });
+export const thunkDeleteReview = (reviewId, spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/reviews/${reviewId}`, { method: "DELETE" });
   if (res.ok) {
-    dispatch(deleteReview(id));
+    dispatch(deleteReview(reviewId));
+    dispatch(getSpotById(spotId));
   }
   return res;
 };
@@ -55,6 +57,7 @@ export const thunkAddReview = (review, id) => async (dispatch) => {
 
   if (res.ok) {
     dispatch(thunkLoadReviews(id));
+    dispatch(getSpotById(id));
   } else {
     return res;
   }
