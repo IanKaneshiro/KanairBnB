@@ -1,0 +1,99 @@
+.spot-form-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px 40px;
+}
+
+.spot-form-container button {
+  border: 1px solid black;
+  border-radius: 0;
+  background-color: #ff5a5f;
+  color: #fffbff;
+  padding: 5px;
+  font-weight: bold;
+  width: 200px;
+  align-self: center;
+  cursor: pointer;
+}
+
+.spot-form-container button:hover {
+  box-shadow: 1px 1px black;
+}
+
+.spot-form-container div {
+  padding: 5px;
+}
+
+.spot-form-container input,
+textarea {
+  padding: 10px;
+  border: 0;
+  box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+  width: 100%;
+}
+
+.spot-form-photos input {
+  margin: 5px 0;
+}
+
+.spot-form h2,
+p,
+textarea {
+  margin: 10px 0;
+}
+
+.spot-form-price-input {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.spot-form-location {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-template-rows: repeat(4, auto);
+}
+
+.spot-form h2 {
+  margin-bottom: 10px;
+}
+
+.spot-form-input-country {
+  grid-column: 1 / 6;
+}
+
+.spot-form-input-address {
+  grid-column: 1 / 6;
+}
+
+.spot-form-input-city {
+  grid-column: 1/5;
+}
+
+.spot-form-input-state {
+  grid-column: 5/6;
+}
+
+.spot-form-input-latitude {
+  grid-column: 1/3;
+}
+
+.spot-form-input-longitude {
+  grid-column: 3/6;
+}
+
+.spot-form-error {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.spot-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.error {
+  color: red;
+}

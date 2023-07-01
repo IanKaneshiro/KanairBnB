@@ -113,7 +113,13 @@ const SpotDetails = () => {
             <p>Be the first to post a review!</p>
           ) : reviews.length > 0 ? (
             reviews.map((review) => {
-              return <ReviewsTile review={review} key={review.id} />;
+              return (
+                <ReviewsTile
+                  sessionId={session?.id}
+                  review={review}
+                  key={review.id}
+                />
+              );
             })
           ) : null}
         </div>

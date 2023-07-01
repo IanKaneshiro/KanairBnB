@@ -1,63 +1,73 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewSpot } from "../../store/spots";
-import { Redirect, useHistory } from "react-router-dom";
-import "./CreateSpotForm.css";
+import { updateSpot } from "../../store/spots";
+import { Redirect, useHistory, useParams } from "react-router-dom";
 
-function CreateSpotForm() {
+import "./UpdateSpotForm.css";
+
+//TODO: fix loading of state, laggin images
+
+function UpdateSpotForm() {
   const dispatch = useDispatch();
-  const [country, setCountry] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [state, setState] = useState("");
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
-  const [description, setDescription] = useState("");
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState(null);
-  const [previewImage, setPreviewImage] = useState("");
-  const [errors, setErrors] = useState({});
-
-  const session = useSelector((state) => state.session.user);
-
   const history = useHistory();
+  const { spotId } = useParams();
+  const session = useSelector((state) => state.session.user);
+  const spot = useSelector((state) => state.spots.userSpots[spotId]);
+
+  const [country, setCountry] = useState(spot.country);
+  const [address, setAddress] = useState(spot.address);
+  const [city, setCity] = useState(spot.city);
+  const [state, setState] = useState(spot.state);
+  const [lat, setLat] = useState(spot.lat);
+  const [lng, setLng] = useState(spot.lng);
+  const [description, setDescription] = useState(spot.description);
+  const [name, setName] = useState(spot.name);
+  const [price, setPrice] = useState(spot.price);
+  const [previewImage, setPreviewImage] = useState(spot.previewImage);
+  const [errors, setErrors] = useState({});
 
   if (!session) return <Redirect to="/" />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+    if (previewImage.length) {
+      const payload = {
+        id: parseInt(spotId),
+        country,
+        address,
+        city,
+        state,
+        lat,
+        lng,
+        description,
+        name,
+        price,
+        previewImage,
+      };
 
-    const payload = {
-      country,
-      address,
-      city,
-      state,
-      lat,
-      lng,
-      description,
-      name,
-      price,
-      previewImage,
-    };
-
-    try {
-      const res = await dispatch(addNewSpot(payload));
-      if (res.id) {
-        return history.push(`/spots/${res.id}`);
+      try {
+        const res = await dispatch(updateSpot(payload));
+        if (res.id) {
+          return history.push(`/spots/${res.id}`);
+        }
+      } catch (error) {
+        const data = await error.json();
+        if (data && data.errors) {
+          setErrors(data.errors);
+        }
       }
-    } catch (error) {
-      const data = await error.json();
-      if (data && data.errors) {
-        setErrors(data.errors);
-      }
+    } else {
+      return setErrors({
+        previewImage: "Must include at least a preview image",
+      });
     }
   };
 
   return (
     <div className="spot-form-container">
       <form onSubmit={handleSubmit} className="spot-form">
-        <h1>Create a New Spot</h1>
+        <h1>Update your Spot</h1>
         <h2>Where's your place located?</h2>
         <p>
           Guests will only get your exact address once they booked a
@@ -73,6 +83,7 @@ function CreateSpotForm() {
               type="text"
               id="country"
               placeholder="Country"
+              value={country}
               onChange={(e) => setCountry(e.target.value)}
             />
           </div>
@@ -84,6 +95,7 @@ function CreateSpotForm() {
             <input
               type="text"
               id="address"
+              value={address}
               placeholder="Street Address"
               onChange={(e) => setAddress(e.target.value)}
             />
@@ -96,6 +108,7 @@ function CreateSpotForm() {
             <input
               type="text"
               id="city"
+              value={city}
               placeholder="City"
               onChange={(e) => setCity(e.target.value)}
             />
@@ -108,6 +121,7 @@ function CreateSpotForm() {
             <input
               type="text"
               id="state"
+              value={state}
               placeholder="State"
               onChange={(e) => setState(e.target.value)}
             />
@@ -121,6 +135,7 @@ function CreateSpotForm() {
               type="number"
               id="latitude"
               placeholder="Latitude"
+              value={lat}
               onChange={(e) => setLat(e.target.value)}
             />
           </div>
@@ -133,6 +148,7 @@ function CreateSpotForm() {
               type="number"
               id="longitude"
               placeholder="Longitude"
+              value={lng}
               onChange={(e) => setLng(e.target.value)}
             />
           </div>
@@ -146,6 +162,7 @@ function CreateSpotForm() {
           <textarea
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Please write at least 30 characters"
+            value={description}
             style={{ height: "100px" }}
           ></textarea>
           {errors.description && <p className="error">{errors.description}</p>}
@@ -158,7 +175,8 @@ function CreateSpotForm() {
           </p>
           <input
             type="text"
-            placeholder="Name of your spot"
+            placeholder="Name"
+            value={name}
             onChange={(e) => setName(e.target.value)}
           />
           {errors.name && <p className="error">{errors.name}</p>}
@@ -174,6 +192,7 @@ function CreateSpotForm() {
             <input
               type="number"
               placeholder="Price per night (USD)"
+              value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
           </div>
@@ -184,6 +203,7 @@ function CreateSpotForm() {
           <p>Submit a link to at least one photo to publish your spot.</p>
           <input
             type="text"
+            value={previewImage}
             placeholder="Preview Image URL"
             onChange={(e) => setPreviewImage(e.target.value)}
           />
@@ -196,10 +216,10 @@ function CreateSpotForm() {
           <input type="text" placeholder="Image URL" />
           <input type="text" placeholder="Image URL" />
         </div>
-        <button>Create Spot</button>
+        <button>Update Spot</button>
       </form>
     </div>
   );
 }
 
-export default CreateSpotForm;
+export default UpdateSpotForm;

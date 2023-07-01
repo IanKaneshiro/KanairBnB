@@ -66,6 +66,8 @@ export const getSpotById = (spotId) => async (dispatch) => {
 };
 
 export const addNewSpot = (payload) => async (dispatch) => {
+  const imgPayload = payload.previewImage;
+  delete payload.previewImage;
   const res = await csrfFetch("/api/spots", {
     method: "POST",
     headers: {
@@ -73,10 +75,36 @@ export const addNewSpot = (payload) => async (dispatch) => {
     },
     body: JSON.stringify(payload),
   });
-
-  const data = await res.json();
-  dispatch(addSpot(data));
   if (res.ok) {
+    const data = await res.json();
+    csrfFetch(`/api/spots/${data.id}/images`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url: imgPayload, preview: true }),
+    });
+    dispatch(addSpot(data));
+    return data;
+  } else return res;
+};
+
+export const updateSpot = (payload) => async (dispatch) => {
+  // const imgPayload = payload.previewImage;
+  // delete payload.previewImage;
+  const id = payload.id;
+  delete payload.id;
+  const res = await csrfFetch(`/api/spots/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (res.ok) {
+    // TODO: Add preview images/images update functionallity
+    const data = await res.json();
+    dispatch(addSpot(data));
     return data;
   } else return res;
 };

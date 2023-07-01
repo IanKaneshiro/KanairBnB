@@ -7,6 +7,7 @@ import LandingPage from "./components/LandingPage";
 import SpotDetails from "./components/SpotDetails";
 import CreateSpotForm from "./components/CreateSpotForm";
 import ManageSpots from "./components/ManageSpots";
+import UpdateSpotForm from "./components/UpdateSpotForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ function App() {
             <LandingPage />
           </Route>
           <Route path="/spots/:spotId/edit">
-            <CreateSpotForm />
+            <UpdateSpotForm />
           </Route>
           <Route exact path="/spots/current">
             <ManageSpots />
