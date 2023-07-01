@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./LandingPage.css";
 import SpotTile from "../SpotTile";
+import Tooltip from "../Tooltip";
 import { thunkLoadSpots } from "../../store/spots";
 
 const LandingPage = () => {
@@ -17,7 +18,9 @@ const LandingPage = () => {
   return (
     <main className="spots-main">
       {spots.map((spot) => (
-        <SpotTile key={spot.id} spot={spot} />
+        <Tooltip content={spot.name}>
+          <SpotTile key={spot.id} spot={spot} />
+        </Tooltip>
       ))}
     </main>
   );
