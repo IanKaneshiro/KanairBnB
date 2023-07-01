@@ -2,9 +2,11 @@ import "./ReviewsTile.css";
 import React from "react";
 import OpenModalMenuButton from "../ModalButton";
 import DeleteSpotModal from "../DeleteSpotModal";
+import { useSelector } from "react-redux";
 
 const ReviewsTile = ({ review, sessionId }) => {
   const date = new Date(review.createdAt);
+  const { id } = useSelector((state) => state.spots.currentSpot);
   return (
     <div className="reviews-tile">
       <h3 className="reviews-tile-name">{review.User.firstName}</h3>
@@ -15,7 +17,7 @@ const ReviewsTile = ({ review, sessionId }) => {
       {review.userId === sessionId && (
         <OpenModalMenuButton
           itemText="Delete"
-          modalComponent={<DeleteSpotModal reviewId={review.id} />}
+          modalComponent={<DeleteSpotModal reviewId={review.id} spotId={id} />}
         />
       )}
     </div>
