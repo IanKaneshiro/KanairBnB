@@ -89,6 +89,26 @@ export const addNewSpot = (payload) => async (dispatch) => {
   } else return res;
 };
 
+export const updateSpot = (payload) => async (dispatch) => {
+  // const imgPayload = payload.previewImage;
+  // delete payload.previewImage;
+  const id = payload.id;
+  delete payload.id;
+  const res = await csrfFetch(`/api/spots/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (res.ok) {
+    // TODO: Add preview images/images update functionallity
+    const data = await res.json();
+    dispatch(addSpot(data));
+    return data;
+  } else return res;
+};
+
 export const thunkGetUsersSpots = () => async (dispatch) => {
   const res = await csrfFetch("/api/users/me/spots");
 
