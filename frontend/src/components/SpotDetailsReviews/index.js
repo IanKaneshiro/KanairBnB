@@ -36,7 +36,7 @@ const SpotDetailsReviews = ({ session, currentSpot, handleReviewCount }) => {
         <h2>
           <i className="fa-solid fa-star"></i>
           {currentSpot.avgRating
-            ? parseInt(currentSpot.avgRating).toFixed(1)
+            ? Number(currentSpot.avgRating).toFixed(1)
             : "New"}
           {handleReviewCount()}
         </h2>
