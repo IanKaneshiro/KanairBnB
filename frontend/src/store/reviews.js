@@ -3,7 +3,6 @@ import { csrfFetch } from "./csrf";
 // Action Types
 const LOAD_REVIEWS = "reviews/load";
 const CLEAR_REVIEWS = "reviews/clear";
-const ADD_REVIEW = "reviews/add";
 const DELETE_REVIEW = "reviews/delete";
 
 // Action Creators
@@ -17,13 +16,6 @@ const loadReviews = (payload) => {
 export const clearReviews = () => {
   return {
     type: CLEAR_REVIEWS,
-  };
-};
-
-const addReview = (payload) => {
-  return {
-    type: ADD_REVIEW,
-    payload,
   };
 };
 
@@ -62,8 +54,7 @@ export const thunkAddReview = (review, id) => async (dispatch) => {
   });
 
   if (res.ok) {
-    const data = await res.json();
-    dispatch(addReview(data));
+    dispatch(thunkLoadReviews(id));
   } else {
     return res;
   }
@@ -78,11 +69,6 @@ export default function reviewsReducer(state = {}, action) {
         newState[review.id] = review;
       });
       return newState;
-    case ADD_REVIEW:
-      return {
-        ...state,
-        [action.payload.id]: action.payload,
-      };
     case DELETE_REVIEW:
       newState = { ...state };
       delete newState[action.id];

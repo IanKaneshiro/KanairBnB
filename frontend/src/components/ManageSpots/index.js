@@ -22,10 +22,13 @@ const ManageSpots = () => {
 
   return (
     <div className="manage-container">
-      <h1>Manage Your Spots</h1>
-      <button>
-        <Link to="/spots/new">Create a New Spot</Link>
-      </button>
+      <h1>Manage Spots</h1>
+      {!spots.length && (
+        <Link to="/spots/new">
+          <button>Create a New Spot</button>
+        </Link>
+      )}
+
       <div className="manage-spots">
         {spots.map((spot) => (
           <SpotTile ownerId={session.id} key={spot.id} spot={spot} />

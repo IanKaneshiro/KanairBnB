@@ -31,16 +31,20 @@ const DeleteSpotModal = ({ id, reviewId }) => {
         <h1>Confirm Delete</h1>
         <p>Are you sure you want to delete this review?</p>
         <button onClick={handleDelete}>Yes (Delete Review)</button>
-        <button onClick={closeModal}>No (Keep Review)</button>
+        <button style={{ backgroundColor: "darkgray" }} onClick={closeModal}>
+          No (Keep Review)
+        </button>
       </div>
     );
 
   return (
     <div className="delete-spot-container">
       <h1>Confirm Delete</h1>
-      <p>Are you sure you want to remove this spot from the listings?</p>
+      <p>Are you sure you want to remove this spot?</p>
       <button onClick={handleDelete}>Yes (Delete Spot)</button>
-      <button onClick={closeModal}>No (Keep Spot)</button>
+      <button style={{ backgroundColor: "darkgray" }} onClick={closeModal}>
+        No (Keep Spot)
+      </button>
     </div>
   );
 };
