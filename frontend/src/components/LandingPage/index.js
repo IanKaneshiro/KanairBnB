@@ -14,7 +14,13 @@ const LandingPage = () => {
     dispatch(thunkLoadSpots());
   }, [dispatch]);
 
-  if (!spots) return <h1>...loading</h1>;
+  // TODO: cleaner conditional pages
+  if (!spots.length) return <h1>...loading</h1>;
+
+  if (spots.length === 0) {
+    return <h1>No spots available</h1>;
+  }
+
   return (
     <main className="spots-main">
       {spots.map((spot) => (

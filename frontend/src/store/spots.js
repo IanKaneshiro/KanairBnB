@@ -6,6 +6,7 @@ const GET_BY_ID = "spots/getById";
 const ADD_SPOT = "spots/add";
 const ADD_USER_SPOTS = "spots/addUserSpots";
 const CLEAR_CURRENT_SPOT = "spots/clearCurrentSpot";
+const CLEAR_USER_SPOTS = "spots/clearUserSpots";
 const DELETE_SPOT = "spots/delete";
 
 // Action Creators
@@ -47,6 +48,12 @@ const deleteSpot = (id) => {
 export const clearCurrentSpot = () => {
   return {
     type: CLEAR_CURRENT_SPOT,
+  };
+};
+
+export const clearUserSpots = () => {
+  return {
+    type: CLEAR_USER_SPOTS,
   };
 };
 
@@ -150,7 +157,11 @@ export default function spotsReducer(state = initialState, action) {
       };
     case CLEAR_CURRENT_SPOT:
       return { ...state, currentSpot: {} };
-
+    case CLEAR_USER_SPOTS:
+      return {
+        ...state,
+        userSpots: {},
+      };
     case ADD_SPOT:
       return {
         ...state,

@@ -30,6 +30,12 @@ function LoginFormModal() {
       });
   };
 
+  const disableButton = () => {
+    if (password.length < 6) return true;
+    if (credential.length < 4) return true;
+    return false;
+  };
+
   const logInDemo = () => {
     return dispatch(
       sessionActions.login({ credential: "demo", password: "password" })
@@ -55,10 +61,12 @@ function LoginFormModal() {
           placeholder="Password"
           required
         />
-        <button type="submit">Log In</button>
+        <button type="submit" disabled={disableButton()}>
+          Log In
+        </button>
       </form>
       <button className="demo-user-button" onClick={logInDemo}>
-        Demo User
+        Log in as Demo User
       </button>
     </>
   );
