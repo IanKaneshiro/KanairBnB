@@ -1,4 +1,5 @@
 import { csrfFetch } from "./csrf";
+import { loadImages } from "./images";
 
 // Action Types
 const LOAD_SPOTS = "spots/load";
@@ -69,12 +70,13 @@ export const getSpotById = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`);
   const data = await res.json();
   dispatch(getById(data));
+  if (data.SpotImages.length) {
+    dispatch(loadImages(data.SpotImages));
+  }
   return res;
 };
 
 export const addNewSpot = (payload) => async (dispatch) => {
-  const imgPayload = payload.previewImage;
-  delete payload.previewImage;
   const res = await csrfFetch("/api/spots", {
     method: "POST",
     headers: {
@@ -84,16 +86,9 @@ export const addNewSpot = (payload) => async (dispatch) => {
   });
   if (res.ok) {
     const data = await res.json();
-    csrfFetch(`/api/spots/${data.id}/images`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url: imgPayload, preview: true }),
-    });
-    dispatch(addSpot(data));
     return data;
-  } else return res;
+  }
+  return res;
 };
 
 export const updateSpot = (payload) => async (dispatch) => {

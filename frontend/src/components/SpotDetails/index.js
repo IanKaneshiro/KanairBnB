@@ -4,17 +4,23 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getSpotById, clearCurrentSpot } from "../../store/spots";
 import SpotDetailsReviews from "../SpotDetailsReviews";
+import { clearImages } from "../../store/images";
 
 const SpotDetails = () => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
   const currentSpot = useSelector((state) => state.spots.currentSpot);
   const session = useSelector((state) => state.session.user);
+  const previewImage = useSelector((state) => state.images.previewImage);
+  const images = useSelector((state) => Object.values(state.images.images));
 
   useEffect(() => {
     dispatch(getSpotById(parseInt(spotId)));
 
-    return () => dispatch(clearCurrentSpot());
+    return () => {
+      dispatch(clearCurrentSpot());
+      dispatch(clearImages());
+    };
   }, [dispatch, spotId]);
 
   // TODO: Add a nicer loading page
@@ -35,7 +41,8 @@ const SpotDetails = () => {
           {currentSpot.city}, {currentSpot.state}, {currentSpot.country}
         </p>
         <div className="details-img-container">
-          {currentSpot.SpotImages.map((img) => {
+          <img src={previewImage.url} alt={previewImage.id} />
+          {images?.map((img) => {
             return <img src={img.url} alt={img.id} key={img.id} />;
           })}
         </div>

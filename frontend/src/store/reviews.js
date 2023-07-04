@@ -30,8 +30,8 @@ const deleteReview = (id) => {
 // Thunk Action Creators
 export const thunkLoadReviews = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}/reviews`);
-  const data = await res.json();
-  if (data) {
+  if (res.ok) {
+    const data = await res.json();
     dispatch(loadReviews(data));
   }
   return res;

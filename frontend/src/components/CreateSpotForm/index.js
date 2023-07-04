@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewSpot } from "../../store/spots";
+import imagesReducer, { addImage } from "../../store/images";
 import { Redirect, useHistory } from "react-router-dom";
 import "./CreateSpotForm.css";
 
@@ -16,6 +17,11 @@ function CreateSpotForm() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
   const [previewImage, setPreviewImage] = useState("");
+  const [img1, setImg1] = useState("");
+  const [img2, setImg2] = useState("");
+  const [img3, setImg3] = useState("");
+  const [img4, setImg4] = useState("");
+
   const [errors, setErrors] = useState({});
 
   const session = useSelector((state) => state.session.user);
@@ -28,7 +34,67 @@ function CreateSpotForm() {
     e.preventDefault();
     setErrors({});
 
-    const payload = {
+    const handleImages = () => {
+      const errors = {};
+      const imagePayload = [];
+      if (!previewImage) {
+        errors.previewImage = "Preview image is required";
+      }
+      if (
+        previewImage &&
+        !previewImage.endsWith(".png") &&
+        !previewImage.endsWith(".jpg") &&
+        !previewImage.endsWith(".jpeg")
+      ) {
+        errors.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
+      } else if (previewImage) {
+        imagePayload.push({ url: previewImage, preview: true });
+      }
+      if (
+        img1 &&
+        !img1.endsWith(".png") &&
+        !img1.endsWith(".jpg") &&
+        !img1.endsWith(".jpeg")
+      ) {
+        errors.img1 = "Image URL must end in .png, .jpg, or .jpeg";
+      } else if (img1) {
+        imagePayload.push({ url: img1, preview: false });
+      }
+      if (
+        img2 &&
+        !img2.endsWith(".png") &&
+        !img2.endsWith(".jpg") &&
+        !img2.endsWith(".jpeg")
+      ) {
+        errors.img2 = "Image URL must end in .png, .jpg, or .jpeg";
+      } else if (img2) {
+        imagePayload.push({ url: img2, preview: false });
+      }
+      if (
+        img3 &&
+        !img3.endsWith(".png") &&
+        !img3.endsWith(".jpg") &&
+        !img3.endsWith(".jpeg")
+      ) {
+        errors.img3 = "Image URL must end in .png, .jpg, or .jpeg";
+      } else if (img3) {
+        imagePayload.push({ url: img3, preview: false });
+      }
+      if (
+        img4 &&
+        !img4.endsWith(".png") &&
+        !img4.endsWith(".jpg") &&
+        !img4.endsWith(".jpeg")
+      ) {
+        errors.img4 = "Image URL must end in .png, .jpg, or .jpeg";
+      } else if (img4) {
+        imagePayload.push({ url: img4, preview: false });
+      }
+
+      return { errors, imagePayload };
+    };
+
+    const spotPayload = {
       country,
       address,
       city,
@@ -38,33 +104,30 @@ function CreateSpotForm() {
       description,
       name,
       price,
-      previewImage,
     };
 
     try {
-      const res = await dispatch(addNewSpot(payload));
+      const { imagePayload, errors } = handleImages();
+
+      setErrors(errors);
+      if (Object.values(errors).length) return setErrors(errors);
+
+      const res = await dispatch(addNewSpot(spotPayload));
       if (res.id) {
+        await dispatch(addImage(imagePayload, res.id));
         return history.push(`/spots/${res.id}`);
       }
     } catch (error) {
-      const data = await error.json();
-      if (data && data.errors) {
-        if (!previewImage) {
-          data.errors.previewImage = "Preview image is required";
+      try {
+        const data = await error.json();
+        if (data && data.errors) {
+          if (!data.errors.description && description.length < 30)
+            data.errors.description =
+              "Description needs a minimum of 30 characters";
+          setErrors(data.errors);
         }
-        if (
-          previewImage &&
-          !previewImage.endsWith(".png") &&
-          !previewImage.endsWith(".jpg") &&
-          !previewImage.endsWith(".jpeg")
-        ) {
-          data.errors.previewImage =
-            "Image URL must end in .png, .jpg, or .jpeg";
-        }
-        if (!data.errors.description && description.length < 30)
-          data.errors.description =
-            "Description needs a minimum of 30 characters";
-        setErrors(data.errors);
+      } catch (error) {
+        console.log(error);
       }
     }
   };
@@ -205,10 +268,30 @@ function CreateSpotForm() {
           {errors.previewImage && (
             <p className="error">{errors.previewImage}</p>
           )}
-          <input type="text" placeholder="Image URL" />
-          <input type="text" placeholder="Image URL" />
-          <input type="text" placeholder="Image URL" />
-          <input type="text" placeholder="Image URL" />
+          <input
+            type="text"
+            placeholder="Image URL"
+            onChange={(e) => setImg1(e.target.value)}
+          />
+          {errors.img1 && <p className="error">{errors.img1}</p>}
+          <input
+            type="text"
+            placeholder="Image URL"
+            onChange={(e) => setImg2(e.target.value)}
+          />
+          {errors.img2 && <p className="error">{errors.img2}</p>}
+          <input
+            type="text"
+            placeholder="Image URL"
+            onChange={(e) => setImg3(e.target.value)}
+          />
+          {errors.img3 && <p className="error">{errors.img3}</p>}
+          <input
+            type="text"
+            placeholder="Image URL"
+            onChange={(e) => setImg4(e.target.value)}
+          />
+          {errors.img4 && <p className="error">{errors.img4}</p>}
         </div>
         <button>Create Spot</button>
       </form>
