@@ -18,7 +18,6 @@ export const clearImages = () => {
 
 // Thunk action creator
 export const addImage = (payload, spotId) => async (dispatch) => {
-  console.log("image payload", payload);
   payload.forEach(async (img) => {
     await csrfFetch(`/api/spots/${spotId}/images`, {
       method: "POST",

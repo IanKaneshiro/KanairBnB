@@ -115,7 +115,6 @@ function CreateSpotForm() {
       const res = await dispatch(addNewSpot(spotPayload));
       if (res.id) {
         await dispatch(addImage(imagePayload, res.id));
-        console.log(imagePayload);
         return history.push(`/spots/${res.id}`);
       }
     } catch (error) {
