@@ -23,6 +23,12 @@
   color: black;
 }
 
+.login-form > button[disabled] {
+  cursor: not-allowed;
+  color: white;
+  background-color: #959ab3;
+}
+
 .login-form input {
   padding: 10px;
   margin: 10px;

@@ -24,8 +24,8 @@ const LandingPage = () => {
   return (
     <main className="spots-main">
       {spots.map((spot) => (
-        <Tooltip content={spot.name}>
-          <SpotTile key={spot.id} spot={spot} />
+        <Tooltip content={spot.name} key={spot.id}>
+          <SpotTile spot={spot} />
         </Tooltip>
       ))}
     </main>

@@ -20,6 +20,13 @@
   box-shadow: 1px 1px black;
 }
 
+.spot-form-container button[disabled] {
+  cursor: not-allowed;
+  color: white;
+  background-color: #959ab3;
+  box-shadow: none;
+}
+
 .spot-form-container div {
   padding: 5px;
 }

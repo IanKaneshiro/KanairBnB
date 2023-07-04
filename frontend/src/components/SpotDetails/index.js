@@ -10,6 +10,8 @@ const SpotDetails = () => {
   const dispatch = useDispatch();
   const currentSpot = useSelector((state) => state.spots.currentSpot);
   const session = useSelector((state) => state.session.user);
+  const previewImage = useSelector((state) => state.images.previewImage);
+  const images = useSelector((state) => Object.values(state.images.images));
 
   useEffect(() => {
     dispatch(getSpotById(parseInt(spotId)));
@@ -35,7 +37,8 @@ const SpotDetails = () => {
           {currentSpot.city}, {currentSpot.state}, {currentSpot.country}
         </p>
         <div className="details-img-container">
-          {currentSpot.SpotImages.map((img) => {
+          <img src={previewImage.url} alt={previewImage.id} />
+          {images?.map((img) => {
             return <img src={img.url} alt={img.id} key={img.id} />;
           })}
         </div>

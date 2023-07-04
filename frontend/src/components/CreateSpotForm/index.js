@@ -16,6 +16,11 @@ function CreateSpotForm() {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(null);
   const [previewImage, setPreviewImage] = useState("");
+  const [img1, setImg1] = useState("");
+  const [img2, setImg2] = useState("");
+  const [img3, setImg3] = useState("");
+  const [img4, setImg4] = useState("");
+
   const [errors, setErrors] = useState({});
 
   const session = useSelector((state) => state.session.user);
@@ -24,10 +29,21 @@ function CreateSpotForm() {
 
   if (!session) return <Redirect to="/" />;
 
+  const imageValidation = (img, data) => {
+    if (
+      img &&
+      !img.endsWith(".png") &&
+      !img.endsWith(".jpg") &&
+      !img.endsWith(".jpeg")
+    ) {
+      data.errors[img] = "Image URL must end in .png, .jpg, or .jpeg";
+    }
+    return;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-
     const payload = {
       country,
       address,
@@ -38,7 +54,6 @@ function CreateSpotForm() {
       description,
       name,
       price,
-      previewImage,
     };
 
     try {
@@ -205,10 +220,26 @@ function CreateSpotForm() {
           {errors.previewImage && (
             <p className="error">{errors.previewImage}</p>
           )}
-          <input type="text" placeholder="Image URL" />
-          <input type="text" placeholder="Image URL" />
-          <input type="text" placeholder="Image URL" />
-          <input type="text" placeholder="Image URL" />
+          <input
+            type="text"
+            placeholder="Image URL"
+            onChange={(e) => setImg1(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Image URL"
+            onChange={(e) => setImg2(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Image URL"
+            onChange={(e) => setImg3(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Image URL"
+            onChange={(e) => setImg4(e.target.value)}
+          />
         </div>
         <button>Create Spot</button>
       </form>

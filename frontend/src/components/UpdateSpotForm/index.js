@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSpot } from "../../store/spots";
 import { Redirect, useHistory, useParams } from "react-router-dom";
@@ -14,16 +14,16 @@ function UpdateSpotForm() {
   const session = useSelector((state) => state.session.user);
   const spot = useSelector((state) => state.spots.userSpots[spotId]);
 
-  const [country, setCountry] = useState(spot.country);
-  const [address, setAddress] = useState(spot.address);
-  const [city, setCity] = useState(spot.city);
-  const [state, setState] = useState(spot.state);
-  const [lat, setLat] = useState(spot.lat);
-  const [lng, setLng] = useState(spot.lng);
-  const [description, setDescription] = useState(spot.description);
-  const [name, setName] = useState(spot.name);
-  const [price, setPrice] = useState(spot.price);
-  const [previewImage, setPreviewImage] = useState(spot.previewImage);
+  const [country, setCountry] = useState(spot?.country);
+  const [address, setAddress] = useState(spot?.address);
+  const [city, setCity] = useState(spot?.city);
+  const [state, setState] = useState(spot?.state);
+  const [lat, setLat] = useState(spot?.lat);
+  const [lng, setLng] = useState(spot?.lng);
+  const [description, setDescription] = useState(spot?.description);
+  const [name, setName] = useState(spot?.name);
+  const [price, setPrice] = useState(spot?.price);
+  const [previewImage, setPreviewImage] = useState(spot?.previewImage);
   const [errors, setErrors] = useState({});
 
   if (!session) return <Redirect to="/" />;
