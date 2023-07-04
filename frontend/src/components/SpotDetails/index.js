@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getSpotById, clearCurrentSpot } from "../../store/spots";
 import SpotDetailsReviews from "../SpotDetailsReviews";
+import { clearImages } from "../../store/images";
 
 const SpotDetails = () => {
   const { spotId } = useParams();
@@ -16,7 +17,10 @@ const SpotDetails = () => {
   useEffect(() => {
     dispatch(getSpotById(parseInt(spotId)));
 
-    return () => dispatch(clearCurrentSpot());
+    return () => {
+      dispatch(clearCurrentSpot());
+      dispatch(clearImages());
+    };
   }, [dispatch, spotId]);
 
   // TODO: Add a nicer loading page

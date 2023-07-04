@@ -16,10 +16,9 @@ const SpotDetailsReviews = ({ session, currentSpot, handleReviewCount }) => {
 
   useEffect(() => {
     // TODO: handle errors better when there are no reviews
-    dispatch(thunkLoadReviews(parseInt(spotId))).catch((err) =>
-      console.log(err)
-    );
-
+    dispatch(thunkLoadReviews(parseInt(spotId))).catch((res) => {
+      console.log(res);
+    });
     return () => dispatch(clearReviews());
   }, [dispatch, spotId]);
 

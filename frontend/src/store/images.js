@@ -1,5 +1,8 @@
+import { csrfFetch } from "./csrf";
+
 // Action Types
 const LOAD_IMAGES = "images/load";
+const CLEAR_IMAGES = "images/clear";
 
 // Action Creator
 export const loadImages = (images) => {
@@ -7,6 +10,24 @@ export const loadImages = (images) => {
     type: LOAD_IMAGES,
     images,
   };
+};
+
+export const clearImages = () => {
+  return { type: CLEAR_IMAGES };
+};
+
+// Thunk action creator
+export const addImage = (payload, spotId) => async (dispatch) => {
+  console.log("image payload", payload);
+  payload.forEach(async (img) => {
+    await csrfFetch(`/api/spots/${spotId}/images`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(img),
+    });
+  });
 };
 
 const initialState = {
@@ -27,6 +48,8 @@ export default function imagesReducer(state = initialState, action) {
         previewImage,
         images,
       };
+    case CLEAR_IMAGES:
+      return initialState;
     default:
       return state;
   }
