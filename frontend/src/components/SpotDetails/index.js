@@ -27,9 +27,9 @@ const SpotDetails = () => {
   if (!currentSpot.id) return <h1>....loading</h1>;
 
   const handleReviewCount = () => {
-    if (currentSpot.numReviews === 1) return " \u00B7 1 Review";
+    if (Number(currentSpot.numReviews) === 1) return " \u00B7 1 Review";
     if (!currentSpot.numReviews) return "";
-    if (currentSpot.numReviews > 1)
+    if (Number(currentSpot.numReviews) > 1)
       return ` \u00B7 ${currentSpot.numReviews} Reviews`;
   };
 

@@ -19,7 +19,6 @@ const ManageSpots = () => {
       .catch((err) => {
         setLoading(false);
         setError(err.status);
-        console.log(err);
       });
   }, [dispatch]);
 
@@ -33,7 +32,7 @@ const ManageSpots = () => {
     <div className="manage-container">
       <h1>Manage Spots</h1>
 
-      {error && (
+      {!spots.length && (
         <Link to="/spots/new">
           <button>Create a New Spot</button>
         </Link>
