@@ -17,3 +17,26 @@
   flex-direction: column;
   align-items: center;
 }
+
+.rating-modal-container button {
+  border: 1px solid black;
+  border-radius: 0;
+  background-color: #ff5a5f;
+  color: #fffbff;
+  padding: 5px;
+  font-weight: bold;
+  width: 200px;
+  align-self: center;
+  cursor: pointer;
+}
+
+.rating-modal-container button:hover {
+  box-shadow: 1px 1px black;
+}
+
+.rating-modal-container button[disabled] {
+  cursor: not-allowed;
+  color: white;
+  background-color: #959ab3;
+  box-shadow: none;
+}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewSpot } from "../../store/spots";
-import imagesReducer, { addImage } from "../../store/images";
+import { addImage } from "../../store/images";
 import { Redirect, useHistory } from "react-router-dom";
 import "./CreateSpotForm.css";
 
