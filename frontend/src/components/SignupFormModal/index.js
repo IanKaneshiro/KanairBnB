@@ -70,26 +70,6 @@ function SignupFormModal() {
       <form onSubmit={handleSubmit} className="signup-form">
         <input
           type="text"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-
-        {errors.email && <p className="errors">{errors.email}</p>}
-
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-          required
-        />
-
-        {errors.username && <p className="errors">{errors.username}</p>}
-
-        <input
-          type="text"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
           placeholder="First Name"
@@ -107,6 +87,25 @@ function SignupFormModal() {
         />
 
         {errors.lastName && <p className="errors">{errors.lastName}</p>}
+        <input
+          type="text"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+          required
+        />
+
+        {errors.email && <p className="errors">{errors.email}</p>}
+
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Username"
+          required
+        />
+
+        {errors.username && <p className="errors">{errors.username}</p>}
 
         <input
           type="password"
