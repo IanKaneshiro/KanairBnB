@@ -1,3 +1,9 @@
+.sign-up-container {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
 .signup-form {
   display: flex;
   align-items: center;
@@ -5,8 +11,8 @@
   padding: 20px 40px;
 }
 
-.signup-form > h1 {
-  padding-top: 10px;
+.sign-up-container > h1 {
+  align-self: center;
 }
 
 .signup-form > button {
@@ -16,6 +22,7 @@
   color: white;
   font-weight: bold;
   border-radius: 10px;
+  width: 100%;
 }
 
 .signup-form > button:hover {
@@ -35,4 +42,5 @@
   border: 0;
   box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
   border-radius: 10px;
+  width: 100%;
 }

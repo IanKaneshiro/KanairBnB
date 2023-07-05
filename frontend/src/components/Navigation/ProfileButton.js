@@ -53,7 +53,7 @@ function ProfileButton({ user }) {
             <li>{user.email}</li>
             <li>
               <Link to="/spots/current" onClick={closeMenu}>
-                Manage Spots
+                <button>Manage Spots</button>
               </Link>
             </li>
             <li className="navbar-li">

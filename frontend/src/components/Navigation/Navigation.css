@@ -21,6 +21,10 @@ ul {
   border-bottom: 2px solid #cccccc;
 }
 
+.navbar-logo {
+  width: 80px;
+}
+
 .navbar--links {
   display: flex;
   gap: 1em;
@@ -51,6 +55,14 @@ ul {
   gap: 10px;
   border-radius: 10px;
   z-index: 5;
+}
+
+.profile-dropdown a {
+  color: white;
+}
+
+.profile-dropdown a:hover {
+  color: black;
 }
 
 .navbar button {

@@ -11,7 +11,11 @@ function Navigation({ isLoaded }) {
     <ul className="navbar">
       <li>
         <NavLink exact to="/">
-          <i className="fa-solid fa-house"></i>
+          <img
+            className="navbar-logo"
+            src="https://res.cloudinary.com/dmkyocbqi/image/upload/v1688526908/favicon.ico_ezrzpw.png"
+            alt="kanairbnb logo"
+          />
         </NavLink>
       </li>
       {isLoaded && (
