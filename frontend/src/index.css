@@ -8,7 +8,6 @@
 }
 .errors {
   color: red;
-  font-style: italic;
 }
 
 a {
@@ -17,4 +16,8 @@ a {
 
 li {
   list-style: none;
+}
+
+button {
+  cursor: pointer;
 }

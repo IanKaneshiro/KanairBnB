@@ -11,14 +11,12 @@ const ManageSpots = () => {
   const spots = useSelector((state) => Object.values(state.spots.userSpots));
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     dispatch(thunkGetUsersSpots())
       .then(() => setLoading(false))
       .catch((err) => {
         setLoading(false);
-        setError(err.status);
       });
   }, [dispatch]);
 

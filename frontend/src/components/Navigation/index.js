@@ -21,11 +21,13 @@ function Navigation({ isLoaded }) {
       {isLoaded && (
         <li>
           {sessionUser && (
-            <button
-              style={{ backgroundColor: "transparent", marginLeft: "10px" }}
-            >
-              <NavLink to="/spots/new">Create a New Spot</NavLink>
-            </button>
+            <NavLink to="/spots/new">
+              <button
+                style={{ backgroundColor: "transparent", marginLeft: "10px" }}
+              >
+                Create a New Spot
+              </button>
+            </NavLink>
           )}
           <ProfileButton user={sessionUser} />
         </li>

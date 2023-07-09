@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./SpotDetailsReviews.css";
@@ -9,18 +9,22 @@ import { thunkLoadReviews, clearReviews } from "../../store/reviews";
 
 const SpotDetailsReviews = ({ session, currentSpot, handleReviewCount }) => {
   const { spotId } = useParams();
+  const [noReviews, setNoReviews] = useState(false);
   const dispatch = useDispatch();
   const reviews = useSelector((state) =>
     Object.values(state.reviews).sort((a, b) => b.id - a.id)
   );
 
   useEffect(() => {
+    setNoReviews(false);
     // TODO: handle errors better when there are no reviews
     dispatch(thunkLoadReviews(parseInt(spotId))).catch((res) => {
-      console.log(res);
+      if (!res.ok) setNoReviews(true);
     });
     return () => dispatch(clearReviews());
   }, [dispatch, spotId]);
+
+  if (!reviews.length && !noReviews) return <p>...loading</p>;
 
   const showReview = () => {
     const hasReview = reviews.filter((rev) => rev?.userId === session?.id);
