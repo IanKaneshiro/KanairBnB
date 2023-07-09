@@ -5,7 +5,6 @@ import OpenModalMenuButton from "../ModalButton";
 import DeleteSpotModal from "../DeleteSpotModal";
 
 const SpotTile = ({ spot, ownerId }) => {
-  // TODO: add a tooltip
   return (
     <div className="spot-tile">
       <Link to={`/spots/${spot.id}`}>
@@ -22,7 +21,9 @@ const SpotTile = ({ spot, ownerId }) => {
             <i className="fa-solid fa-star"></i>
             {spot.avgRating ? Number(spot.avgRating).toFixed(1) : "New"}
           </p>
-          <p className="spot-tile-price">${spot.price} night</p>
+          <p className="spot-tile-price">
+            <span>${spot.price}</span> night
+          </p>
         </div>
       </Link>
       {ownerId === spot.ownerId && (

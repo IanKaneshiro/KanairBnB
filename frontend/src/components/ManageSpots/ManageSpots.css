@@ -4,24 +4,27 @@
   padding: 20px;
 }
 
+.manage-container > h1 {
+  padding: 0 40px;
+}
+
 .manage-spots {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 15px;
   padding: 20px 40px;
   max-width: 1000px; /* Adjust as needed */
-  margin: 0 auto;
+  justify-content: center;
 }
 
 .manage-container button {
+  margin: 0 40px;
   border: 1px solid black;
-  border-radius: 0;
   background-color: #ff5a5f;
   color: #fffbff;
   padding: 5px;
   font-weight: bold;
-  width: 100px;
-  align-self: center;
+  width: fit-content;
   cursor: pointer;
 }
 

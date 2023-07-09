@@ -36,6 +36,9 @@
   grid-area: price;
   justify-self: start;
 }
+.spot-tile-price > span {
+  font-weight: bold;
+}
 
 .spot-tile-rating {
   grid-area: rating;

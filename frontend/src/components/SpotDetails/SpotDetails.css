@@ -16,7 +16,7 @@
 .details-img-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 10vw);
+  grid-template-rows: repeat(2, 200px);
   grid-gap: 10px;
 }
 
@@ -27,25 +27,28 @@
   border-radius: 10px;
 }
 
-.details-description-block > p {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
+.details-description {
+  display: grid;
+  grid-template-areas: "text text box" "text text ." "text text .";
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 10rem auto auto;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  gap: 20px;
 }
-
-.details-img-container img:first-child {
+.gallery-preview-img {
   grid-column: 1 / 3;
   grid-row: 1 / 3;
 }
 
-.details-description {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  margin-bottom: 20px;
+.details-description-block {
+  grid-area: text;
+  overflow: auto;
 }
-.details-description > div > p {
-  margin-top: 10px;
+
+.details-description-block > p {
+  overflow-wrap: break-word;
+  white-space: normal;
 }
 
 .details-desciption-reserve {
@@ -55,6 +58,7 @@
   border-radius: 10px;
   padding: 20px;
   box-shadow: 1px 2px 5px black;
+  grid-area: box;
 }
 
 .details-desciption-reserve > div {
@@ -72,4 +76,18 @@
   color: #fffbff;
   padding: 10px;
   font-weight: bold;
+}
+
+@media screen and (max-width: 550px) {
+  .details-description {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .details-img-container {
+    display: block;
+    overflow: auto;
+    white-space: nowrap;
+    height: 20rem;
+  }
 }

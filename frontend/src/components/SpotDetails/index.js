@@ -41,19 +41,28 @@ const SpotDetails = () => {
           {currentSpot.city}, {currentSpot.state}, {currentSpot.country}
         </p>
         <div className="details-img-container">
-          <img src={previewImage.url} alt={previewImage.id} />
+          <img
+            src={previewImage.url}
+            alt={previewImage.id}
+            className="gallery-preview-img"
+          />
           {images?.map((img) => {
-            return <img src={img.url} alt={img.id} key={img.id} />;
+            return (
+              <img
+                src={img.url}
+                alt={img.id}
+                key={img.id}
+                className="gallery-image"
+              />
+            );
           })}
         </div>
         <div className="details-description">
-          <div>
+          <div className="details-description-block">
             <h2>
               {`Hosted by ${currentSpot.Owner.firstName}, ${currentSpot.Owner.lastName}`}
             </h2>
-            <div className="details-description-block">
-              <p>{currentSpot.description}</p>
-            </div>
+            <p>{currentSpot.description}</p>
           </div>
           <div className="details-desciption-reserve">
             <div>
@@ -64,7 +73,6 @@ const SpotDetails = () => {
                 night
               </p>
               <p>
-                {/* {TODO: Throws an error on render} */}
                 <i className="fa-solid fa-star"></i>
                 {currentSpot.avgRating
                   ? Number(currentSpot.avgRating).toFixed(1)
