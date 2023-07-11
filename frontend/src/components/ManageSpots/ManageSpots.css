@@ -19,13 +19,12 @@
 }
 
 .manage-container button {
-  margin: 0 40px;
   border: 1px solid black;
   background-color: #ff5a5f;
   color: #fffbff;
   padding: 5px;
   font-weight: bold;
-  width: fit-content;
+  width: 6rem;
   cursor: pointer;
 }
 
@@ -35,7 +34,13 @@
 
 .spot-owner {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 10px;
   margin-bottom: 20px;
+}
+
+@media (min-width: 1300px) and (max-width: 2000px) {
+  .manage-spots {
+    grid-template-columns: repeat(4, minmax(300px, 1fr));
+  }
 }

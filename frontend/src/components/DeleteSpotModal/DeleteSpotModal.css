@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 10px;
+  width: 20rem;
 }
 
 .delete-spot-container button {
@@ -13,4 +15,8 @@
   padding: 10px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.delete-spot-container button:hover {
+  box-shadow: 1px 1px black;
 }
