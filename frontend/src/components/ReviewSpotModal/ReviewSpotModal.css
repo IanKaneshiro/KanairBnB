@@ -10,12 +10,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 10px;
 }
 
 .rating-modal-form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 20rem;
 }
 
 .rating-modal-container button {

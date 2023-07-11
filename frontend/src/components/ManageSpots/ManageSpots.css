@@ -1,5 +1,5 @@
 .manage-container {
-  max-width: 1000px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -13,8 +13,9 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 15px;
   padding: 20px 40px;
-  max-width: 1000px; /* Adjust as needed */
+  max-width: 1600px; /* Adjust as needed */
   justify-content: center;
+  margin: 0 auto;
 }
 
 .manage-container button {

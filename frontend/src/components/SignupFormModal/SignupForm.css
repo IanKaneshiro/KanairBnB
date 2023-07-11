@@ -9,6 +9,7 @@
   align-items: center;
   flex-direction: column;
   padding: 20px 40px;
+  width: 20rem;
 }
 
 .sign-up-container > h1 {
@@ -26,14 +27,14 @@
 }
 
 .signup-form > button:hover {
-  cursor: pointer;
-  color: black;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 .signup-form > button[disabled] {
   cursor: not-allowed;
   color: white;
   background-color: #959ab3;
+  box-shadow: none;
 }
 
 .signup-form input {
