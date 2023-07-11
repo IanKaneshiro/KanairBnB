@@ -17,7 +17,6 @@
 
 .spot-tile-info {
   margin-top: 5px;
-  height: 30%;
   display: grid;
   grid-template-columns: repeat(3, auto);
   grid-template-rows: repeat(3, auto);

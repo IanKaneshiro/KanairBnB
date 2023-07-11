@@ -67,10 +67,7 @@ const SpotDetails = () => {
           <div className="details-desciption-reserve">
             <div>
               <p>
-                <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-                  ${currentSpot.price}
-                </span>
-                night
+                <span>${currentSpot.price}</span> night
               </p>
               <p>
                 <i className="fa-solid fa-star"></i>
