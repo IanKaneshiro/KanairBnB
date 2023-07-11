@@ -1,8 +1,8 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
+import { Link } from "react-router-dom";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
@@ -10,24 +10,20 @@ function Navigation({ isLoaded }) {
   return (
     <ul className="navbar">
       <li>
-        <NavLink exact to="/">
+        <Link exact to="/">
           <img
             className="navbar-logo"
             src="https://res.cloudinary.com/dmkyocbqi/image/upload/v1688526908/favicon.ico_ezrzpw.png"
             alt="kanairbnb logo"
           />
-        </NavLink>
+        </Link>
       </li>
       {isLoaded && (
         <li>
           {sessionUser && (
-            <NavLink to="/spots/new">
-              <button
-                style={{ backgroundColor: "transparent", marginLeft: "10px" }}
-              >
-                Create a New Spot
-              </button>
-            </NavLink>
+            <Link to="/spots/new" className="navbar-createspot">
+              Create a New Spot
+            </Link>
           )}
           <ProfileButton user={sessionUser} />
         </li>
