@@ -1,5 +1,6 @@
 .reviews-tile p {
-  word-break: break-all;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .reviews-tile button {
