@@ -30,6 +30,20 @@ function CreateSpotForm() {
 
   if (!session) return <Redirect to="/" />;
 
+  const handleDisabledBtn = () => {
+    if (!country.length) return true;
+    if (!address.length) return true;
+    if (!city.length) return true;
+    if (!state.length) return true;
+    if (!lat) return true;
+    if (!lng) return true;
+    if (description.length < 30) return true;
+    if (!name.length) return true;
+    if (!price) return true;
+    if (!previewImage.length) return true;
+    return false;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -293,7 +307,7 @@ function CreateSpotForm() {
           />
           {errors.img4 && <p className="error">{errors.img4}</p>}
         </div>
-        <button>Create Spot</button>
+        <button disabled={handleDisabledBtn()}>Create Spot</button>
       </form>
     </div>
   );
