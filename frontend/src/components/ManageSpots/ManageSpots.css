@@ -24,12 +24,17 @@
   color: #fffbff;
   padding: 5px;
   font-weight: bold;
-  width: 6rem;
+  width: fit-content;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .manage-container button:hover {
   box-shadow: 1px 1px black;
+}
+
+.manage-spots-new {
+  padding-left: 40px;
 }
 
 .spot-owner {
@@ -39,8 +44,14 @@
   margin-bottom: 20px;
 }
 
-@media (min-width: 1300px) and (max-width: 2000px) {
+@media (min-width: 1300px) {
   .manage-spots {
     grid-template-columns: repeat(4, minmax(300px, 1fr));
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1299px) {
+  .manage-spots {
+    grid-template-columns: repeat(3, minmax(300px, 1fr));
   }
 }

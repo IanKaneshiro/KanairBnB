@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateSpot } from "../../store/spots";
+import { thunkGetUsersSpots, updateSpot } from "../../store/spots";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 
 import "./UpdateSpotForm.css";
-
-//TODO: fix loading of state, laggin images
 
 function UpdateSpotForm() {
   const dispatch = useDispatch();
@@ -14,17 +12,36 @@ function UpdateSpotForm() {
   const session = useSelector((state) => state.session.user);
   const spot = useSelector((state) => state.spots.userSpots[spotId]);
 
-  const [country, setCountry] = useState(spot?.country);
-  const [address, setAddress] = useState(spot?.address);
-  const [city, setCity] = useState(spot?.city);
-  const [state, setState] = useState(spot?.state);
-  const [lat, setLat] = useState(spot?.lat);
-  const [lng, setLng] = useState(spot?.lng);
-  const [description, setDescription] = useState(spot?.description);
-  const [name, setName] = useState(spot?.name);
-  const [price, setPrice] = useState(spot?.price);
-  const [previewImage, setPreviewImage] = useState(spot?.previewImage);
+  const [country, setCountry] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [lat, setLat] = useState(null);
+  const [lng, setLng] = useState(null);
+  const [description, setDescription] = useState("");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(null);
+  const [previewImage, setPreviewImage] = useState("");
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (spot) {
+      setCountry(spot.country);
+      setAddress(spot.address);
+      setCity(spot.city);
+      setState(spot.state);
+      setLat(spot.lat);
+      setLng(spot.lng);
+      setDescription(spot.description);
+      setName(spot.name);
+      setPrice(spot.price);
+      setPreviewImage(spot.previewImage);
+    }
+  }, [spot]);
+
+  useEffect(() => {
+    dispatch(thunkGetUsersSpots());
+  }, [dispatch]);
 
   if (!session) return <Redirect to="/" />;
 

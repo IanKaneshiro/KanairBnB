@@ -10,7 +10,7 @@ function Navigation({ isLoaded }) {
   return (
     <ul className="navbar">
       <li>
-        <Link exact to="/">
+        <Link to="/">
           <img
             className="navbar-logo"
             src="https://res.cloudinary.com/dmkyocbqi/image/upload/v1688526908/favicon.ico_ezrzpw.png"
