@@ -16,7 +16,7 @@ function OpenModalMenuItem({
   };
 
   return (
-    <li className="navbar-click-li" onClick={onClick}>
+    <li className="navbar-login-signup" onClick={onClick}>
       {itemText}
     </li>
   );

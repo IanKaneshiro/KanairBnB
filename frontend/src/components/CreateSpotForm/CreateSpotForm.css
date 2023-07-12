@@ -20,7 +20,8 @@
   box-shadow: 1px 1px black;
 }
 
-.spot-form-container button[disabled] {
+.spot-form-container button[disabled],
+.spot-form-container button[disabled]:hover {
   cursor: not-allowed;
   color: white;
   background-color: #959ab3;

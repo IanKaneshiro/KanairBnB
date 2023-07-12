@@ -53,12 +53,9 @@ function ProfileButton({ user }) {
           <>
             <li>Hello, {user.username}</li>
             <li>{user.email}</li>
-            <li>
-              <Link
-                to="/spots/current"
-                className="navbar-li-managespots"
-                onClick={closeMenu}
-              >
+            <hr className="navbar-hr"></hr>
+            <li className="navbar-li-managespots">
+              <Link to="/spots/current" onClick={closeMenu}>
                 Manage Spots
               </Link>
             </li>
