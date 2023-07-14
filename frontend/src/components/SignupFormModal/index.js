@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../context/Modal";
 import * as sessionActions from "../../store/session";
@@ -17,6 +17,30 @@ function SignupFormModal() {
   const { closeModal } = useModal();
 
   const session = useSelector((state) => state.session.user);
+
+  useEffect(() => {
+    const errors = {};
+    if (username.length && username.length < 4) {
+      errors.username = "* Username must be at least 4 characters";
+    }
+
+    if (password.length && password.length < 4) {
+      errors.password = "* Password must be at least 6 characters";
+    }
+
+    if (
+      password.length &&
+      confirmPassword.length &&
+      password !== confirmPassword
+    ) {
+      errors.confirmPassword = "* Password must match";
+    }
+    setErrors(errors);
+
+    if (email.length && !email.includes("@")) {
+      errors.email = "* Must be a valid email";
+    }
+  }, [username, password, confirmPassword, email]);
 
   if (session) return <Redirect to="/" />;
 

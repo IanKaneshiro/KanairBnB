@@ -31,7 +31,7 @@ function App() {
           <Route path="/spots/:spotId/edit">
             <UpdateSpotForm />
           </Route>
-          <Route exact path="/spots/current">
+          <Route exact path="/spots/me">
             <ManageSpots />
           </Route>
           <Route exact path="/spots/new">
@@ -40,7 +40,7 @@ function App() {
           <Route path="/spots/:spotId">
             <SpotDetails />
           </Route>
-          <Route path="/reviews/current">
+          <Route path="/reviews/me">
             <ManageReviews />
           </Route>
         </Switch>

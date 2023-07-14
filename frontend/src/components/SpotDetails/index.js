@@ -9,6 +9,7 @@ import { clearImages } from "../../store/images";
 const SpotDetails = () => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
+
   const currentSpot = useSelector((state) => state.spots.currentSpot);
   const session = useSelector((state) => state.session.user);
   const previewImage = useSelector((state) => state.images.previewImage);
