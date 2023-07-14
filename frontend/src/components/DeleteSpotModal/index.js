@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { thunkDeleteSpot } from "../../store/spots";
 import { thunkDeleteReview } from "../../store/reviews";
 
-const DeleteSpotModal = ({ id, reviewId, spotId }) => {
+const DeleteSpotModal = ({ id, reviewId, spotId, isManage }) => {
   const { closeModal } = useModal();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -19,7 +19,11 @@ const DeleteSpotModal = ({ id, reviewId, spotId }) => {
         console.log(err)
       );
       closeModal();
-      return history.push(`/spots/${currentSpotId}`);
+      if (!isManage) {
+        return history.push(`/spots/${currentSpotId}`);
+      } else {
+        return history.push("/reviews/current");
+      }
     } else {
       dispatch(thunkDeleteSpot(id, spotId)).catch((err) => console.log(err));
       closeModal();
