@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ReviewSpotModal.css";
 import { useModal } from "../../context/Modal";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,6 +13,15 @@ const ReviewSpotModal = ({ update, spot, reviewId }) => {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const errors = {};
+    if (review.length && review.length < 10) {
+      errors.review = "* Review must be at least 10 characters";
+    }
+
+    setErrors(errors);
+  }, [stars, review]);
 
   const disableButton = () => {
     if (review.length < 10 || stars === 0) return true;
@@ -49,7 +58,7 @@ const ReviewSpotModal = ({ update, spot, reviewId }) => {
 
   return (
     <div className="rating-modal-container">
-      <h1>How was your stay {update && `at ${spot.name}`}?</h1>
+      <h1>How was your stay{update && `at ${spot.name}`}?</h1>
       {errors.review && <p className="error">{errors.review}</p>}
       <form className="rating-modal-form">
         <textarea
