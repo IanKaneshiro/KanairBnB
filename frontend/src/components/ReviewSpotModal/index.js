@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import "./ReviewSpotModal.css";
 import { useModal } from "../../context/Modal";
 import { useSelector, useDispatch } from "react-redux";
-import { thunkAddReview } from "../../store/reviews";
+import { thunkAddReview, thunkUpdateReview } from "../../store/reviews";
 
-const ReviewSpotModal = () => {
-  const [review, setReview] = useState("");
-  const [stars, setStars] = useState(0);
+const ReviewSpotModal = ({ update, spot, reviewId }) => {
+  const { id } = useSelector((state) => state.spots.currentSpot);
+  const curReview = useSelector((state) => state.reviews[reviewId]);
+  const [review, setReview] = useState(curReview?.review || "");
+  const [stars, setStars] = useState(curReview?.stars || 0);
   const [activeStars, setActiveStars] = useState(stars);
   const [errors, setErrors] = useState({});
-  const { id } = useSelector((state) => state.spots.currentSpot);
   const { closeModal } = useModal();
   const dispatch = useDispatch();
 
@@ -25,26 +26,37 @@ const ReviewSpotModal = () => {
       review,
       stars,
     };
+    if (update) {
+      return dispatch(thunkUpdateReview(curReview.id, payload, id))
+        .then(closeModal)
+        .catch(async (res) => {
+          const data = await res.json();
+          if (data && data.message) {
+            setErrors({ review: data.message });
+          }
+        });
+    }
 
     return dispatch(thunkAddReview(payload, id))
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-        if (data && data.errors) {
-          setErrors(data.errors);
+        if (data && data.message) {
+          setErrors({ review: data.message });
         }
       });
   };
 
   return (
     <div className="rating-modal-container">
-      <h1>How was your stay?</h1>
+      <h1>How was your stay {update && `at ${spot.name}`}?</h1>
+      {errors.review && <p className="error">{errors.review}</p>}
       <form className="rating-modal-form">
         <textarea
           placeholder="Leave your review here..."
+          value={review}
           onChange={(e) => setReview(e.target.value)}
         />
-        {errors.review && <p className="error">{errors.review}</p>}
         <div className="rating-input">
           <div
             onMouseEnter={() => setActiveStars(1)}
@@ -105,7 +117,7 @@ const ReviewSpotModal = () => {
         </div>
         {errors.stars && <p className="error">{errors.stars}</p>}
         <button disabled={disableButton()} onClick={handleSubmit}>
-          Submit Your Review
+          {update ? "Update your Review" : "Submit Your Review"}
         </button>
       </form>
     </div>

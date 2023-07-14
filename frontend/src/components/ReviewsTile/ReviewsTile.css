@@ -10,10 +10,15 @@
   color: #fffbff;
   padding: 5px;
   font-weight: bold;
-  width: 200px;
+  width: 100px;
   cursor: pointer;
 }
 
 .reviews-tile button:hover {
   box-shadow: 1px 1px black;
+}
+
+.review-tile-options {
+  display: flex;
+  gap: 5px;
 }

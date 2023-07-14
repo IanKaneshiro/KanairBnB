@@ -1,0 +1,10 @@
+.manage-reviews-container {
+  padding: 20px 40px;
+}
+
+.manage-reviews {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

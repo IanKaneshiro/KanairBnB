@@ -37,11 +37,22 @@ export const thunkLoadReviews = (spotId) => async (dispatch) => {
   return res;
 };
 
+export const thunkGetUserReviews = () => async (dispatch) => {
+  const res = await csrfFetch("/api/users/me/reviews");
+  if (res.ok) {
+    const data = await res.json();
+    dispatch(loadReviews(data));
+  }
+  return res;
+};
+
 export const thunkDeleteReview = (reviewId, spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/reviews/${reviewId}`, { method: "DELETE" });
   if (res.ok) {
     dispatch(deleteReview(reviewId));
-    dispatch(getSpotById(spotId));
+    if (spotId) {
+      dispatch(getSpotById(spotId));
+    }
   }
   return res;
 };
@@ -61,6 +72,27 @@ export const thunkAddReview = (review, id) => async (dispatch) => {
   } else {
     return res;
   }
+};
+
+export const thunkUpdateReview = (id, payload, spotId) => async (dispatch) => {
+  const res = await csrfFetch(`/api/reviews/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (res.ok) {
+    if (!spotId) {
+      return dispatch(thunkGetUserReviews());
+    } else {
+      dispatch(getSpotById(spotId));
+      return dispatch(thunkLoadReviews(spotId));
+    }
+  }
+
+  return res;
 };
 
 export default function reviewsReducer(state = {}, action) {
