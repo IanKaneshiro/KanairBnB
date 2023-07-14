@@ -3,7 +3,7 @@ import "./ManageSpots.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { Redirect, Link } from "react-router-dom";
-import { thunkGetUsersSpots } from "../../store/spots";
+import { thunkGetUsersSpots, clearUserSpots } from "../../store/spots";
 import SpotTile from "../SpotTile";
 
 const ManageSpots = () => {
@@ -18,6 +18,8 @@ const ManageSpots = () => {
       .catch((err) => {
         setLoading(false);
       });
+
+    return () => dispatch(clearUserSpots());
   }, [dispatch]);
 
   // TODO: better handle error pages and errros
