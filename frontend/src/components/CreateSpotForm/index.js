@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewSpot } from "../../store/spots";
 import { addImage } from "../../store/images";
@@ -28,6 +28,23 @@ function CreateSpotForm() {
 
   const history = useHistory();
 
+  useEffect(() => {
+    const errors = {};
+
+    if (description.length && description.length < 30) {
+      errors.description = "Description needs a minimum of 30 characters";
+    }
+
+    if ((lat && lat > 90) || lat < -90) {
+      errors.lat = "Not a valid latitude";
+    }
+
+    if ((lng && lng > 190) || lng < -180) {
+      errors.lng = "Not a valid longitude";
+    }
+    setErrors(errors);
+  }, [previewImage, description, lat, lng]);
+
   if (!session) return <Redirect to="/" />;
 
   const handleDisabledBtn = () => {
@@ -35,8 +52,6 @@ function CreateSpotForm() {
     if (!address.length) return true;
     if (!city.length) return true;
     if (!state.length) return true;
-    if (!lat) return true;
-    if (!lng) return true;
     if (description.length < 30) return true;
     if (!name.length) return true;
     if (!price) return true;
@@ -44,69 +59,69 @@ function CreateSpotForm() {
     return false;
   };
 
+  const handleImages = () => {
+    const errors = {};
+    const imagePayload = [];
+    if (!previewImage) {
+      errors.previewImage = "Preview image is required";
+    }
+    if (
+      previewImage &&
+      !previewImage.endsWith(".png") &&
+      !previewImage.endsWith(".jpg") &&
+      !previewImage.endsWith(".jpeg")
+    ) {
+      errors.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
+    } else if (previewImage) {
+      imagePayload.push({ url: previewImage, preview: true });
+    }
+    if (
+      img1 &&
+      !img1.endsWith(".png") &&
+      !img1.endsWith(".jpg") &&
+      !img1.endsWith(".jpeg")
+    ) {
+      errors.img1 = "Image URL must end in .png, .jpg, or .jpeg";
+    } else if (img1) {
+      imagePayload.push({ url: img1, preview: false });
+    }
+    if (
+      img2 &&
+      !img2.endsWith(".png") &&
+      !img2.endsWith(".jpg") &&
+      !img2.endsWith(".jpeg")
+    ) {
+      errors.img2 = "Image URL must end in .png, .jpg, or .jpeg";
+    } else if (img2) {
+      imagePayload.push({ url: img2, preview: false });
+    }
+    if (
+      img3 &&
+      !img3.endsWith(".png") &&
+      !img3.endsWith(".jpg") &&
+      !img3.endsWith(".jpeg")
+    ) {
+      errors.img3 = "Image URL must end in .png, .jpg, or .jpeg";
+    } else if (img3) {
+      imagePayload.push({ url: img3, preview: false });
+    }
+    if (
+      img4 &&
+      !img4.endsWith(".png") &&
+      !img4.endsWith(".jpg") &&
+      !img4.endsWith(".jpeg")
+    ) {
+      errors.img4 = "Image URL must end in .png, .jpg, or .jpeg";
+    } else if (img4) {
+      imagePayload.push({ url: img4, preview: false });
+    }
+
+    return { errors, imagePayload };
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-
-    const handleImages = () => {
-      const errors = {};
-      const imagePayload = [];
-      if (!previewImage) {
-        errors.previewImage = "Preview image is required";
-      }
-      if (
-        previewImage &&
-        !previewImage.endsWith(".png") &&
-        !previewImage.endsWith(".jpg") &&
-        !previewImage.endsWith(".jpeg")
-      ) {
-        errors.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
-      } else if (previewImage) {
-        imagePayload.push({ url: previewImage, preview: true });
-      }
-      if (
-        img1 &&
-        !img1.endsWith(".png") &&
-        !img1.endsWith(".jpg") &&
-        !img1.endsWith(".jpeg")
-      ) {
-        errors.img1 = "Image URL must end in .png, .jpg, or .jpeg";
-      } else if (img1) {
-        imagePayload.push({ url: img1, preview: false });
-      }
-      if (
-        img2 &&
-        !img2.endsWith(".png") &&
-        !img2.endsWith(".jpg") &&
-        !img2.endsWith(".jpeg")
-      ) {
-        errors.img2 = "Image URL must end in .png, .jpg, or .jpeg";
-      } else if (img2) {
-        imagePayload.push({ url: img2, preview: false });
-      }
-      if (
-        img3 &&
-        !img3.endsWith(".png") &&
-        !img3.endsWith(".jpg") &&
-        !img3.endsWith(".jpeg")
-      ) {
-        errors.img3 = "Image URL must end in .png, .jpg, or .jpeg";
-      } else if (img3) {
-        imagePayload.push({ url: img3, preview: false });
-      }
-      if (
-        img4 &&
-        !img4.endsWith(".png") &&
-        !img4.endsWith(".jpg") &&
-        !img4.endsWith(".jpeg")
-      ) {
-        errors.img4 = "Image URL must end in .png, .jpg, or .jpeg";
-      } else if (img4) {
-        imagePayload.push({ url: img4, preview: false });
-      }
-
-      return { errors, imagePayload };
-    };
 
     const spotPayload = {
       country,
@@ -128,8 +143,9 @@ function CreateSpotForm() {
 
       const res = await dispatch(addNewSpot(spotPayload));
       if (res.id) {
-        await dispatch(addImage(imagePayload, res.id));
-        return history.push(`/spots/${res.id}`);
+        return dispatch(addImage(imagePayload, res.id)).then(() => {
+          history.push(`/spots/${res.id}`);
+        });
       }
     } catch (error) {
       try {
@@ -182,7 +198,7 @@ function CreateSpotForm() {
           </div>
           <div className="spot-form-input-city">
             <div className="spot-form-error">
-              <label htmlFor="city">City</label>{" "}
+              <label htmlFor="city">City</label>
               {errors.city && <p className="error">{errors.city}</p>}
             </div>
             <input
@@ -194,7 +210,7 @@ function CreateSpotForm() {
           </div>
           <div className="spot-form-input-state">
             <div className="spot-form-error">
-              <label htmlFor="state">State</label>{" "}
+              <label htmlFor="state">State</label>
               {errors.state && <p className="error">{errors.state}</p>}
             </div>
             <input
@@ -207,24 +223,26 @@ function CreateSpotForm() {
           <div className="spot-form-input-latitude">
             <div className="spot-form-error">
               <label htmlFor="latitude">Latitude</label>
-              {errors.lat && <p className="error">{errors.lat}</p>}
+              {errors.lat && <span className="error">{errors.lat}</span>}
             </div>
             <input
               type="number"
+              step="any"
               id="latitude"
-              placeholder="Latitude"
+              placeholder="Latitude (Optional)"
               onChange={(e) => setLat(e.target.value)}
             />
           </div>
           <div className="spot-form-input-longitude">
             <div className="spot-form-error">
               <label htmlFor="longitude">Longitude</label>
-              {errors.lng && <p className="error">{errors.lng}</p>}
+              {errors.lng && <span className="error">{errors.lng}</span>}
             </div>
             <input
               type="number"
               id="longitude"
-              placeholder="Longitude"
+              step="any"
+              placeholder="Longitude (Optional)"
               onChange={(e) => setLng(e.target.value)}
             />
           </div>

@@ -1,5 +1,6 @@
 import "./ReviewsTile.css";
 import React from "react";
+import { Link } from "react-router-dom";
 import OpenModalMenuButton from "../ModalButton";
 import DeleteSpotModal from "../DeleteSpotModal";
 import ReviewSpotModal from "../ReviewSpotModal";
@@ -12,7 +13,11 @@ const ReviewsTile = ({ review, sessionId, isManage }) => {
   return (
     <div className="reviews-tile">
       <h3 className="reviews-tile-name">
-        {review.Spot?.name ? review.Spot.name : review.User.firstName}
+        {review.Spot?.name ? (
+          <Link to={`/spots/${review.spotId}`}>{review.Spot.name}</Link>
+        ) : (
+          review.User.firstName
+        )}
       </h3>
       <p className="reviews-tile-date">{`${date.toLocaleString("default", {
         month: "long",
