@@ -21,11 +21,11 @@ function SignupFormModal() {
   useEffect(() => {
     const errors = {};
     if (username.length && username.length < 4) {
-      errors.username = "* Username must be at least 4 characters";
+      errors.username = "Username must be at least 4 characters";
     }
 
     if (password.length && password.length < 4) {
-      errors.password = "* Password must be at least 6 characters";
+      errors.password = "Password must be at least 6 characters";
     }
 
     if (
@@ -33,12 +33,12 @@ function SignupFormModal() {
       confirmPassword.length &&
       password !== confirmPassword
     ) {
-      errors.confirmPassword = "* Password must match";
+      errors.confirmPassword = "Password must match";
     }
     setErrors(errors);
 
     if (email.length && !email.includes("@")) {
-      errors.email = "* Must be a valid email";
+      errors.email = "Must be a valid email";
     }
   }, [username, password, confirmPassword, email]);
 

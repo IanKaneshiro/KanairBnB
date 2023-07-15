@@ -14,6 +14,7 @@ const SpotDetails = () => {
   const session = useSelector((state) => state.session.user);
   const previewImage = useSelector((state) => state.images.previewImage);
   const images = useSelector((state) => Object.values(state.images.images));
+  console.log(images);
 
   useEffect(() => {
     dispatch(getSpotById(parseInt(spotId)));
@@ -25,7 +26,7 @@ const SpotDetails = () => {
   }, [dispatch, spotId]);
 
   // TODO: Add a nicer loading page
-  if (!currentSpot.id) return <h1>....loading</h1>;
+  if (!currentSpot.id || !previewImage) return <h1>....loading</h1>;
 
   const handleReviewCount = () => {
     if (Number(currentSpot.numReviews) === 1) return " \u00B7 1 Review";
