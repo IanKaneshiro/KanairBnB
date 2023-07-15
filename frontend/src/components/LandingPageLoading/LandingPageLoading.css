@@ -1,0 +1,26 @@
+.landing-loading-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 15px;
+  padding: 20px 40px;
+  max-width: 1600px; /* Adjust as needed */
+  margin: 0 auto;
+}
+
+.landing-loading-container div {
+  width: 400px;
+  height: 400px;
+  border: 1px solid black;
+}
+
+@media (min-width: 1300px) {
+  .landing-loading-container {
+    grid-template-columns: repeat(4, minmax(300px, 1fr));
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1299px) {
+  .landing-loading-container {
+    grid-template-columns: repeat(3, minmax(300px, 1fr));
+  }
+}

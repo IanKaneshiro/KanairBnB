@@ -40,6 +40,23 @@ function UpdateSpotForm() {
   }, [spot]);
 
   useEffect(() => {
+    const errors = {};
+
+    if (description.length && description.length < 30) {
+      errors.description = "Description needs a minimum of 30 characters";
+    }
+
+    if ((lat && lat > 90) || lat < -90) {
+      errors.lat = "Not a valid latitude";
+    }
+
+    if ((lng && lng > 190) || lng < -180) {
+      errors.lng = "Not a valid longitude";
+    }
+    setErrors(errors);
+  }, [previewImage, description, lat, lng]);
+
+  useEffect(() => {
     dispatch(thunkGetUsersSpots());
   }, [dispatch]);
 
@@ -142,7 +159,7 @@ function UpdateSpotForm() {
           </div>
           <div className="spot-form-input-state">
             <div className="spot-form-error">
-              <label htmlFor="state">State</label>{" "}
+              <label htmlFor="state">State</label>
               {errors.state && <p className="error">{errors.state}</p>}
             </div>
             <input
@@ -156,7 +173,7 @@ function UpdateSpotForm() {
           <div className="spot-form-input-latitude">
             <div className="spot-form-error">
               <label htmlFor="latitude">Latitude</label>
-              {errors.lat && <p className="error">{errors.lat}</p>}
+              {errors.lat && <span className="error">{errors.lat}</span>}
             </div>
             <input
               type="number"
@@ -169,7 +186,7 @@ function UpdateSpotForm() {
           <div className="spot-form-input-longitude">
             <div className="spot-form-error">
               <label htmlFor="longitude">Longitude</label>
-              {errors.lng && <p className="error">{errors.lng}</p>}
+              {errors.lng && <span className="error">{errors.lng}</span>}
             </div>
             <input
               type="number"

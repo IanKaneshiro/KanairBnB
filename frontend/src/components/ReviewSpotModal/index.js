@@ -17,7 +17,11 @@ const ReviewSpotModal = ({ update, spot, reviewId }) => {
   useEffect(() => {
     const errors = {};
     if (review.length && review.length < 10) {
-      errors.review = "* Review must be at least 10 characters";
+      errors.message = "Review must be at least 10 characters";
+    }
+
+    if (review.length >= 10 && !stars) {
+      errors.message = "Must include star rating";
     }
 
     setErrors(errors);
@@ -59,7 +63,8 @@ const ReviewSpotModal = ({ update, spot, reviewId }) => {
   return (
     <div className="rating-modal-container">
       <h1>How was your stay{update && `at ${spot.name}`}?</h1>
-      {errors.review && <p className="error">{errors.review}</p>}
+      {errors.message && <p className="error">{errors.message}</p>}
+
       <form className="rating-modal-form">
         <textarea
           placeholder="Leave your review here..."

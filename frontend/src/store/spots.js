@@ -69,10 +69,10 @@ export const thunkLoadSpots = () => async (dispatch) => {
 export const getSpotById = (spotId) => async (dispatch) => {
   const res = await csrfFetch(`/api/spots/${spotId}`);
   const data = await res.json();
-  dispatch(getById(data));
   if (data.SpotImages.length) {
     dispatch(loadImages(data.SpotImages));
   }
+  dispatch(getById(data));
   return res;
 };
 
