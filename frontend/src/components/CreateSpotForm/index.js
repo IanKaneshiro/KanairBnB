@@ -128,12 +128,13 @@ function CreateSpotForm() {
       address,
       city,
       state,
-      lat,
-      lng,
       description,
       name,
       price,
     };
+
+    if (lat) spotPayload.lat = lat;
+    if (lng) spotPayload.lng = lng;
 
     try {
       const { imagePayload, errors } = handleImages();
