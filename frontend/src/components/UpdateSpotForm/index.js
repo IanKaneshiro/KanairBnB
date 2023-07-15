@@ -72,13 +72,14 @@ function UpdateSpotForm() {
       address,
       city,
       state,
-      lat,
-      lng,
       description,
       name,
       price,
       previewImage,
     };
+
+    if (lat) payload.lat = lat;
+    if (lng) payload.lng = lng;
 
     try {
       const res = await dispatch(updateSpot(payload));
@@ -178,7 +179,8 @@ function UpdateSpotForm() {
             <input
               type="number"
               id="latitude"
-              placeholder="Latitude"
+              step="any"
+              placeholder="Latitude (Optional)"
               value={lat}
               onChange={(e) => setLat(e.target.value)}
             />
@@ -191,7 +193,8 @@ function UpdateSpotForm() {
             <input
               type="number"
               id="longitude"
-              placeholder="Longitude"
+              step="any"
+              placeholder="Longitude (Optional)"
               value={lng}
               onChange={(e) => setLng(e.target.value)}
             />
