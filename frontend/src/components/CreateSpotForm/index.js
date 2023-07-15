@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewSpot } from "../../store/spots";
 import { addImage } from "../../store/images";
@@ -27,6 +27,16 @@ function CreateSpotForm() {
   const session = useSelector((state) => state.session.user);
 
   const history = useHistory();
+
+  useEffect(() => {
+    const errors = {};
+
+    if (description.length && description.length < 30) {
+      errors.description = "Description needs a minimum of 30 characters";
+    }
+
+    setErrors(errors);
+  }, [previewImage, description]);
 
   if (!session) return <Redirect to="/" />;
 
