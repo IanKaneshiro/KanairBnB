@@ -22,12 +22,12 @@ const DeleteSpotModal = ({ id, reviewId, spotId, isManage }) => {
       if (!isManage) {
         return history.push(`/spots/${currentSpotId}`);
       } else {
-        return history.push("/reviews/current");
+        return history.push("/reviews/me");
       }
     } else {
       dispatch(thunkDeleteSpot(id, spotId)).catch((err) => console.log(err));
       closeModal();
-      return history.push("/spots/current");
+      return history.push("/spots/me");
     }
   };
 
