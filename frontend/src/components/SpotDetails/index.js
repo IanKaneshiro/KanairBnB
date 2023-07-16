@@ -2,7 +2,7 @@ import "./SpotDetails.css";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getSpotById, clearCurrentSpot, spots } from "../../store/spots";
+import { getSpotById, clearCurrentSpot } from "../../store/spots";
 import SpotDetailsReviews from "../SpotDetailsReviews";
 import { clearImages } from "../../store/images";
 
