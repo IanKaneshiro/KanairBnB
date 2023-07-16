@@ -1,6 +1,7 @@
 .manage-reviews-container {
   padding: 20px 40px;
   max-width: 1000px;
+  margin: 0 auto;
 }
 
 .manage-reviews {
