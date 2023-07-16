@@ -24,7 +24,7 @@ const SpotDetails = () => {
     };
   }, [dispatch, spotId]);
 
-  if (!currentSpot.id || !previewImage) return <h1>....loading</h1>;
+  if (!currentSpot.id || !previewImage) return null;
 
   const handleReviewCount = () => {
     if (Number(currentSpot.numReviews) === 1) return " \u00B7 1 Review";

@@ -1,18 +1,31 @@
 .landing-loading-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 15px;
+  gap: 15px;
   padding: 20px 40px;
   max-width: 1600px; /* Adjust as needed */
   margin: 0 auto;
 }
 
-.landing-loading-container div {
-  width: 400px;
+.landing-loading-box {
+  width: 23rem;
   height: 400px;
-  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
+.landing-loading-img {
+  height: 80%;
+  border-radius: 15px;
+  background-color: lightgray;
+}
+
+.landing-loading-content {
+  height: 20%;
+  border-radius: 15px;
+  background-color: lightgray;
+}
 @media (min-width: 1300px) {
   .landing-loading-container {
     grid-template-columns: repeat(4, minmax(300px, 1fr));
