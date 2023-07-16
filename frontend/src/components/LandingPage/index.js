@@ -15,7 +15,7 @@ const LandingPage = () => {
   }, [dispatch]);
 
   // TODO: cleaner conditional pages
-  if (!spots.length) return <h1>...loading</h1>;
+  if (!spots.length) return null;
 
   if (spots.length === 0) {
     return <h1>No spots available</h1>;

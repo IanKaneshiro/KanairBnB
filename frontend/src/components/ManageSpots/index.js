@@ -26,7 +26,7 @@ const ManageSpots = () => {
 
   if (!session) return <Redirect to="/" />;
 
-  if (loading) return <h1>Loading...</h1>;
+  if (loading) return null;
 
   return (
     <div className="manage-container">
