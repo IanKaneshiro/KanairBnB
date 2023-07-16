@@ -7,7 +7,7 @@ options.tableName = "Spots";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.removeIndex(options, "index-reviews-userId-spotId");
+    await queryInterface.removeIndex(options, "index-spots-address-city-state");
   },
 
   async down(queryInterface, Sequelize) {

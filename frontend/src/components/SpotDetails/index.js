@@ -2,7 +2,7 @@ import "./SpotDetails.css";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { getSpotById, clearCurrentSpot } from "../../store/spots";
+import { getSpotById, clearCurrentSpot, spots } from "../../store/spots";
 import SpotDetailsReviews from "../SpotDetailsReviews";
 import { clearImages } from "../../store/images";
 
@@ -25,7 +25,6 @@ const SpotDetails = () => {
     };
   }, [dispatch, spotId]);
 
-  // TODO: Add a nicer loading page
   if (!currentSpot.id || !previewImage) return <h1>....loading</h1>;
 
   const handleReviewCount = () => {
@@ -34,6 +33,11 @@ const SpotDetails = () => {
     if (Number(currentSpot.numReviews) > 1)
       return ` \u00B7 ${currentSpot.numReviews} Reviews`;
   };
+
+  let prevImgClass = "gallery-preview-img";
+  if (!images.length) {
+    prevImgClass = prevImgClass + " only-prev-image";
+  }
 
   return (
     <div className="details-container">
@@ -46,7 +50,7 @@ const SpotDetails = () => {
           <img
             src={previewImage.url}
             alt={previewImage.id}
-            className="gallery-preview-img"
+            className={prevImgClass}
           />
           {images?.map((img) => {
             return (
