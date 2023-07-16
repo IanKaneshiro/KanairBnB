@@ -44,6 +44,7 @@
 
 .only-prev-image {
   grid-column: 1 / 6;
+  object-fit: contain;
 }
 
 .details-description-block {

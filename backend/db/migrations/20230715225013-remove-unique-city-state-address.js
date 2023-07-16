@@ -23,12 +23,6 @@ module.exports = {
       type: Sequelize.STRING,
       allowNull: false,
     });
-    await queryInterface.changeColumn(options, "id", {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: Sequelize.INTEGER,
-    });
   },
 
   async down(queryInterface, Sequelize) {
@@ -43,12 +37,6 @@ module.exports = {
     await queryInterface.changeColumn(options, "state", {
       type: Sequelize.STRING,
       allowNull: false,
-    });
-    await queryInterface.changeColumn(options, "id", {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: Sequelize.INTEGER,
     });
   },
 };
