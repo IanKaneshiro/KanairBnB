@@ -62,7 +62,7 @@ const ReviewSpotModal = ({ update, spot, reviewId }) => {
 
   return (
     <div className="rating-modal-container">
-      <h1>How was your stay{update && `at ${spot.name}`}?</h1>
+      <h1>How was your stay{update && ` at ${spot.name}`}?</h1>
       {errors.message && <p className="error">{errors.message}</p>}
 
       <form className="rating-modal-form">

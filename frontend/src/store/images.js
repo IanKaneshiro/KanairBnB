@@ -18,16 +18,18 @@ export const clearImages = () => {
 
 // Thunk action creator
 export const addImage = (payload, spotId) => async (dispatch) => {
-  console.log(payload);
-  payload.forEach(async (img) => {
-    await csrfFetch(`/api/spots/${spotId}/images`, {
+  const promises = payload.map(async (img) => {
+    const res = await csrfFetch(`/api/spots/${spotId}/images`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(img),
     });
+    return res.json();
   });
+  const results = await Promise.all(promises);
+  return results;
 };
 
 const initialState = {
