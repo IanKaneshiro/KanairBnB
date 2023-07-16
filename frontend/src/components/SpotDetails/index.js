@@ -14,7 +14,6 @@ const SpotDetails = () => {
   const session = useSelector((state) => state.session.user);
   const previewImage = useSelector((state) => state.images.previewImage);
   const images = useSelector((state) => Object.values(state.images.images));
-  console.log(images);
 
   useEffect(() => {
     dispatch(getSpotById(parseInt(spotId)));
