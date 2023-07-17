@@ -42,16 +42,22 @@ export function Modal() {
   // If there is no div referenced by the modalRef or modalContent is not a
   // truthy value, render nothing:
   if (!modalRef || !modalRef.current || !modalContent) return null;
-  let modalClass = "modal-content";
+
   if (modalContent.type.name === "ImageGallery") {
-    modalClass = modalClass + " modal-gallery";
+    return ReactDOM.createPortal(
+      <div id="modal">
+        <div id="modal-background" onClick={closeModal} />
+        <div id="modal-img-content">{modalContent}</div>
+      </div>,
+      modalRef.current
+    );
   }
 
   // Render the following component to the div referenced by the modalRef
   return ReactDOM.createPortal(
     <div id="modal">
       <div id="modal-background" onClick={closeModal} />
-      <div id={modalClass}>{modalContent}</div>
+      <div id="modal-content">{modalContent}</div>
     </div>,
     modalRef.current
   );

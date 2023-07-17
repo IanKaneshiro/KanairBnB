@@ -8,16 +8,27 @@ const ImageGallery = () => {
 
   const imagesArr = [previewImage, ...images];
 
+  if (imagesArr.length < 2) {
+    return (
+      <div className="image-gallery-container-prev">
+        <div className="preview-image">
+          <img src={previewImage.url} alt={previewImage.id} />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <ul className="image-gallery-container">
+    <div className="image-gallery-container">
+      <div className="preview-image"></div>
       {imagesArr.map((img) => {
         return (
-          <li key={img.id} className="image-gallery-item">
+          <div key={img.id} className="image-gallery-item">
             <img src={img.url} alt={img.id} />
-          </li>
+          </div>
         );
       })}
-    </ul>
+    </div>
   );
 };
 
