@@ -5,11 +5,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { getSpotById, clearCurrentSpot } from "../../store/spots";
 import SpotDetailsReviews from "../SpotDetailsReviews";
 import { clearImages } from "../../store/images";
+import OpenModalGallery from "../ModelGallery";
+import ImageGallery from "../ImageGallery";
 
 const SpotDetails = () => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
-
   const currentSpot = useSelector((state) => state.spots.currentSpot);
   const session = useSelector((state) => state.session.user);
   const previewImage = useSelector((state) => state.images.previewImage);
@@ -46,18 +47,20 @@ const SpotDetails = () => {
           {currentSpot.city}, {currentSpot.state}, {currentSpot.country}
         </p>
         <div className="details-img-container">
-          <img
+          <OpenModalGallery
+            modalComponent={<ImageGallery />}
             src={previewImage.url}
             alt={previewImage.id}
-            className={prevImgClass}
+            classItem={prevImgClass}
           />
           {images?.map((img) => {
             return (
-              <img
+              <OpenModalGallery
+                modalComponent={<ImageGallery />}
                 src={img.url}
                 alt={img.id}
                 key={img.id}
-                className="gallery-image"
+                classItem={"gallery-image"}
               />
             );
           })}
