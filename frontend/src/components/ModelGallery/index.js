@@ -10,10 +10,11 @@ function OpenModalGallery({
   alt,
   classItem,
 }) {
-  const { setModalContent, setOnModalClose } = useModal();
+  const { setModalContent, setOnModalClose, setIsGallery } = useModal();
 
   const onClick = () => {
     if (onModalClose) setOnModalClose(onModalClose);
+    setIsGallery(true);
     setModalContent(modalComponent);
     if (onItemClick) onItemClick();
   };
